@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView, StyleSheet, FlatList, ImageBackground } 
 import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Sample data for clubs, security personnel, and managers
+// Dummy data
 const clubs = [
   { name: 'Omnia', logo: (images.omnia) },
   { name: 'Jail Night Club', logo: (images.jail) },
@@ -11,14 +11,15 @@ const clubs = [
   { name: 'Neon Night Club', logo: (images.neon) },
 ];
 
+// Dummy data
 const securityPersonnel = [
   { name: 'Frikkie', logo: (images.profileMale) },
-  { name: 'Trent', logo: (images.profileMale) },
   { name: 'Dagan', logo: (images.profileMale) },
   { name: 'Shannon', logo: (images.profileFemale) },
   { name: 'Rudi', logo: (images.profileMale) },
 ];
 
+// Dummy data
 const clubManagers = [
   { name: 'Bob', logo: (images.profileMale) },
   { name: 'Jason', logo: (images.profileMale) },
@@ -29,7 +30,7 @@ const clubManagers = [
 
 const SecurityAdmin = () => {
 
-  // function to diplay the lists of clubs, security personnel and club managers. 
+  // Diplay the lists of clubs, security personnel and club managers. 
   const displayItmes = ({ item }) => (
     <View style={styles.personnelItem}>
       <Image source={item.logo} style={styles.personIcon} />
