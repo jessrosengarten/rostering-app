@@ -30,7 +30,7 @@ const assignSecurityPersonnel = () => {
                 {/* Club Name */}
                 <Text style={styles.clubName}>Neon Night Club</Text>
 
-                {/* Day Elements from Thursday to Sunday */}
+                {/* Day Elements */}
                 {['Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
                     <View key={index} style={styles.dayContainer}>
                         <Text style={styles.dayText}>{day}</Text>
@@ -90,7 +90,9 @@ const styles = StyleSheet.create({
     },
     dayText: {
         fontSize: 18,
-        color: 'red',
+        color: 'black',
+        fontWeight:  'bold',
+
     },
     label: {
         marginLeft: 10,

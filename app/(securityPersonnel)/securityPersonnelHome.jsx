@@ -17,26 +17,27 @@ const shifts = [
 const SecurityHome = () => {
     return (
         <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} className='h-full w-full'>
-                <ScrollView contentContainerStyle={{ height: '100%' }}>
-                    <View className="flex-1 items-center justify-center">
-                        <Text>Welcome, Security Personnel! I LIIIIKKKEEEe</Text>
+            <ImageBackground source={images.background} style={styles.background}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={styles.container}>
+                        <View style={styles.welcomeContainer}>
+                            <Text style={styles.welcomeText}>i like</Text>
+                        </View>
+                        
                         {/* Loop through the shifts to display a box for each night */}
-                        <View style={styles.container}>
                         {shifts.map((shift, index) => (
                             <View key={index} style={styles.shiftBox}>
                                 <View style={styles.shiftDetails}>
                                     <Text style={styles.dayText}>{shift.day}</Text>
                                     <Text style={styles.clubText}>Club: {shift.club}</Text>
                                     <Text style={styles.timeText}>Shift Time: {shift.time}</Text>
-
-                                    {/* ADDED THIS */}
-                                    <CustomButton
-                                    title="Cancel"/>
                                 </View>
+                                <CustomButton
+                                    title="Cancel"
+                                    style={styles.cancelButton}
+                                />
                             </View>
                         ))}
-                    </View> 
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -51,21 +52,25 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    scrollContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     container: {
         padding: 20,
         width: '100%',
+    },
+    welcomeContainer: {
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
+    welcomeText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'red',
+        textAlign: 'center',
     },
     shiftBox: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         borderRadius: 10,
         padding: 15,
         marginVertical: 10,
-        flexDirection: 'row',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -84,14 +89,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'gray',
     },
+    
     cancelButton: {
         backgroundColor: 'red',
-        padding: 10,
+        padding: 8, 
         borderRadius: 5,
+        paddingHorizontal: 15,
+        marginLeft: 10, 
+        fontSize: 10,
     },
-    cancelText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-});
 
+});

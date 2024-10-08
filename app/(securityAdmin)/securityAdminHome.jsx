@@ -4,6 +4,8 @@ import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
 
+
+
 // Dummy data
 const clubs = [
   { name: 'Omnia', logo: (images.omnia) },
@@ -34,13 +36,19 @@ const SecurityAdmin = () => {
 
   // Handle the navigation
   const handleNavigation = (type, name) => {
-    if (type ==  'club') {
-      navigation.navigate('/clubDetails', {clubName: name});
+    if (type == 'clubs') {
+      navigation.navigate('clubDetails', { clubName: name });  
+    } 
+    else if (type == 'securityPersonnel') {
+      navigation.navigate('assignPersonnelManagement', { securityName: name });  
+    } 
+    else if (type == 'clubManagers') {
+      navigation.navigate('clubManagerDetails', { managerName: name });  
     }
-  }
+  };
 
     // Display the lists of clubs, security personnel, and club managers
-    const displayItems = ({ item, type }) => (
+    const displayItems = ({ item }, type) => (
       <TouchableOpacity onPress={() => handleNavigation(type, item.name)}>
         <View style={styles.personnelItem}>
           <Image source={item.logo} style={styles.personIcon} />
@@ -48,6 +56,7 @@ const SecurityAdmin = () => {
         </View>
       </TouchableOpacity>
     );
+    
 
   return (
     <SafeAreaView edges={[]}>
@@ -62,7 +71,7 @@ const SecurityAdmin = () => {
             <FlatList
               data={clubs}
               horizontal
-              renderItem={displayItems}
+              renderItem={(item) => displayItems(item, 'clubs')}
               keyExtractor={(item) => item.name}
               showsHorizontalScrollIndicator={false}
               style={styles.clubList}
@@ -74,7 +83,7 @@ const SecurityAdmin = () => {
             <FlatList
               data={securityPersonnel}
               horizontal
-              renderItem={displayItems}
+              renderItem={(item) => displayItems(item, 'securityPersonnel')}
               keyExtractor={(item) => item.name}
               showsHorizontalScrollIndicator={false}
               style={styles.personnelList}
@@ -86,11 +95,18 @@ const SecurityAdmin = () => {
             <FlatList
               data={clubManagers}
               horizontal
-              renderItem={displayItems}
+              renderItem={(item) => displayItems(item, 'clubManagers')}
               keyExtractor={(item) => item.name}
               showsHorizontalScrollIndicator={false}
               style={styles.personnelList}
             />
+            {/* Add User Button */}
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate('addUsers')} // Navigate to addUser.jsx
+          >
+            <Text style={styles.addButtonText}>Add User</Text>
+          </TouchableOpacity>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -162,6 +178,14 @@ const styles = StyleSheet.create({
   menuItem: {
     fontSize: 16,
     color: '#333',
+  },
+  addButton: {
+    backgroundColor: '#E21A1A',  
+    padding: 15,
+    marginVertical: 20,
+    marginHorizontal: 30,
+    alignItems: 'center',
+    borderRadius: 10,
   },
 });
 

@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Switch } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
 
 const Settings = () => {
+    // State for toggling switches - ADD
     return (
         <SafeAreaView edges={[]}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -17,21 +18,28 @@ const Settings = () => {
                     <FontAwesome name="user" size={24} color="black" />
                     <Text style={styles.settingsText}>User Profile</Text>
                 </View>
+
                 <View style={styles.settingsItem}>
                     <FontAwesome name="moon-o" size={24} color="black" />
                     <Text style={styles.settingsText}>Select Light/Dark Mode</Text>
-                    <Switch
+                    <View style={styles.switchContainer}>
+                        <Switch
                         />
+                    </View>
                 </View>
+
                 <View style={styles.settingsItem}>
                     <FontAwesome name="language" size={24} color="black" />
                     <Text style={styles.settingsText}>Language Preferences</Text>
                 </View>
+
                 <View style={styles.settingsItem}>
                     <FontAwesome name="bell" size={24} color="black" />
                     <Text style={styles.settingsText}>Notifications</Text>
-                    <Switch
+                    <View style={styles.switchContainer}>
+                        <Switch
                         />
+                    </View>
                 </View>
 
                 <View style={styles.settingsItem}>
@@ -66,6 +74,7 @@ const styles = StyleSheet.create({
     settingsItem: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between', 
         paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
@@ -73,6 +82,10 @@ const styles = StyleSheet.create({
     settingsText: {
         marginLeft: 15,
         fontSize: 16,
+        flex: 1, 
+    },
+    switchContainer: {
+        justifyContent: 'flex-end',
     },
     logoutButton: {
         backgroundColor: '#ff4d4d',

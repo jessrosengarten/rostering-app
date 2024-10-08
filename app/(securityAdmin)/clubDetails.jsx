@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
-import { images } from '../../constants'; // Assuming you have an image for background
+import { images } from '../../constants'; 
 
 const { width } = Dimensions.get('window');
 
@@ -13,7 +13,6 @@ const ClubDetails = () => {
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     {/* Profile Icon and Name */}
                     <View style={styles.profileHeader}>
-                        <Image source={{ uri: 'https://your-club-logo-url.png' }} style={styles.clubLogo} />
                         <Text style={styles.clubName}>Oasis Disco Bar</Text>
                     </View>
 
@@ -22,8 +21,8 @@ const ClubDetails = () => {
                         <Text style={styles.detailTitle}>Address:</Text>
                         <Text style={styles.detailText}>Sandton</Text>
 
-                        <Text style={styles.detailTitle}>Manager/s:</Text>
-                        <Text style={styles.detailText}>Donald Martin{'\n'}Bob Harris</Text>
+                        <Text style={styles.detailTitle}>Manager:</Text>
+                        <Text style={styles.detailText}>Donald</Text>
 
                         <Text style={styles.detailTitle}>Contact Details:</Text>
                         <Text style={styles.detailText}>011 567 0987</Text>
@@ -98,18 +97,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#000',
+        textAlign: 'center',
     },
     detailText: {
         fontSize: 16,
         color: '#000',
         marginBottom: 10,
+        textAlign: 'center',
     },
     buttonsContainer: {
         marginTop: 20,
     },
     button: {
         backgroundColor: '#E21A1A',
-        paddingVertical: 12,
+        paddingVertical: 10,
         marginBottom: 10,
         borderRadius: 5,
         alignItems: 'center',
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 14, // NOT CHANGING FONT SIZE???
     },
 });
 
