@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Switch } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
@@ -20,6 +20,8 @@ const Settings = () => {
                 <View style={styles.settingsItem}>
                     <FontAwesome name="moon-o" size={24} color="black" />
                     <Text style={styles.settingsText}>Select Light/Dark Mode</Text>
+                    <Switch
+                        />
                 </View>
                 <View style={styles.settingsItem}>
                     <FontAwesome name="language" size={24} color="black" />
@@ -28,11 +30,10 @@ const Settings = () => {
                 <View style={styles.settingsItem}>
                     <FontAwesome name="bell" size={24} color="black" />
                     <Text style={styles.settingsText}>Notifications</Text>
+                    <Switch
+                        />
                 </View>
-                <View style={styles.settingsItem}>
-                    <FontAwesome name="question-circle" size={24} color="black" />
-                    <Text style={styles.settingsText}>FAQ</Text>
-                </View>
+
                 <View style={styles.settingsItem}>
                     <FontAwesome name="lock" size={24} color="black" />
                     <Text style={styles.settingsText}>Change Password</Text>

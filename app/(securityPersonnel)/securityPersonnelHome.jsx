@@ -1,8 +1,8 @@
-// App/SecurityPersonnel/Home.jsx
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import CustomButton from '../../components/CustomButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,11 +29,14 @@ const SecurityHome = () => {
                                     <Text style={styles.dayText}>{shift.day}</Text>
                                     <Text style={styles.clubText}>Club: {shift.club}</Text>
                                     <Text style={styles.timeText}>Shift Time: {shift.time}</Text>
+
+                                    {/* ADDED THIS */}
+                                    <CustomButton
+                                    title="Cancel"/>
                                 </View>
                             </View>
                         ))}
-                    </View>
-                        
+                    </View> 
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -62,6 +65,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 15,
         marginVertical: 10,
+        flexDirection: 'row',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

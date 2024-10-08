@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, FlatList, ImageBackground } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, FlatList, ImageBackground } from 'react-native';
 import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from 'expo-router';
 
 // Dummy data
 const clubs = [
@@ -13,7 +14,7 @@ const clubs = [
 
 // Dummy data
 const securityPersonnel = [
-  { name: 'Frikkie', logo: (images.profileMale) },
+  { name: 'Jess', logo: (images.profileFemale) },
   { name: 'Dagan', logo: (images.profileMale) },
   { name: 'Shannon', logo: (images.profileFemale) },
   { name: 'Rudi', logo: (images.profileMale) },
@@ -29,14 +30,24 @@ const clubManagers = [
 ];
 
 const SecurityAdmin = () => {
+  const navigation = useNavigation();
 
-  // Diplay the lists of clubs, security personnel and club managers. 
-  const displayItmes = ({ item }) => (
-    <View style={styles.personnelItem}>
-      <Image source={item.logo} style={styles.personIcon} />
-      <Text style={styles.personName}>{item.name}</Text>
-    </View>
-  );
+  // Handle the navigation
+  const handleNavigation = (type, name) => {
+    if (type ==  'club') {
+      navigation.navigate('/clubDetails', {clubName: name});
+    }
+  }
+
+    // Display the lists of clubs, security personnel, and club managers
+    const displayItems = ({ item, type }) => (
+      <TouchableOpacity onPress={() => handleNavigation(type, item.name)}>
+        <View style={styles.personnelItem}>
+          <Image source={item.logo} style={styles.personIcon} />
+          <Text style={styles.personName}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
 
   return (
     <SafeAreaView edges={[]}>
@@ -51,7 +62,7 @@ const SecurityAdmin = () => {
             <FlatList
               data={clubs}
               horizontal
-              renderItem={displayItmes}
+              renderItem={displayItems}
               keyExtractor={(item) => item.name}
               showsHorizontalScrollIndicator={false}
               style={styles.clubList}
@@ -63,7 +74,7 @@ const SecurityAdmin = () => {
             <FlatList
               data={securityPersonnel}
               horizontal
-              renderItem={displayItmes}
+              renderItem={displayItems}
               keyExtractor={(item) => item.name}
               showsHorizontalScrollIndicator={false}
               style={styles.personnelList}
@@ -75,7 +86,7 @@ const SecurityAdmin = () => {
             <FlatList
               data={clubManagers}
               horizontal
-              renderItem={displayItmes}
+              renderItem={displayItems}
               keyExtractor={(item) => item.name}
               showsHorizontalScrollIndicator={false}
               style={styles.personnelList}

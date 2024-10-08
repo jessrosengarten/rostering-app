@@ -8,12 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
 
-
 const { width, height } = Dimensions.get('window')
 
+// ADD PATHS TO LOGOS
 // Dummy data
 const clubs = [
-    { name: 'Omnia' },
+    { name: 'Omnia', logo: (images.omnia) },
     { name: 'Oasis Disco Bar' },
     { name: 'Jail Night Club' },
     { name: 'Neon Night Club' },
@@ -79,16 +79,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
+    
+
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        flexDirection: 'column',
         marginTop: 10,
     },
 
     assignButton: {
         backgroundColor: '#E21A1A',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         borderRadius: 5,
         marginHorizontal: 5,
         alignItems: 'center',
@@ -104,6 +107,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
+        fontSize: 10,
     },
     clubList: {
         alignItems: 'left',
@@ -111,6 +115,9 @@ const styles = StyleSheet.create({
     clubItem: {
         width: '90%',
         padding: 10,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
         marginVertical: 10,
         borderRadius: 10, 
     }
