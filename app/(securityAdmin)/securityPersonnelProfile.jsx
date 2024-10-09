@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const clubManagerProfile = () => {
+const securityPersonnelProfile = () => {
     //const navigation = useNavigation();
     const router = useRouter();
     return (
@@ -17,14 +17,13 @@ const clubManagerProfile = () => {
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     {/* Profile Name */}
                     <View style={styles.profileHeader}>
-                        <Text style={styles.clubName}>Club Manager</Text>
+                        <Text style={styles.clubName}>Softpaws</Text>
                     </View>
 
-                    {/* Club Details */}
                     <View style={styles.detailsContainer}>
+                        <Text style={styles.detailTitle}>Address:</Text>
+                        <Text style={styles.detailText}>Sandton</Text>
 
-                    <Text style={styles.detailTitle}>Club Managed:</Text>
-                    <Text style={styles.detailText}>Jail</Text>
 
                         <Text style={styles.detailTitle}>Contact Details:</Text>
                         <Text style={styles.detailText}>011 567 0987</Text>
@@ -33,7 +32,18 @@ const clubManagerProfile = () => {
 
                     {/* Buttons */}
                     <View style={styles.buttonsContainer}>
-
+                        <CustomButton 
+                            title="View Documents"
+                            handlePress={() => {}}
+                            customStyle={styles.button} 
+                            textStyle={styles.buttonText} 
+                        />
+                        <CustomButton 
+                            title="Finance Details"
+                            handlePress={() => {}}
+                            customStyle={styles.button} 
+                            textStyle={styles.buttonText} 
+                        />
                         <CustomButton 
                             title="Edit Details"
                             handlePress={() => {}}
@@ -42,7 +52,7 @@ const clubManagerProfile = () => {
                         />
                         <CustomButton 
                             title="Delete"
-                            handlePress={() => {}}
+                            handlePress={() => {}} 
                             customStyle={[styles.button, styles.button]} 
                             textStyle={styles.buttonText} 
                         />
@@ -117,4 +127,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default clubManagerProfile;
+export default securityPersonnelProfile;

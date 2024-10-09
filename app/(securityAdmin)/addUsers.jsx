@@ -1,5 +1,7 @@
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, ImageBackground, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
 
 const AddUsers = () => {
     // State for user input
@@ -7,50 +9,63 @@ const AddUsers = () => {
     const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [cellphone, setCellphone] = useState('');
+    const [userType, setUserType] = useState('');
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Add User</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Surname"
-        value={surname}
-        onChangeText={setSurname}
-      />
+    const navigation = useNavigation();
 
-<TextInput
+
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Add User</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Surname"
+                value={surname}
+                onChangeText={setSurname}
+            />
+            <TextInput
                 style={styles.input}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
             />
-<TextInput
+            <TextInput
                 style={styles.input}
                 placeholder="Cellphone Number"
                 value={cellphone}
                 onChangeText={setCellphone}
-                // keyboardType="phone-pad" // set the keyboard type for phone numbers
             />
-             <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                    console.log({ name, surname, email, cellphone });
+            {/* Dropdown for User Type */}
+            <RNPickerSelect
+                onValueChange={(value) => setUserType(value)}
+                items={[
+                    { label: 'Club Manager User', value: 'clubManagerUser' },
+                    { label: 'Security Admin User', value: 'securityPersonnelUser' }, // Corrected spelling here
+                ]}
+                style={{ input: styles.pickerInput }} 
+                placeholder={{
+                    label: 'Select User Type',
+                    value: null,
                 }}
+            />
+            {/* Continue Button */}
+            <TouchableOpacity
+                style={styles.button}
             >
                 <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
+        </View>
+    );
+};
 
-    </View>
-  )
-}
-
-export default AddUsers
+export default AddUsers;
 
 const styles = StyleSheet.create({
     container: {
@@ -60,12 +75,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-    },
-
-    picker: {
-        height: 50,
-        width: '100%',
-        marginBottom: 20,
     },
     input: {
         height: 50,
@@ -87,7 +96,16 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize:  16,
-
+        fontSize: 16,
+    },
+    pickerInput: { 
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 20,
+        paddingLeft: 10,
+        borderRadius: 5,
+        backgroundColor: '#FFF',
+        color: '#000',
     },
 });

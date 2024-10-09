@@ -19,14 +19,6 @@ const AssignPersonnelManagement = () => {
       
         {/* Text Display for Personnel */}
         <Text style={styles.personnelText}>{item.personnel}</Text>
-         {/* Dropdown list to select personnel */}
-      <View style={styles.pickerContainer}>
-        <Picker
-          style={styles.picker}
-        >
-
-        </Picker>
-      </View>
 
       <TouchableOpacity style={styles.assignButton}>
         <Text style={styles.assignButtonText}>Assign</Text>

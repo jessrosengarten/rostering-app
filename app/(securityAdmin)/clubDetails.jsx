@@ -3,10 +3,14 @@ import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants'; 
+// import { useNavigation } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const ClubDetails = () => {
+    //const navigation = useNavigation();
+    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={images.background} style={styles.backgroundImage}>
@@ -52,6 +56,12 @@ const ClubDetails = () => {
                             title="Delete Club"
                             handlePress={() => {}}
                             customStyle={[styles.button, styles.deleteButton]} 
+                            textStyle={styles.buttonText} 
+                        />
+                        <CustomButton 
+                            title="Assign Personnel"
+                            handlePress={() => router.push('/assignPersonnelManagement')} 
+                            customStyle={[styles.button, styles.button]} 
                             textStyle={styles.buttonText} 
                         />
                     </View>

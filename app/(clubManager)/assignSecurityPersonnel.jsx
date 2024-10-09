@@ -26,7 +26,6 @@ const assignSecurityPersonnel = () => {
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Assigning Security Personnel</Text>
                 </View>
-
                 {/* Club Name */}
                 <Text style={styles.clubName}>Neon Night Club</Text>
 

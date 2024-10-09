@@ -40,7 +40,7 @@ const SecurityAdmin = () => {
       navigation.navigate('clubDetails', { clubName: name });  
     } 
     else if (type == 'securityPersonnel') {
-      navigation.navigate('assignPersonnelManagement', { securityName: name });  
+      navigation.navigate('securityPersonnelProfile', { securityName: name });  
     } 
     else if (type == 'clubManagers') {
       navigation.navigate('clubManagerDetails', { managerName: name });  
@@ -103,7 +103,7 @@ const SecurityAdmin = () => {
             {/* Add User Button */}
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() => navigation.navigate('addUsers')} // Navigate to addUser.jsx
+            onPress={() => navigation.navigate('addUsers')}
           >
             <Text style={styles.addButtonText}>Add User</Text>
           </TouchableOpacity>
