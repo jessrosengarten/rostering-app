@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker'
-import { icons, images } from "../../constants"; 
+import { icons, images } from "../../constants";
 
 const AssignPersonnelManagement = () => {
   // Dummy data 
@@ -16,9 +16,9 @@ const AssignPersonnelManagement = () => {
   const renderScheduleItem = (item) => (
     <View style={styles.scheduleItem}>
       <Text style={styles.dayText}>{item.day}:</Text>
-      
-        {/* Text for Personnel */}
-        <Text style={styles.personnelText}>{item.personnel}</Text>
+
+      {/* Text for Personnel */}
+      <Text style={styles.personnelText}>{item.personnel}</Text>
 
       <TouchableOpacity style={styles.assignButton}>
         <Text style={styles.assignButtonText}>Assign</Text>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     marginRight: 10,
-    flex:2,
+    flex: 2,
   },
   assignButton: {
     backgroundColor: '#d0d0d0',

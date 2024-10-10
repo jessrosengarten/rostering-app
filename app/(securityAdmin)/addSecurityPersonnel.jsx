@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, ImageBackground } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constants'; 
+import { images } from '../../constants';
 import { TextInput } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -10,32 +10,32 @@ const AddSecurityPersonnel = () => {
     const [gender, setGender] = useState('');
     const [rate, setRate] = useState('');
 
-  return (
+    return (
 
-    <SafeAreaView edges={[]}>
-        <ImageBackground source={images.background} style={styles.background}>
+        <SafeAreaView edges={[]}>
+            <ImageBackground source={images.background} style={styles.background}>
 
-        <ScrollView style={styles.container}>
-            <View style={styles.header}>
-            <Text style={styles.headerText}>Add Security Personnel</Text>
-            </View>
-            
-            {/* Gender Selector */}
-            <View style={styles.formContainer}>
-                <Text style={styles.label}>Gender:</Text>
-                <View style={styles.pickerContainer}>
-                </View>
-            </View>
+                <ScrollView style={styles.container}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>Add Security Personnel</Text>
+                    </View>
 
-            {/* Rate Input */}
-            <Text>Rate:</Text>
-            <TextInput></TextInput>
+                    {/* Gender Selector */}
+                    <View style={styles.formContainer}>
+                        <Text style={styles.label}>Gender:</Text>
+                        <View style={styles.pickerContainer}>
+                        </View>
+                    </View>
 
-        </ScrollView>
-        </ImageBackground>
-        
-    </SafeAreaView>
-  )
+                    {/* Rate Input */}
+                    <Text>Rate:</Text>
+                    <TextInput></TextInput>
+
+                </ScrollView>
+            </ImageBackground>
+
+        </SafeAreaView>
+    )
 }
 
 export default AddSecurityPersonnel
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         padding: 15,
         alignItems: 'center',
     },

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 
@@ -20,36 +20,38 @@ const assignSecurityPersonnel = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ImageBackground source={images.background} style={styles.background}>
+        <SafeAreaView edges={[]}>
+            <ImageBackground source={images.background} className='h-full w-full'>
                 {/* Semi-transparent header */}
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Assigning Security Personnel</Text>
                 </View>
-                {/* Club Name */}
-                <Text style={styles.clubName}>Neon Night Club</Text>
+                <ScrollView contentContainerStyle={{ height: '100%' }}>
+                    {/* Club Name */}
+                    <Text style={styles.clubName}>Neon Night Club</Text>
 
-                {/* Day Elements */}
-                {['Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
-                    <View key={index} style={styles.dayContainer}>
-                        <Text style={styles.dayText}>{day}</Text>
-                        <Switch
-                            value={isClubOpen[day]}
-                            onValueChange={() => toggleSwitch(day)}
-                        />
-                        <Text style={styles.label}>No of Personnel:</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Input No."
-                            editable={isClubOpen[day]} // Only editable if the switch is on
-                        />
-                    </View>
-                ))}
+                    {/* Day Elements */}
+                    {['Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
+                        <View key={index} style={styles.dayContainer}>
+                            <Text style={styles.dayText}>{day}</Text>
+                            <Switch
+                                value={isClubOpen[day]}
+                                onValueChange={() => toggleSwitch(day)}
+                            />
+                            <Text style={styles.label}>No of Personnel:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Input No."
+                                editable={isClubOpen[day]} // Only editable if the switch is on
+                            />
+                        </View>
+                    ))}
 
-                {/* Assign Button */}
-                <TouchableOpacity style={styles.assignButton}>
-                    <Text style={styles.assignButtonText}>Assign</Text>
-                </TouchableOpacity>
+                    {/* Assign Button */}
+                    <TouchableOpacity style={styles.assignButton}>
+                        <Text style={styles.assignButtonText}>Assign</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </ImageBackground>
         </SafeAreaView>
     );
@@ -64,15 +66,19 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        width: '100%',
         padding: 15,
-        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        alignItems: 'left',
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
     },
     headerText: {
-        color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
+        color: '#000',
     },
+
     clubName: {
         textAlign: 'center',
         fontSize: 22,
@@ -90,7 +96,7 @@ const styles = StyleSheet.create({
     dayText: {
         fontSize: 18,
         color: 'black',
-        fontWeight:  'bold',
+        fontWeight: 'bold',
 
     },
     label: {

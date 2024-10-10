@@ -37,37 +37,36 @@ const SecurityAdmin = () => {
   // Handle the navigation
   const handleNavigation = (type, name) => {
     if (type == 'clubs') {
-      navigation.navigate('clubDetails', { clubName: name });  
-    } 
+      navigation.navigate('clubDetails', { clubName: name });
+    }
     else if (type == 'securityPersonnel') {
-      navigation.navigate('securityPersonnelProfile', { securityName: name });  
-    } 
+      navigation.navigate('securityPersonnelProfile', { securityName: name });
+    }
     else if (type == 'clubManagers') {
-      navigation.navigate('clubManagerDetails', { managerName: name });  
+      navigation.navigate('clubManagerDetails', { managerName: name });
     }
   };
 
-    // Display the lists of clubs, security personnel, and club managers
-    const displayItems = ({ item }, type) => (
-      <TouchableOpacity onPress={() => handleNavigation(type, item.name)}>
-        <View style={styles.personnelItem}>
-          <Image source={item.logo} style={styles.personIcon} />
-          <Text style={styles.personName}>{item.name}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-    
+  // Display the lists of clubs, security personnel, and club managers
+  const displayItems = ({ item }, type) => (
+    <TouchableOpacity onPress={() => handleNavigation(type, item.name)}>
+      <View style={styles.personnelItem}>
+        <Image source={item.logo} style={styles.personIcon} />
+        <Text style={styles.personName}>{item.name}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
         <ScrollView style={styles.container}>
+          {/* Semi-transparent Header */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Clarence</Text>
+            <Text style={styles.headerText}>Clubs</Text>
           </View>
-
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Clubs</Text>
             <FlatList
               data={clubs}
               horizontal
@@ -101,10 +100,10 @@ const SecurityAdmin = () => {
               style={styles.personnelList}
             />
             {/* Add User Button */}
-            <CustomButton  
-               handlePress={() => {router.push('/addUsers')}}
+            <CustomButton
+              handlePress={() => { router.push('/addUsers') }}
               title="Add User"
-              style={styles.addButton}/>
+              style={styles.addButton} />
           </View>
         </ScrollView>
       </ImageBackground>
@@ -117,13 +116,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: '#e0e0e0',
+    width: '100%',
     padding: 15,
-    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#000',
   },
   section: {
     marginVertical: 15,
@@ -180,10 +183,10 @@ const styles = StyleSheet.create({
   addButton: {
     backgroundColor: '#FFD700',
     paddingVertical: 5,
-    paddingHorizontal:  8,
+    paddingHorizontal: 8,
     borderRadius: 5,
     alignItems: 'center',
-},
+  },
 });
 
 export default SecurityAdmin;

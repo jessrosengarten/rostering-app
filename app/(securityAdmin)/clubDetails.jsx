@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
-import { images } from '../../constants'; 
+import { images } from '../../constants';
 // import { useNavigation } from 'expo-router';
 import { useRouter } from 'expo-router';
 
@@ -40,29 +40,29 @@ const ClubDetails = () => {
 
                     {/* Buttons */}
                     <View style={styles.buttonsContainer}>
-                        <CustomButton 
+                        <CustomButton
                             title="Finance Details"
-                            handlePress={() => {}}
-                            customStyle={styles.button} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
                         />
-                        <CustomButton 
+                        <CustomButton
                             title="Edit Details"
-                            handlePress={() => {}}
-                            customStyle={styles.button} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
                         />
-                        <CustomButton 
+                        <CustomButton
                             title="Delete Club"
-                            handlePress={() => {}}
-                            customStyle={[styles.button, styles.deleteButton]} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={[styles.button, styles.deleteButton]}
+                            textStyle={styles.buttonText}
                         />
-                        <CustomButton 
+                        <CustomButton
                             title="Assign Personnel"
-                            handlePress={() => router.push('/assignPersonnelManagement')} 
-                            customStyle={[styles.button, styles.button]} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => router.push('/assignPersonnelManagement')}
+                            customStyle={[styles.button, styles.button]}
+                            textStyle={styles.buttonText}
                         />
                     </View>
                 </ScrollView>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 14, 
+        fontSize: 14,
     },
 });
 
