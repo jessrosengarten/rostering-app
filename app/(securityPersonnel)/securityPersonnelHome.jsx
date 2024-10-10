@@ -23,7 +23,6 @@ const SecurityHome = () => {
                         <View style={styles.welcomeContainer}>
                             <Text style={styles.welcomeText}>i like</Text>
                         </View>
-                        
                         {/* Loop through the shifts to display a box for each night */}
                         {shifts.map((shift, index) => (
                             <View key={index} style={styles.shiftBox}>
@@ -89,13 +88,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'gray',
     },
-    
+
     cancelButton: {
         backgroundColor: 'red',
-        padding: 8, 
+        padding: 8,
         borderRadius: 5,
         paddingHorizontal: 15,
-        marginLeft: 10, 
+        marginLeft: 10,
         fontSize: 10,
     },
 

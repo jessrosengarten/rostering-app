@@ -17,8 +17,8 @@ const AddUsers = () => {
 
     const navigation = useNavigation();
 
-     // Handle the continue button press
-     const handleContinue = () => {
+    // Handle the continue button press
+    const handleContinue = () => {
         if (userType === 'clubManagerUser') {
             navigation.navigate('addClubManager');
         } else {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        alignItems: 'center',
+        alignItems: 'left',
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },

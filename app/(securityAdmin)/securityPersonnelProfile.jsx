@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
-import { images } from '../../constants'; 
+import { images } from '../../constants';
 // import { useNavigation } from 'expo-router';
 import { useRouter } from 'expo-router';
 
@@ -12,13 +12,13 @@ const securityPersonnelProfile = () => {
     //const navigation = useNavigation();
     const router = useRouter();
     return (
-        <SafeAreaView style={styles.container}>
-            <ImageBackground source={images.background} style={styles.backgroundImage}>
+        <SafeAreaView edges={[]}>
+            <ImageBackground source={images.background} className='h-full w-full'>
+                {/* Profile Name */}
+                <View style={styles.profileHeader}>
+                    <Text style={styles.clubName}>Softpaws</Text>
+                </View>
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
-                    {/* Profile Name */}
-                    <View style={styles.profileHeader}>
-                        <Text style={styles.clubName}>Softpaws</Text>
-                    </View>
 
                     <View style={styles.detailsContainer}>
                         <Text style={styles.detailTitle}>Address:</Text>
@@ -32,29 +32,29 @@ const securityPersonnelProfile = () => {
 
                     {/* Buttons */}
                     <View style={styles.buttonsContainer}>
-                        <CustomButton 
+                        <CustomButton
                             title="View Documents"
-                            handlePress={() => {}}
-                            customStyle={styles.button} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
                         />
-                        <CustomButton 
+                        <CustomButton
                             title="Finance Details"
-                            handlePress={() => {}}
-                            customStyle={styles.button} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
                         />
-                        <CustomButton 
+                        <CustomButton
                             title="Edit Details"
-                            handlePress={() => {}}
-                            customStyle={[styles.button, styles.deleteButton]} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={[styles.button, styles.deleteButton]}
+                            textStyle={styles.buttonText}
                         />
-                        <CustomButton 
+                        <CustomButton
                             title="Delete"
-                            handlePress={() => {}} 
-                            customStyle={[styles.button, styles.button]} 
-                            textStyle={styles.buttonText} 
+                            handlePress={() => { }}
+                            customStyle={[styles.button, styles.button]}
+                            textStyle={styles.buttonText}
                         />
                     </View>
                 </ScrollView>
@@ -77,9 +77,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     profileHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
+        width: '100%',
+        padding: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        alignItems: 'left',
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
     },
     clubLogo: {
         width: 50,
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 14, 
+        fontSize: 14,
     },
 });
 

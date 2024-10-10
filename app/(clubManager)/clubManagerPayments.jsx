@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constants'; 
+import { images } from '../../constants';
 
 const clubManagerPayments = () => {
     // Dummy data
@@ -17,48 +17,50 @@ const clubManagerPayments = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ImageBackground source={images.background} style={styles.background}>
+        <SafeAreaView edges={[]}>
+            <ImageBackground source={images.background} className='h-full w-full'>
                 {/* Semi-transparent Header */}
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>Payments Page</Text>
+                    <Text style={styles.headerText}>Payments</Text>
                 </View>
+                <ScrollView contentContainerStyle={{ height: '100%' }}>
 
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
-                    {/* Club Name and Logo */}
-                    <View style={styles.clubInfo}>
-                        <Text style={styles.clubName}>{paymentData.clubName}</Text>
-                        <Image 
-                            source={{ uri: paymentData.clubLogo }} 
-                            style={styles.clubLogo}
-                            resizeMode='contain'
-                        />
-                    </View>
-
-                    {/* Payments List */}
-                    <View style={styles.paymentDetails}>
-                        <Text style={styles.sectionTitle}>Total Invoice to Pay</Text>
-
-                        {Object.keys(paymentData.payments).map((day, index) => (
-                            <View key={index} style={styles.paymentRow}>
-                                <Text style={styles.dayText}>{day}:</Text>
-                                <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
-                            </View>
-                        ))}
-
-                        {/* Total */}
-                        <View style={styles.paymentRow}>
-                            <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
-                            <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
-                                R {paymentData.total.toFixed(2)}
-                            </Text>
+                    <ScrollView contentContainerStyle={styles.scrollContainer}>
+                        {/* Club Name and Logo */}
+                        <View style={styles.clubInfo}>
+                            <Text style={styles.clubName}>{paymentData.clubName}</Text>
+                            <Image
+                                source={{ uri: paymentData.clubLogo }}
+                                style={styles.clubLogo}
+                                resizeMode='contain'
+                            />
                         </View>
-                    </View>
 
-                    {/* Payment Button */}
-                    <TouchableOpacity style={styles.paymentButton}>
-                        <Text style={styles.paymentButtonText}>Make Payment</Text>
-                    </TouchableOpacity>
+                        {/* Payments List */}
+                        <View style={styles.paymentDetails}>
+                            <Text style={styles.sectionTitle}>Total Invoice to Pay</Text>
+
+                            {Object.keys(paymentData.payments).map((day, index) => (
+                                <View key={index} style={styles.paymentRow}>
+                                    <Text style={styles.dayText}>{day}:</Text>
+                                    <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
+                                </View>
+                            ))}
+
+                            {/* Total */}
+                            <View style={styles.paymentRow}>
+                                <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
+                                <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
+                                    R {paymentData.total.toFixed(2)}
+                                </Text>
+                            </View>
+                        </View>
+
+                        {/* Payment Button */}
+                        <TouchableOpacity style={styles.paymentButton}>
+                            <Text style={styles.paymentButtonText}>Make Payment</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
@@ -74,14 +76,17 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        width: '100%',
         padding: 15,
-        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        alignItems: 'left',
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
     },
     headerText: {
-        color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
+        color: '#000',
     },
     scrollContainer: {
         padding: 20,
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     clubName: {
-        fontSize: 22, 
+        fontSize: 22,
         fontWeight: 'bold',
         color: 'red',
         marginBottom: 10,
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     paymentButton: {
-        backgroundColor: '#E21A1A', 
+        backgroundColor: '#E21A1A',
         paddingVertical: 15,
         paddingHorizontal: 50,
         borderRadius: 5,

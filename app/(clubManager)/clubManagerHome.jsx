@@ -4,7 +4,7 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import { TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
 
@@ -25,28 +25,27 @@ const home = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} className='h-full w-full'>
+                {/* Semi-transparent Header */}
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>List of Clubs</Text>
+                </View>
                 <ScrollView contentContainerStyle={{ height: '100%' }}>
-                    
-                    {/* Semi-transparent Header */}
-                    <View style={styles.header}>
-                        <Text style={styles.headerText}>List of Clubs</Text>
-                    </View>
 
-                     {/* Scrollable List of Clubs */}
-                     <View style={styles.clubList}>   
+                    {/* Scrollable List of Clubs */}
+                    <View style={styles.clubList}>
                         {clubs.map((club, index) => (
                             <View key={index} style={styles.clubItem}>
                                 <Text style={styles.clubName}>{club.name}</Text>
                                 <View style={styles.buttonsContainer}>
-                                    <CustomButton  
-                                    handlePress={() => { router.push('/assignSecurityPersonnel') }}
-                                    title="Assign Personnel"
-                                    style={styles.assignButton}/>
+                                    <CustomButton
+                                        handlePress={() => { router.push('/assignSecurityPersonnel') }}
+                                        title="Assign Personnel"
+                                        style={styles.assignButton} />
 
                                     <CustomButton
-                                    handlePress={() => {router.push('/clubManagerPayments')}}
-                                    title="Payments"
-                                    style={styles.assignButton}/>
+                                        handlePress={() => { router.push('/clubManagerPayments') }}
+                                        title="Payments"
+                                        style={styles.assignButton} />
                                 </View>
                             </View>
                         ))}
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        alignItems: 'center',
+        alignItems: 'left',
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     paymentButton: {
         backgroundColor: '#FFD700',
         paddingVertical: 5,
-        paddingHorizontal:  8,
+        paddingHorizontal: 8,
         borderRadius: 5,
         alignItems: 'center',
     },
@@ -121,9 +120,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'rgba(255,255,255,0.8)', // background for each club item
         marginVertical: 10,
-        borderRadius: 10, 
+        borderRadius: 10,
     }
-    
+
 });
 
 export default home
