@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 14, // NOT CHANGING FONT SIZE???
+        fontSize: 14, 
     },
 });
 

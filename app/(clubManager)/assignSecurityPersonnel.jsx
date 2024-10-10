@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
         padding: 15,
         alignItems: 'center',
     },

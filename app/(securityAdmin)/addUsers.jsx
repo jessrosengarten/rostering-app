@@ -6,6 +6,7 @@ import CustomButton from '../../components/CustomButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 
+
 const AddUsers = () => {
     // State for user input
     const [name, setName] = useState('');
@@ -71,7 +72,7 @@ const AddUsers = () => {
                             onValueChange={(value) => setUserType(value)}
                             items={[
                                 { label: 'Club Manager User', value: 'clubManagerUser' },
-                                { label: 'Security Admin User', value: 'securityPersonnelUser' },
+                                { label: 'Security Personnel User', value: 'securityPersonnelUser' },
                             ]}
                             style={{
                                 // CHECK THIS OUT
@@ -86,7 +87,6 @@ const AddUsers = () => {
                             }}
                         />
 
-                        {/* Custom Continue Button */}
                         <CustomButton
                             title="Continue"
                             handlePress={handleContinue}

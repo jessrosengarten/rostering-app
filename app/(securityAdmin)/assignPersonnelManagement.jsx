@@ -17,7 +17,7 @@ const AssignPersonnelManagement = () => {
     <View style={styles.scheduleItem}>
       <Text style={styles.dayText}>{item.day}:</Text>
       
-        {/* Text Display for Personnel */}
+        {/* Text for Personnel */}
         <Text style={styles.personnelText}>{item.personnel}</Text>
 
       <TouchableOpacity style={styles.assignButton}>
