@@ -26,11 +26,10 @@ const assignSecurityPersonnel = () => {
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Assigning Security Personnel</Text>
                 </View>
-
                 {/* Club Name */}
                 <Text style={styles.clubName}>Neon Night Club</Text>
 
-                {/* Day Elements from Thursday to Sunday */}
+                {/* Day Elements */}
                 {['Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
                     <View key={index} style={styles.dayContainer}>
                         <Text style={styles.dayText}>{day}</Text>
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
         padding: 15,
         alignItems: 'center',
     },
@@ -90,7 +89,9 @@ const styles = StyleSheet.create({
     },
     dayText: {
         fontSize: 18,
-        color: 'red',
+        color: 'black',
+        fontWeight:  'bold',
+
     },
     label: {
         marginLeft: 10,

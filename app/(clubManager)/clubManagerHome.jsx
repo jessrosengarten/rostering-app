@@ -8,12 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
 
-
 const { width, height } = Dimensions.get('window')
 
+// ADD PATHS TO LOGOS
 // Dummy data
 const clubs = [
-    { name: 'Omnia' },
+    { name: 'Omnia', logo: (images.omnia) },
     { name: 'Oasis Disco Bar' },
     { name: 'Jail Night Club' },
     { name: 'Neon Night Club' },
@@ -26,25 +26,27 @@ const home = () => {
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} className='h-full w-full'>
                 <ScrollView contentContainerStyle={{ height: '100%' }}>
+                    
                     {/* Semi-transparent Header */}
                     <View style={styles.header}>
                         <Text style={styles.headerText}>List of Clubs</Text>
                     </View>
 
                      {/* Scrollable List of Clubs */}
-                     <View style={styles.clubList}>
-                        
+                     <View style={styles.clubList}>   
                         {clubs.map((club, index) => (
                             <View key={index} style={styles.clubItem}>
                                 <Text style={styles.clubName}>{club.name}</Text>
-                                <View >
+                                <View style={styles.buttonsContainer}>
                                     <CustomButton  
                                     handlePress={() => { router.push('/assignSecurityPersonnel') }}
-                                    title="Assign Personnel"/>
+                                    title="Assign Personnel"
+                                    style={styles.assignButton}/>
 
                                     <CustomButton
                                     handlePress={() => {router.push('/clubManagerPayments')}}
-                                    title="Payments"/>
+                                    title="Payments"
+                                    style={styles.assignButton}/>
                                 </View>
                             </View>
                         ))}
@@ -81,14 +83,14 @@ const styles = StyleSheet.create({
 
     buttonsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
+        justifyContent: 'flex-end',
+        marginTop: 5,
     },
 
     assignButton: {
         backgroundColor: '#E21A1A',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        paddingVertical: 5,
+        paddingHorizontal: 8,
         borderRadius: 5,
         marginHorizontal: 5,
         alignItems: 'center',
@@ -96,21 +98,28 @@ const styles = StyleSheet.create({
 
     paymentButton: {
         backgroundColor: '#FFD700',
-        paddingVertical: 10,
-        paddingHorizontal:  15,
+        paddingVertical: 5,
+        paddingHorizontal:  8,
         borderRadius: 5,
-        marginHorizontal: 5,
+        alignItems: 'center',
     },
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
+        fontSize: 10,
     },
     clubList: {
         alignItems: 'left',
     },
+
+
     clubItem: {
         width: '90%',
         padding: 10,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+        backgroundColor: 'rgba(255,255,255,0.8)', // background for each club item
         marginVertical: 10,
         borderRadius: 10, 
     }

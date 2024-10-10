@@ -1,8 +1,8 @@
-// App/SecurityPersonnel/Home.jsx
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import CustomButton from '../../components/CustomButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,12 +17,14 @@ const shifts = [
 const SecurityHome = () => {
     return (
         <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} className='h-full w-full'>
-                <ScrollView contentContainerStyle={{ height: '100%' }}>
-                    <View className="flex-1 items-center justify-center">
-                        <Text>Welcome, Security Personnel! I LIIIIKKKEEEe</Text>
+            <ImageBackground source={images.background} style={styles.background}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View style={styles.container}>
+                        <View style={styles.welcomeContainer}>
+                            <Text style={styles.welcomeText}>i like</Text>
+                        </View>
+                        
                         {/* Loop through the shifts to display a box for each night */}
-                        <View style={styles.container}>
                         {shifts.map((shift, index) => (
                             <View key={index} style={styles.shiftBox}>
                                 <View style={styles.shiftDetails}>
@@ -30,10 +32,12 @@ const SecurityHome = () => {
                                     <Text style={styles.clubText}>Club: {shift.club}</Text>
                                     <Text style={styles.timeText}>Shift Time: {shift.time}</Text>
                                 </View>
+                                <CustomButton
+                                    title="Cancel"
+                                    style={styles.cancelButton}
+                                />
                             </View>
                         ))}
-                    </View>
-                        
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -48,14 +52,19 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    scrollContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     container: {
         padding: 20,
         width: '100%',
+    },
+    welcomeContainer: {
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
+    welcomeText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'red',
+        textAlign: 'center',
     },
     shiftBox: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -80,14 +89,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'gray',
     },
+    
     cancelButton: {
         backgroundColor: 'red',
-        padding: 10,
+        padding: 8, 
         borderRadius: 5,
+        paddingHorizontal: 15,
+        marginLeft: 10, 
+        fontSize: 10,
     },
-    cancelText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-});
 
+});

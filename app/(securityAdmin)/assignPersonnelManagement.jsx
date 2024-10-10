@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Picker } from '@react-native-picker/picker'
 import { icons, images } from "../../constants"; 
 
 const AssignPersonnelManagement = () => {
@@ -15,11 +16,11 @@ const AssignPersonnelManagement = () => {
   const renderScheduleItem = (item) => (
     <View style={styles.scheduleItem}>
       <Text style={styles.dayText}>{item.day}:</Text>
-      <TouchableOpacity style={styles.personnelButton}>
+      
+        {/* Text for Personnel */}
         <Text style={styles.personnelText}>{item.personnel}</Text>
-      </TouchableOpacity>
+
       <TouchableOpacity style={styles.assignButton}>
-        {/* Black triangle button */}
         <Text style={styles.assignButtonText}>Assign</Text>
       </TouchableOpacity>
     </View>
@@ -32,7 +33,6 @@ const AssignPersonnelManagement = () => {
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerContent}>
-              <Image source={icons.profile} style={styles.profileIcon} />
               <Text style={styles.headerText}>Clarence</Text>
             </View>
             <Text style={styles.clubName}>Oasis Disco Bar</Text>
@@ -46,18 +46,6 @@ const AssignPersonnelManagement = () => {
           </View>
         </ScrollView>
 
-        {/* Bottom Navigation */}
-        <View style={styles.bottomMenu}>
-          <TouchableOpacity>
-            <Image source={icons.home} style={styles.menuIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={icons.schedule} style={styles.menuIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={icons.finance} style={styles.menuIcon} />
-          </TouchableOpacity>
-        </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -117,6 +105,8 @@ const styles = StyleSheet.create({
   personnelText: {
     fontSize: 14,
     color: '#333',
+    marginRight: 10,
+    flex:2,
   },
   assignButton: {
     backgroundColor: '#d0d0d0',
@@ -127,16 +117,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
   },
-  bottomMenu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 15,
-    backgroundColor: '#fff',
+
+  pickerContainer: {
+    flex: 2,
+    borderWidth: 1,
+    borderColor: '#d0d0d0',
+    borderRadius: 8,
+    justifyContent: 'center',
   },
-  menuIcon: {
-    width: 30,
-    height: 30,
+  picker: {
+    height: 40,
+    width: '100%',
+    alignSelf: 'stretch',
   },
+
 });
 
 export default AssignPersonnelManagement;

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constants';  // Assuming you have an images constant file
+import { images } from '../../constants'; 
 
 const clubManagerPayments = () => {
     // Dummy data
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent header
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
         padding: 15,
         alignItems: 'center',
     },
