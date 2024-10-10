@@ -3,8 +3,8 @@ import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, FlatList, 
 import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
-
-
+import CustomButton from '../../components/CustomButton';
+import { router } from 'expo-router';
 
 // Dummy data
 const clubs = [
@@ -101,12 +101,10 @@ const SecurityAdmin = () => {
               style={styles.personnelList}
             />
             {/* Add User Button */}
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => navigation.navigate('addUsers')}
-          >
-            <Text style={styles.addButtonText}>Add User</Text>
-          </TouchableOpacity>
+            <CustomButton  
+               handlePress={() => {router.push('/addUsers')}}
+              title="Add User"
+              style={styles.addButton}/>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -180,13 +178,12 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   addButton: {
-    backgroundColor: '#E21A1A',  
-    padding: 15,
-    marginVertical: 20,
-    marginHorizontal: 30,
+    backgroundColor: '#FFD700',
+    paddingVertical: 5,
+    paddingHorizontal:  8,
+    borderRadius: 5,
     alignItems: 'center',
-    borderRadius: 10,
-  },
+},
 });
 
 export default SecurityAdmin;

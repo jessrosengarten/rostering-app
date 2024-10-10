@@ -83,14 +83,14 @@ const styles = StyleSheet.create({
 
     buttonsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         marginTop: 5,
     },
 
     assignButton: {
         backgroundColor: '#E21A1A',
         paddingVertical: 5,
-        paddingHorizontal: 10,
+        paddingHorizontal: 8,
         borderRadius: 5,
         marginHorizontal: 5,
         alignItems: 'center',
