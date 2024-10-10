@@ -14,22 +14,20 @@ const AddSecurityPersonnel = () => {
 
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Add Security Personnel</Text>
+            </View>
+        <ScrollView style={styles.container}>
+            {/* Gender Selector */}
+            <View style={styles.formContainer}>
+                    <Text style={styles.label}>Gender:</Text>
+                <View style={styles.pickerContainer}>
+                </View>
+            </View>
 
-                <ScrollView style={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerText}>Add Security Personnel</Text>
-                    </View>
-
-                    {/* Gender Selector */}
-                    <View style={styles.formContainer}>
-                        <Text style={styles.label}>Gender:</Text>
-                        <View style={styles.pickerContainer}>
-                        </View>
-                    </View>
-
-                    {/* Rate Input */}
-                    <Text>Rate:</Text>
-                    <TextInput></TextInput>
+            {/* Rate Input */}
+            <Text>Rate:</Text>
+            <TextInput></TextInput>
 
                 </ScrollView>
             </ImageBackground>
@@ -50,13 +48,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     header: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        width: '100%',
         padding: 15,
-        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        alignItems: 'left',
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
     },
     headerText: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: '#000',
 
     },
     formContainer: {

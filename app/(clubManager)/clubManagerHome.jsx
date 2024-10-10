@@ -10,14 +10,13 @@ import CustomButton from '../../components/CustomButton';
 
 const { width, height } = Dimensions.get('window')
 
-// ADD PATHS TO LOGOS
 // Dummy data
 const clubs = [
     { name: 'Omnia', logo: (images.omnia) },
-    { name: 'Oasis Disco Bar' },
-    { name: 'Jail Night Club' },
-    { name: 'Neon Night Club' },
-];
+    { name: 'Jail Night Club', logo: (images.jail) },
+    { name: 'Oasis Disco Bar', logo: (images.oasis) },
+    { name: 'Neon Night Club', logo: (images.neon) },
+  ];
 
 const home = () => {
     const navigation = useNavigation();
@@ -35,6 +34,10 @@ const home = () => {
                     <View style={styles.clubList}>
                         {clubs.map((club, index) => (
                             <View key={index} style={styles.clubItem}>
+                                <Image
+                                    source={club.logo} 
+                                    style={styles.clubLogo} 
+                                />
                                 <Text style={styles.clubName}>{club.name}</Text>
                                 <View style={styles.buttonsContainer}>
                                     <CustomButton
@@ -74,6 +77,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
     },
+    clubLogo: {
+        width: 50,
+        height: 50,
+        borderRadius: 10,
+      },
 
     clubName: {
         fontSize: 18,

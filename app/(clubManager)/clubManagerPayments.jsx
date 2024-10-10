@@ -6,7 +6,7 @@ const clubManagerPayments = () => {
     // Dummy data
     const paymentData = {
         clubName: 'Neon Night Club',
-        clubLogo: 'URL', // Placeholder for club logo URL
+        clubLogo: images.neon, // Placeholder for club logo URL
         payments: {
             Thursday: 750.00,
             Friday: 950.00,
@@ -30,7 +30,7 @@ const clubManagerPayments = () => {
                         <View style={styles.clubInfo}>
                             <Text style={styles.clubName}>{paymentData.clubName}</Text>
                             <Image
-                                source={{ uri: paymentData.clubLogo }}
+                                source={paymentData.clubLogo} 
                                 style={styles.clubLogo}
                                 resizeMode='contain'
                             />
@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
     clubLogo: {
         width: 100,
         height: 100,
-    },
+        borderRadius: 10,
+      },
     paymentDetails: {
         width: '100%',
         backgroundColor: '#FFF',

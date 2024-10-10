@@ -6,6 +6,9 @@ import { images } from '../../constants';
 
 const assignSecurityPersonnel = () => {
     const [isClubOpen, setIsClubOpen] = useState({
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
         Thursday: false,
         Friday: false,
         Saturday: false,
@@ -24,14 +27,14 @@ const assignSecurityPersonnel = () => {
             <ImageBackground source={images.background} className='h-full w-full'>
                 {/* Semi-transparent header */}
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>Assigning Security Personnel</Text>
+                    <Text style={styles.headerText}>Personnel Needed</Text>
                 </View>
                 <ScrollView contentContainerStyle={{ height: '100%' }}>
                     {/* Club Name */}
                     <Text style={styles.clubName}>Neon Night Club</Text>
 
                     {/* Day Elements */}
-                    {['Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
+                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
                         <View key={index} style={styles.dayContainer}>
                             <Text style={styles.dayText}>{day}</Text>
                             <Switch

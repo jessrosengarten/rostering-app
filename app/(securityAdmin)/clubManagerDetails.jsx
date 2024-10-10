@@ -14,9 +14,8 @@ const clubManagerProfile = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.backgroundImage}>
-                {/* Profile Name */}
-                <View style={styles.profileHeader}>
-                    <Text style={styles.clubName}>Club Manager</Text>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>Club Manager</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -35,15 +34,9 @@ const clubManagerProfile = () => {
                     <View style={styles.buttonsContainer}>
 
                         <CustomButton
-                            title="Edit Details"
+                            title="View Club"
                             handlePress={() => { }}
-                            customStyle={[styles.button, styles.deleteButton]}
-                            textStyle={styles.buttonText}
-                        />
-                        <CustomButton
-                            title="Delete"
-                            handlePress={() => { }}
-                            customStyle={[styles.button, styles.button]}
+                            customStyle={[styles.button, styles.clubViewButton]} 
                             textStyle={styles.buttonText}
                         />
                     </View>
@@ -66,7 +59,8 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
     },
-    profileHeader: {
+
+    header: {
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -74,6 +68,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },
+    headerText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+
     clubLogo: {
         width: 50,
         height: 50,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
     },
-    deleteButton: {
+    clubViewButton: {
         backgroundColor: '#FF0000',
     },
     buttonText: {
