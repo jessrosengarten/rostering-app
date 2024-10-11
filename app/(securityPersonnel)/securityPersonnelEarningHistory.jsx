@@ -17,37 +17,37 @@ const EarningsHistory = () => {
 
           {/* Earnings History Section */}
           <View style={styles.earningsContainer}>
-                        <Text style={styles.sectionTitle}>Week Ending</Text>
-                        <Text style={styles.sectionValue}>01/09/2024</Text>
-                        <Text style={styles.detailText}>Rate per shift:</Text>
-                        <Text style={styles.valueText}>R200.00</Text>
-                        <Text style={styles.detailText}>Number of shifts:</Text>
-                        <Text style={styles.valueText}> 4</Text>
-                        <Text style={styles.detailText}>Total earned:</Text>
-                        <Text style={styles.valueText}>R 800.00</Text>
-                    </View>
+            <Text style={styles.sectionTitle}>Week Ending</Text>
+            <Text style={styles.sectionValue}>01/09/2024</Text>
+            <Text style={styles.detailText}>Rate per shift:</Text>
+            <Text style={styles.valueText}>R200.00</Text>
+            <Text style={styles.detailText}>Number of shifts:</Text>
+            <Text style={styles.valueText}> 4</Text>
+            <Text style={styles.detailText}>Total earned:</Text>
+            <Text style={styles.valueText}>R 800.00</Text>
+          </View>
 
-                    <View style={styles.earningsContainer}>
-                    <Text style={styles.sectionTitle}>Week Ending</Text>
-                    <Text style={styles.sectionValue}>25/08/2024</Text>
-                        <Text style={styles.detailText}>Rate per shift:</Text>
-                        <Text style={styles.valueText}>R300.00</Text>
-                        <Text style={styles.detailText}>Number of shifts:</Text>
-                        <Text style={styles.valueText}>3</Text>
-                        <Text style={styles.detailText}>Total earned:</Text>
-                        <Text style={styles.valueText}>R 600.00</Text>
-                    </View>
+        <View style={styles.earningsContainer}>
+            <Text style={styles.sectionTitle}>Week Ending</Text>
+            <Text style={styles.sectionValue}>25/08/2024</Text>
+            <Text style={styles.detailText}>Rate per shift:</Text>
+            <Text style={styles.valueText}>R300.00</Text>
+            <Text style={styles.detailText}>Number of shifts:</Text>
+            <Text style={styles.valueText}>3</Text>
+            <Text style={styles.detailText}>Total earned:</Text>
+            <Text style={styles.valueText}>R 600.00</Text>
+          </View>
 
-                    <View style={styles.earningsContainer}>
-                      <Text style={styles.sectionTitle}>Week Ending</Text>
-                      <Text style={styles.sectionValue}>18/08/2024</Text>
-                        <Text style={styles.detailText}>Rate per shift:</Text>
-                        <Text style={styles.valueText}>R200.00</Text>
-                        <Text style={styles.detailText}>Number of shifts:</Text>
-                        <Text style={styles.valueText}>5</Text>
-                        <Text style={styles.detailText}>Total earned:</Text>
-                        <Text style={styles.valueText}>R 1000.00</Text>
-                    </View>
+          <View style={styles.earningsContainer}>
+            <Text style={styles.sectionTitle}>Week Ending</Text>
+            <Text style={styles.sectionValue}>18/08/2024</Text>
+              <Text style={styles.detailText}>Rate per shift:</Text>
+              <Text style={styles.valueText}>R200.00</Text>
+              <Text style={styles.detailText}>Number of shifts:</Text>
+              <Text style={styles.valueText}>5</Text>
+              <Text style={styles.detailText}>Total earned:</Text>
+              <Text style={styles.valueText}>R 1000.00</Text>
+          </View>
 
         </ScrollView>
       </ImageBackground>
