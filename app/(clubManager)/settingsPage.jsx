@@ -47,7 +47,6 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Change Password</Text>
                 </View>
 
-                {/* Logout Button */}
                 <TouchableOpacity style={styles.logoutButton}>
                     <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>

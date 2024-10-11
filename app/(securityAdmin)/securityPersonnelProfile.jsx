@@ -14,9 +14,8 @@ const securityPersonnelProfile = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} className='h-full w-full'>
-                {/* Profile Name */}
-                <View style={styles.profileHeader}>
-                    <Text style={styles.clubName}>Softpaws</Text>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>Softpaws</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -44,18 +43,7 @@ const securityPersonnelProfile = () => {
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
-                        <CustomButton
-                            title="Edit Details"
-                            handlePress={() => { }}
-                            customStyle={[styles.button, styles.deleteButton]}
-                            textStyle={styles.buttonText}
-                        />
-                        <CustomButton
-                            title="Delete"
-                            handlePress={() => { }}
-                            customStyle={[styles.button, styles.button]}
-                            textStyle={styles.buttonText}
-                        />
+
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -76,7 +64,8 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
     },
-    profileHeader: {
+
+    header: {
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -84,6 +73,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },
+    headerText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+
     clubLogo: {
         width: 50,
         height: 50,
@@ -119,9 +114,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 5,
         alignItems: 'center',
-    },
-    deleteButton: {
-        backgroundColor: '#FF0000',
     },
     buttonText: {
         color: '#FFF',

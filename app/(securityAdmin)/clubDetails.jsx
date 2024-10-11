@@ -12,13 +12,12 @@ const ClubDetails = () => {
     //const navigation = useNavigation();
     const router = useRouter();
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.backgroundImage}>
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
-                    {/* Profile Icon and Name */}
-                    <View style={styles.profileHeader}>
-                        <Text style={styles.clubName}>Oasis Disco Bar</Text>
-                    </View>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Oasis Disco Bar</Text>
+            </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
 
                     {/* Club Details */}
                     <View style={styles.detailsContainer}>
@@ -46,20 +45,16 @@ const ClubDetails = () => {
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
-                        <CustomButton
-                            title="Edit Details"
-                            handlePress={() => { }}
-                            customStyle={styles.button}
-                            textStyle={styles.buttonText}
-                        />
-                        <CustomButton
-                            title="Delete Club"
-                            handlePress={() => { }}
-                            customStyle={[styles.button, styles.deleteButton]}
-                            textStyle={styles.buttonText}
-                        />
+
                         <CustomButton
                             title="Assign Personnel"
+                            handlePress={() => router.push('/assignPersonnelManagement')}
+                            customStyle={[styles.button, styles.button]}
+                            textStyle={styles.buttonText}
+                        />
+
+<CustomButton
+                            title="View Schedule"
                             handlePress={() => router.push('/assignPersonnelManagement')}
                             customStyle={[styles.button, styles.button]}
                             textStyle={styles.buttonText}
@@ -84,10 +79,18 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
     },
-    profileHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
+    header: {
+        width: '100%',
+        padding: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        alignItems: 'left',
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
+    },
+    headerText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#000',
     },
     clubLogo: {
         width: 50,

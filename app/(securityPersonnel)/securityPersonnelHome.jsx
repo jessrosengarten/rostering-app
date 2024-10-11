@@ -18,11 +18,12 @@ const SecurityHome = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>i like</Text>
+            </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.container}>
-                        <View style={styles.welcomeContainer}>
-                            <Text style={styles.welcomeText}>i like</Text>
-                        </View>
+                        
                         {/* Loop through the shifts to display a box for each night */}
                         {shifts.map((shift, index) => (
                             <View key={index} style={styles.shiftBox}>
@@ -55,15 +56,19 @@ const styles = StyleSheet.create({
         padding: 20,
         width: '100%',
     },
-    welcomeContainer: {
-        alignItems: 'center',
-        paddingVertical: 20,
+
+    header: {
+        width: '100%',
+        padding: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        alignItems: 'left',
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
     },
-    welcomeText: {
-        fontSize: 24,
+    headerText: {
+        fontSize: 20,
         fontWeight: 'bold',
-        color: 'red',
-        textAlign: 'center',
+        color: '#000',
     },
     shiftBox: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',

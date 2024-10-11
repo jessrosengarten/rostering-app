@@ -12,8 +12,43 @@ const EarningsHistory = () => {
 
           {/* Semi-transparent Header */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Security Personnel Earnings</Text>
+            <Text style={styles.headerText}>Earnings History</Text>
           </View>
+
+          {/* Earnings History Section */}
+          <View style={styles.earningsContainer}>
+            <Text style={styles.sectionTitle}>Week Ending</Text>
+            <Text style={styles.sectionValue}>01/09/2024</Text>
+            <Text style={styles.detailText}>Rate per shift:</Text>
+            <Text style={styles.valueText}>R200.00</Text>
+            <Text style={styles.detailText}>Number of shifts:</Text>
+            <Text style={styles.valueText}> 4</Text>
+            <Text style={styles.detailText}>Total earned:</Text>
+            <Text style={styles.valueText}>R 800.00</Text>
+          </View>
+
+        <View style={styles.earningsContainer}>
+            <Text style={styles.sectionTitle}>Week Ending</Text>
+            <Text style={styles.sectionValue}>25/08/2024</Text>
+            <Text style={styles.detailText}>Rate per shift:</Text>
+            <Text style={styles.valueText}>R300.00</Text>
+            <Text style={styles.detailText}>Number of shifts:</Text>
+            <Text style={styles.valueText}>3</Text>
+            <Text style={styles.detailText}>Total earned:</Text>
+            <Text style={styles.valueText}>R 600.00</Text>
+          </View>
+
+          <View style={styles.earningsContainer}>
+            <Text style={styles.sectionTitle}>Week Ending</Text>
+            <Text style={styles.sectionValue}>18/08/2024</Text>
+              <Text style={styles.detailText}>Rate per shift:</Text>
+              <Text style={styles.valueText}>R200.00</Text>
+              <Text style={styles.detailText}>Number of shifts:</Text>
+              <Text style={styles.valueText}>5</Text>
+              <Text style={styles.detailText}>Total earned:</Text>
+              <Text style={styles.valueText}>R 1000.00</Text>
+          </View>
+
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -38,54 +73,52 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: '#000',
   },
+  earningsContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#d3d3d3',
+    alignItems: 'center',  
+},
+sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#000',
+    textAlign: 'center',  
+},
 
-  clubName: {
-      fontSize: 18,
-      fontWeight: 'bold',
-  },
+sectionValue: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 5,
+  color: '#000',
+  textAlign: 'center',  
+},
 
-  buttonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      marginTop: 5,
-  },
-
-  assignButton: {
-      backgroundColor: '#E21A1A',
-      paddingVertical: 5,
-      paddingHorizontal: 8,
-      borderRadius: 5,
-      marginHorizontal: 5,
-      alignItems: 'center',
-  },
-
-  paymentButton: {
-      backgroundColor: '#FFD700',
-      paddingVertical: 5,
-      paddingHorizontal:  8,
-      borderRadius: 5,
-      alignItems: 'center',
-  },
-  buttonText: {
-      color: '#FFF',
-      fontWeight: 'bold',
-      fontSize: 10,
-  },
-  clubList: {
-      alignItems: 'left',
-  },
+detailText: {
+  fontSize: 16,
+  color: '#333',
+  marginBottom: 2,
+  fontWeight: 'bold',
+},
 
 
-  clubItem: {
-      width: '90%',
-      padding: 10,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      flexDirection: 'row',
-      backgroundColor: 'rgba(255,255,255,0.8)', // background for each club item
-      marginVertical: 10,
-      borderRadius: 10, 
-  }
+valueText: {
+fontSize: 16,
+color: '#333',
+},
+
+textRow: {
+/* flexDirection to separate heading and value in a row */
+flexDirection: 'row', 
+justifyContent: 'space-between', /* Space between heading and value */
+width: '100%',
+marginBottom: 5,
+},
+
   
 });
 
