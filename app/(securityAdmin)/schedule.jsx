@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import React, { useState } from 'react';
+import RNPickerSelect from 'react-native-picker-select';
 
 const Schedule = () => {
 
@@ -14,7 +15,9 @@ const Schedule = () => {
     Tuesday: [{ name: 'Cleo', club: 'Zest' }, { name: 'Dave', club: 'Moon' }],
     Wednesday: [{ name: 'Daniella', club: 'Zest' }, { name: 'Fred', club: 'Omnia' }],
     Thursday: [{ name: 'Arnold', club: 'Omnia' }, { name: 'Cleo', club: 'Zest' }],
-    Friday: [{ name: 'Arnold', club: 'Omnia' }, { name: 'Daniella', club: 'Zest' }, { name: 'Fred', club: 'Omnia' }]
+    Friday: [{ name: 'Arnold', club: 'Omnia' }, { name: 'Daniella', club: 'Zest' }, { name: 'Fred', club: 'Omnia' }],
+    Saturday: [{ name: 'Arnold', club: 'Omnia' }, { name: 'Daniella', club: 'Zest' }, { name: 'Fred', club: 'Omnia' }],
+    Sunday: [{ name: 'Arnold', club: 'Omnia' }, { name: 'Daniella', club: 'Zest' }, { name: 'Fred', club: 'Omnia' }]
   };
 
 
@@ -26,6 +29,26 @@ const Schedule = () => {
           <View style={styles.header}>
             <Text style={styles.headerText}>Schedule</Text>
           </View>
+
+        {/* RNPicker to select day */}
+        <View style={styles.dropdownContainer}>
+          <RNPickerSelect
+          onValueChange={(value) => setSelectedDay(value)}
+          items = {[
+            { label: 'Monday', value: 'Monday' },
+            { label: 'Tuesday', value: 'Tuesday' },
+            { label: 'Wednesday', value: 'Wednesday' },
+            { label: 'Thursday', value: 'Thursday' },
+            { label: 'Friday', value: 'Friday' },
+            { label: 'Saturday', value: 'Saturday' },
+            { label: 'Sunday', value: 'Sunday' },
+          ]}
+          value={selectedDay}
+          
+          />
+
+        </View>
+
           {/* Schedule List */}
           <View style={styles.scheduleContainer}>
             {scheduleData[selectedDay].map((person, index) => (
@@ -58,6 +81,10 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 10,
+    padding: 10,
+  },
+  pickerSelectStyle: {
+    
   },
   headerText: {
       fontSize: 20,
@@ -76,33 +103,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  clubName: {
-      fontSize: 18,
-      fontWeight: 'bold',
-  },
-
-  buttonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      marginTop: 5,
-  },
-
-  assignButton: {
-      backgroundColor: '#E21A1A',
-      paddingVertical: 5,
-      paddingHorizontal: 8,
-      borderRadius: 5,
-      marginHorizontal: 5,
-      alignItems: 'center',
-  },
-
-  paymentButton: {
-      backgroundColor: '#FFD700',
-      paddingVertical: 5,
-      paddingHorizontal:  8,
-      borderRadius: 5,
-      alignItems: 'center',
-  },
   buttonText: {
       color: '#FFF',
       fontWeight: 'bold',

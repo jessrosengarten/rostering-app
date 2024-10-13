@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 const { width } = Dimensions.get('window');
 
 const securityPersonnelProfile = () => {
-    //const navigation = useNavigation();
+
     const router = useRouter();
     return (
         <SafeAreaView edges={[]}>
@@ -20,6 +20,9 @@ const securityPersonnelProfile = () => {
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
 
                     <View style={styles.detailsContainer}>
+                        <Text style={styles.detailTitle}>Rate per Shift:</Text>
+                        <Text style={styles.detailText}>R 500</Text>
+
                         <Text style={styles.detailTitle}>Address:</Text>
                         <Text style={styles.detailText}>Sandton</Text>
 
@@ -29,7 +32,6 @@ const securityPersonnelProfile = () => {
 
                     </View>
 
-                    {/* Buttons */}
                     <View style={styles.buttonsContainer}>
                         <CustomButton
                             title="View Documents"
@@ -38,7 +40,7 @@ const securityPersonnelProfile = () => {
                             textStyle={styles.buttonText}
                         />
                         <CustomButton
-                            title="Finance Details"
+                            title="Finances"
                             handlePress={() => { }}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
