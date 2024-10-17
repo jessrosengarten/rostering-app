@@ -5,6 +5,8 @@ import { images } from '../../constants';
 import { TextInput } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
+// Page to assign specific personnel for a specific night
+
 const AddSecurityPersonnel = () => {
 
     const [gender, setGender] = useState('');

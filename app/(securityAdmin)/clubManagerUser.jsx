@@ -12,7 +12,7 @@ const ClubManagerUser = () => {
     
     <SafeAreaView edges={[]}>
     <ImageBackground source={images.background} className='h-full w-full'>
-        {/* Semi-transparent Header */}
+
         <View style={styles.header}>
             <Text style={styles.headerText}>List of Clubs</Text>
         </View>

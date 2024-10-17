@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker'
 import { icons, images } from "../../constants";
 
+// Page to select the night to assign personnel for
+
 const AssignPersonnelManagement = () => {
   // Dummy data 
   const schedule = [
@@ -32,10 +34,7 @@ const AssignPersonnelManagement = () => {
         <ScrollView style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
-            <View style={styles.headerContent}>
-              <Text style={styles.headerText}>Clarence</Text>
-            </View>
-            <Text style={styles.clubName}>Oasis Disco Bar</Text>
+            <Text style={styles.headerText}>Oasis Disco Bar</Text>
           </View>
 
           {/* Schedule List */}

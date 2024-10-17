@@ -9,8 +9,6 @@ const EarningsHistory = () => {
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
         <ScrollView contentContainerStyle={{ height: '100%' }}>
-
-          {/* Semi-transparent Header */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Earnings History</Text>
           </View>

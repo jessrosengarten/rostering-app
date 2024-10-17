@@ -24,7 +24,7 @@ const home = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} className='h-full w-full'>
-                {/* Semi-transparent Header */}
+                {/* List of clubs header */}
                 <View style={styles.header}>
                     <Text style={styles.headerText}>List of Clubs</Text>
                 </View>

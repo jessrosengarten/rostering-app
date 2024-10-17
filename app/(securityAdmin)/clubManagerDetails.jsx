@@ -9,7 +9,6 @@ import { useRouter } from 'expo-router';
 const { width } = Dimensions.get('window');
 
 const clubManagerProfile = () => {
-    //const navigation = useNavigation();
     const router = useRouter();
     return (
         <SafeAreaView edges={[]}>
@@ -21,13 +20,11 @@ const clubManagerProfile = () => {
 
                     {/* Club Details */}
                     <View style={styles.detailsContainer}>
-
                         <Text style={styles.detailTitle}>Club Managed:</Text>
                         <Text style={styles.detailText}>Jail</Text>
 
                         <Text style={styles.detailTitle}>Contact Details:</Text>
                         <Text style={styles.detailText}>011 567 0987</Text>
-
                     </View>
 
                     {/* Buttons */}
