@@ -1,9 +1,12 @@
-import { initializeApp } from 'firebase/app';
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeApp } from 'firebase/app'
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getDatabase } from 'firebase/database'
+
 const firebaseConfig = {
   apiKey: "AIzaSyDMjCj_-jhGdHX5roxZ3Dgow9RQ7b1GjXI",
   authDomain: "xbcad-nara.firebaseapp.com",
+  databaseURL: "https://xbcad-nara-default-rtdb.asia-southeast1.firebasedatabase.app/",
   projectId: "xbcad-nara",
   storageBucket: "xbcad-nara.appspot.com",
   messagingSenderId: "320726671795",
@@ -19,4 +22,6 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage)
 });
 
-export { auth };
+const db = getDatabase(app)
+
+export { auth, db };
