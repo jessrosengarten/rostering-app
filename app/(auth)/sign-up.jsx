@@ -18,11 +18,14 @@ const SignUp = () => {
 
   const handleRegister = async () => {
     try {
+      var email= form.email;
+        var password=form.password;
         await register(email, password);
         alert('Registration Successful');
+        console.log("Registration Success");
         router.push('/sign-in')
     } catch (e) {
-      setError(e.message);
+      console.log(e.message);
     }
   };
 
@@ -86,7 +89,7 @@ const SignUp = () => {
                 <CustomButton
                   title="Sign Up"
                   //handlePress={submit}
-                  handlePress={() => { handleRegister }}
+                  handlePress= {handleRegister }
                   containerStyles="mt-7"
                   //isLoading={isSubmitting}
                 />

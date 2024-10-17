@@ -19,7 +19,8 @@ const SignIn = () => {
         var email= form.email;
         var password=form.password;
         await login(email, password);
-        //alert('Login Successful');
+        console.log("Login Success");
+        alert('Login Successful');
     } catch (e) {
       console.log(e.message);
     }
