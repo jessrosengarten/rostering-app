@@ -87,22 +87,6 @@ const SecurityAdminLayout = () => {
           ),
         }}
       />
-      <Tabs.Screen
-        name="addClubManager"
-        options={{
-          title: '',
-          headerShown: true,
-          tabBarButton: () => null, // This hides the tab
-        }}
-      />
-      <Tabs.Screen
-        name="addSecurityPersonnel"
-        options={{
-          title: '',
-          headerShown: true,
-          tabBarButton: () => null, // This hides the tab
-        }}
-      />
       
       <Tabs.Screen
         name="assignPersonnelManagement"
