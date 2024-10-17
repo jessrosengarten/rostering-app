@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     logoutButton: {
-        backgroundColor: '#ff4d4d',
+        backgroundColor: '#E21A1A',
         paddingVertical: 15,
         alignItems: 'center',
         borderRadius: 10,
