@@ -6,6 +6,7 @@ import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { Link, router } from 'expo-router';
 import { Card } from 'react-native-paper';
+import { register } from '../../Backend/loginAndRegister';
 
 const SignUp = () => {
   const [form, setform] = useState({
@@ -14,6 +15,17 @@ const SignUp = () => {
     email: "",
     password: "",
   })
+
+  const handleRegister = async () => {
+    try {
+        await register(email, password);
+        alert('Registration Successful');
+        router.push('/sign-in')
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -74,7 +86,7 @@ const SignUp = () => {
                 <CustomButton
                   title="Sign Up"
                   //handlePress={submit}
-                  handlePress={() => { router.push('/sign-in') }}
+                  handlePress={() => { handleRegister }}
                   containerStyles="mt-7"
                   //isLoading={isSubmitting}
                 />

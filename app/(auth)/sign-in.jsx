@@ -6,12 +6,24 @@ import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
 import { Link } from 'expo-router';
 import { Card } from 'react-native-paper';
+import { login } from '../../Backend/loginAndRegister';
 
 const SignIn = () => {
     const [form, setform] = useState({
         email: "",
         password: "",
     })
+
+    const handleLogin = async () => {
+    try {
+        var email= form.email;
+        var password=form.password;
+        await login(email, password);
+        //alert('Login Successful');
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
 
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -53,7 +65,7 @@ const SignIn = () => {
                                 />
                                 <CustomButton
                                     title="Sign In"
-                                    handlePress={submit}
+                                    handlePress={handleLogin}
                                     containerStyles="mt-7"
                                     isLoading={isSubmitting}
                                 />
