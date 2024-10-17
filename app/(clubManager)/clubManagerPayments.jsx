@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     clubName: {
         fontSize: 22,
         fontWeight: 'bold',
-        color: 'red',
+        color: 'black',
         marginBottom: 10,
     },
     clubLogo: {

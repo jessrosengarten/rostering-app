@@ -59,10 +59,13 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    paddingTop: 40,
-    paddingBottom: 20,
-    alignItems: 'center',
-  },
+    width: '100%',
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
+},
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -40,8 +40,8 @@ const ClubDetails = () => {
                     {/* Buttons */}
                     <View style={styles.buttonsContainer}>
                         <CustomButton
-                            title="Finance Details"
-                            handlePress={() => { }}
+                            title="Finances"
+                            handlePress={() => router.push('/clubPayments')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
@@ -53,9 +53,16 @@ const ClubDetails = () => {
                             textStyle={styles.buttonText}
                         />
 
-<CustomButton
+                        <CustomButton
                             title="View Schedule"
                             handlePress={() => router.push('/assignPersonnelManagement')}
+                            customStyle={[styles.button, styles.button]}
+                            textStyle={styles.buttonText}
+                        />
+
+<CustomButton
+                            title="Back"
+                            handlePress={() => router.push('/securityAdminHome')}
                             customStyle={[styles.button, styles.button]}
                             textStyle={styles.buttonText}
                         />

@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
-// import { useNavigation } from 'expo-router';
 import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
@@ -35,13 +34,19 @@ const securityPersonnelProfile = () => {
                     <View style={styles.buttonsContainer}>
                         <CustomButton
                             title="View Documents"
-                            handlePress={() => { }}
+                            handlePress={() => router.push('/securityPersonnelUser')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
                         <CustomButton
                             title="Finances"
-                            handlePress={() => { }}
+                            handlePress={() => router.push('/securityPersonnelPayments')}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
+                        />
+                        <CustomButton
+                            title="Back"
+                            handlePress={() => router.push('/securityAdminHome')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
