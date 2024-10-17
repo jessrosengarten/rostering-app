@@ -99,11 +99,6 @@ const SecurityAdmin = () => {
               showsHorizontalScrollIndicator={false}
               style={styles.personnelList}
             />
-            {/* Add User Button */}
-            <CustomButton
-              handlePress={() => { router.push('/addUsers') }}
-              title="Add User"
-              style={styles.addButton} />
           </View>
         </ScrollView>
       </ImageBackground>

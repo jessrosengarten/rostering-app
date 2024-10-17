@@ -32,7 +32,14 @@ const clubManagerProfile = () => {
 
                         <CustomButton
                             title="View Club"
-                            handlePress={() => { }}
+                            handlePress={() => router.push('/clubDetails')}
+                            customStyle={[styles.button, styles.clubViewButton]} 
+                            textStyle={styles.buttonText}
+                        />
+
+                        <CustomButton
+                            title="Back"
+                            handlePress={() => router.push('/securityAdminHome')}
                             customStyle={[styles.button, styles.clubViewButton]} 
                             textStyle={styles.buttonText}
                         />

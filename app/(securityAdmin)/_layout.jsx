@@ -103,14 +103,7 @@ const SecurityAdminLayout = () => {
           tabBarButton: () => null, // This hides the tab
         }}
       />
-      <Tabs.Screen
-        name="addUsers"
-        options={{
-          title: '',
-          headerShown: true,
-          tabBarButton: () => null, // This hides the tab
-        }}
-      />
+      
       <Tabs.Screen
         name="assignPersonnelManagement"
         options={{
