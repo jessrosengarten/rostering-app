@@ -4,9 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
-import { Link, router } from 'expo-router';
+import { Link, router, useRouter } from 'expo-router';
 import { Card } from 'react-native-paper';
 import { register } from '../../Backend/loginAndRegister';
+import { db } from '../../Backend/firebaseConfig'
+import { ref, set } from 'firebase/database'
 
 const SignUp = () => {
   const [form, setform] = useState({
@@ -14,25 +16,37 @@ const SignUp = () => {
     username: "",
     email: "",
     password: "",
+    role: "clubManager",
   })
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
 
   const handleRegister = async () => {
     try {
-      var email= form.email;
-        var password=form.password;
-        await register(email, password);
-        alert('Registration Successful');
-        console.log("Registration Success");
-        router.push('/sign-in')
+      const { email, password, role } = form;
+      await register(email, password); // Assuming you have a register function
+      console.log("Sign-Up Success");
+
+      // Store user data in Realtime Database
+      const userRef = ref(db, 'users/' + email.replace('.', ','));
+      await set(userRef, {
+        email: email,
+        role: role,
+      });
+
+      console.log("User data stored in Realtime Database");
+      alert('Sign-Up Successful');
+      router.push('/sign-in'); // Navigate to user home page after sign-up
     } catch (e) {
-      console.log(e.message);
+      alert(e.message);
     }
   };
 
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
   const submit = () => {
+    setIsSubmitting(true);
+    handleRegister().finally(() => setIsSubmitting(false));
   }
   return (
     <SafeAreaView edges={[]}>
@@ -60,7 +74,7 @@ const SignUp = () => {
                   placeholder={"Enter Username"}
                   handleChangeText={(e) => setform({
                     ...form,
-                     username: e
+                    username: e
                   })}
                   otherStyles="mt-5"
                 />
@@ -89,9 +103,9 @@ const SignUp = () => {
                 <CustomButton
                   title="Sign Up"
                   //handlePress={submit}
-                  handlePress= {handleRegister }
+                  handlePress={handleRegister}
                   containerStyles="mt-7"
-                  //isLoading={isSubmitting}
+                //isLoading={isSubmitting}
                 />
                 <View className="justify-center pt-5 flex-row gap-2">
                   <Text className="text-lg text-black font-pregular">

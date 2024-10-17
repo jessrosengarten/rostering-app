@@ -4,9 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Card } from 'react-native-paper';
 import { login } from '../../Backend/loginAndRegister';
+import { db } from '../../Backend/firebaseConfig'
+import { ref, set, get } from 'firebase/database'
 
 const SignIn = () => {
     const [form, setform] = useState({
@@ -14,22 +16,49 @@ const SignIn = () => {
         password: "",
     })
 
-    const handleLogin = async () => {
-    try {
-        var email= form.email;
-        var password=form.password;
-        await login(email, password);
-        console.log("Login Success");
-        alert('Login Successful');
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const router = useRouter()
+
+    const handleLogin = async () => {
+        try {
+            const { email, password } = form
+            await login(email, password)
+            console.log("Login Success")
+
+            // Fetch user role from Realtime Database
+            const userRef = ref(db, 'users/' + email.replace('.', ','))
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                const userData = snapshot.val()
+                const userRole = userData.role
+
+                // Navigate based on user role
+                if (userRole === 'securityAdmin') {
+                    router.push('/securityAdminHome')
+                } else if (userRole === 'securityPersonnel') {
+                    router.push('/securityPersonnelHome')
+                } else if (userRole === 'clubManager') {
+                    router.push('/clubManagerHome')
+                } else {
+                    console.log('Unknown user role')
+                    alert('Unsuccessful, User Role Not Found')
+                    return
+                }
+            } else {
+                alert('No user data found')
+                return
+            }
+
+            alert('Login Successful');
+        } catch (e) {
+            alert(e.message);
+        }
+    };
+
 
     const submit = () => {
-
+        setIsSubmitting(true);
+        handleLogin().finally(() => setIsSubmitting(false));
     }
     return (
         <SafeAreaView edges={[]} >
