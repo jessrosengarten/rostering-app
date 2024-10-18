@@ -1,42 +1,50 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Picker } from '@react-native-picker/picker'
-import { icons, images } from "../../constants";
+import { useNavigation } from '@react-navigation/native'; 
+import { images } from "../../constants";
 
-// Page to select the night to assign personnel for
+// Main page for managing personnel assignment
 
 const AssignPersonnelManagement = () => {
+  const navigation = useNavigation(); // Initialize the navigation object
+
   // Dummy data 
   const schedule = [
-    { day: 'Thursday', personnel: '5 Security Personnel' },
-    { day: 'Friday', personnel: '8 Security Personnel' },
-    { day: 'Saturday', personnel: '12 Security Personnel' },
-    { day: 'Sunday', personnel: '3 Security Personnel' },
+    { day: 'Thursday', personnel: 5 },
+    { day: 'Friday', personnel: 8 },
+    { day: 'Saturday', personnel: 12 },
+    { day: 'Sunday', personnel: 3 },
   ];
 
+  // Handle navigation to the specific personnel assignment screen
+  // Pass the selected day and number of personnel
+  const handleAssignPress = (day, personnelCount) => {
+    navigation.navigate('assignSpecificPersonnel', { day, personnelCount }); 
+  };
+
+  // Render each schedule item (day and number of personnel)
   const renderScheduleItem = (item) => (
     <View style={styles.scheduleItem}>
-      <Text style={styles.dayText}>{item.day}:</Text>
-
-      {/* Text for Personnel */}
-      <Text style={styles.personnelText}>{item.personnel}</Text>
-
-      <TouchableOpacity style={styles.assignButton}>
-        <Text style={styles.assignButtonText}>Assign</Text>
-      </TouchableOpacity>
+      <View style={styles.shiftBox}>
+        <Text style={styles.dayText}>{item.day}:</Text>
+        <Text style={styles.personnelText}>{item.personnel} Security Personnel</Text>
+        <TouchableOpacity style={styles.assignButton} onPress={() => handleAssignPress(item.day, item.personnel)}>
+          <Text style={styles.assignButtonText}>Assign</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ImageBackground source={images.background} style={styles.backgroundImage}>
-        <ScrollView style={styles.container}>
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Oasis Disco Bar</Text>
-          </View>
+    <SafeAreaView edges={[]}>
+      <ImageBackground source={images.background} className='h-full w-full'>
+        {/* Semi-transparent Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Assign Personnel</Text>
+        </View>
 
+        <ScrollView contentContainerStyle={styles.container}>
           {/* Schedule List */}
           <View style={styles.scheduleContainer}>
             {schedule.map((item, index) => (
@@ -44,7 +52,6 @@ const AssignPersonnelManagement = () => {
             ))}
           </View>
         </ScrollView>
-
       </ImageBackground>
     </SafeAreaView>
   );
@@ -56,83 +63,57 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   container: {
+    flexGrow: 1,
     padding: 20,
   },
   header: {
     width: '100%',
     padding: 15,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    alignItems: 'left',
     borderBottomWidth: 1,
     borderBottomColor: '#d3d3d3',
-},
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileIcon: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
   },
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  clubName: {
-    fontSize: 18,
-    color: '#777',
+    color: '#000',
   },
   scheduleContainer: {
     marginTop: 20,
   },
-  scheduleItem: {
+  shiftBox: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  scheduleItem: {
     marginVertical: 10,
   },
   dayText: {
-    fontSize: 16,
-    flex: 1,
-    color: '#333',
-  },
-  personnelButton: {
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    borderRadius: 8,
+    fontSize: 18,
+    fontWeight: 'bold',
     flex: 2,
-    alignItems: 'center',
-    marginRight: 10,
   },
   personnelText: {
     fontSize: 14,
-    color: '#333',
+    color: '#000',
     marginRight: 10,
     flex: 2,
   },
   assignButton: {
-    backgroundColor: '#d0d0d0',
+    backgroundColor: 'red',
     padding: 10,
     borderRadius: 8,
+    alignItems: 'center',
   },
   assignButtonText: {
     fontSize: 14,
-    color: '#000',
+    color: '#fff',
   },
-
-  pickerContainer: {
-    flex: 2,
-    borderWidth: 1,
-    borderColor: '#d0d0d0',
-    borderRadius: 8,
-    justifyContent: 'center',
-  },
-  picker: {
-    height: 40,
-    width: '100%',
-    alignSelf: 'stretch',
-  },
-
 });
 
 export default AssignPersonnelManagement;
