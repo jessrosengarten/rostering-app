@@ -7,7 +7,6 @@ import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
-
 const { width, height } = Dimensions.get('window')
 
 // Dummy data
@@ -18,37 +17,40 @@ const clubs = [
     { name: 'Neon Night Club', logo: (images.neon) },
   ];
 
-const home = () => {
+  const home = () => {
     const navigation = useNavigation();
 
     return (
         <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} className='h-full w-full'>
+            <ImageBackground source={images.background} style={styles.background}>
                 {/* List of clubs header */}
                 <View style={styles.header}>
                     <Text style={styles.headerText}>List of Clubs</Text>
                 </View>
-                <ScrollView contentContainerStyle={{ height: '100%' }}>
 
+                <ScrollView contentContainerStyle={{ padding: 20, flexGrow: 1 }}>
                     {/* Scrollable List of Clubs */}
                     <View style={styles.clubList}>
                         {clubs.map((club, index) => (
                             <View key={index} style={styles.clubItem}>
-                                <Image
-                                    source={club.logo} 
-                                    style={styles.clubLogo} 
-                                />
-                                <Text style={styles.clubName}>{club.name}</Text>
-                                <View style={styles.buttonsContainer}>
-                                    <CustomButton
-                                        handlePress={() => { router.push('/assignSecurityPersonnel') }}
-                                        title="Assign Personnel"
-                                        style={styles.assignButton} />
+                                <View style={styles.clubInfo}>
+                                    <Image source={club.logo} style={styles.clubLogo} />
+                                    <Text style={styles.clubName}>{club.name}</Text>
+                                </View>
 
-                                    <CustomButton
-                                        handlePress={() => { router.push('/clubManagerPayments') }}
-                                        title="Payments"
-                                        style={styles.assignButton} />
+                                <View style={styles.buttonsContainer}>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('/assignSecurityPersonnel')}
+                                        style={styles.assignButton}
+                                    >
+                                        <Text style={styles.buttonText}>Assign Personnel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('/clubManagerPayments')}
+                                        style={styles.paymentButton}
+                                    >
+                                        <Text style={styles.buttonText}>Payments</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         ))}
@@ -56,8 +58,8 @@ const home = () => {
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     background: {
@@ -68,7 +70,6 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        alignItems: 'left',
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },
@@ -81,56 +82,54 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 10,
-      },
-
+        marginRight: 10,
+    },
     clubName: {
         fontSize: 18,
         fontWeight: 'bold',
     },
-
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        marginTop: 5,
-    },
-
-    assignButton: {
-        backgroundColor: '#E21A1A',
-        paddingVertical: 5,
-        paddingHorizontal: 8,
-        borderRadius: 5,
-        marginHorizontal: 5,
+    clubList: {
         alignItems: 'center',
     },
-
+    clubItem: {
+        width: '90%',
+        padding: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        marginVertical: 10,
+        borderRadius: 10,
+        alignItems: 'flex-start',
+    },
+    clubInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        marginBottom: 10,
+    },
+    buttonsContainer: {
+        flexDirection: 'row', // Stack buttons vertically
+        justifyContent: 'space-between',
+        width: '100%', // Ensure full width for buttons
+    },
+    assignButton: {
+        backgroundColor: '#E21A1A',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginRight: 10,
+        alignItems: 'center',
+    },
     paymentButton: {
-        backgroundColor: '#FFD700',
-        paddingVertical: 5,
-        paddingHorizontal: 8,
+        backgroundColor: '#E21A1A',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
         borderRadius: 5,
         alignItems: 'center',
     },
     buttonText: {
         color: '#FFF',
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 14,
     },
-    clubList: {
-        alignItems: 'left',
-    },
-
-
-    clubItem: {
-        width: '90%',
-        padding: 10,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: 'rgba(255,255,255,0.8)', // background for each club item
-        marginVertical: 10,
-        borderRadius: 10,
-    }
-
 });
 
-export default home
+export default home;
