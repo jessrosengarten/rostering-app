@@ -3,50 +3,56 @@ import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
-import { useRouter } from 'expo-router';
+import { useRoute } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
+
 
 const { width } = Dimensions.get('window');
 
 const securityPersonnelProfile = () => {
 
-    const router = useRouter();
+    const route = useRoute();
+    const navigation = useNavigation(); 
+    const { securityPersonnel } = route.params; 
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} className='h-full w-full'>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>Softpaws</Text>
+                    <Text style={styles.headerText}>{securityPersonnel.name}</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
 
+                    {/* Personnel Info */}
                     <View style={styles.detailsContainer}>
                         <Text style={styles.detailTitle}>Rate per Shift:</Text>
-                        <Text style={styles.detailText}>R 500</Text>
+                        <Text style={styles.detailText}>{securityPersonnel.rate}</Text>
 
                         <Text style={styles.detailTitle}>Address:</Text>
-                        <Text style={styles.detailText}>Sandton</Text>
+                        <Text style={styles.detailText}>{securityPersonnel.address}</Text>
 
 
                         <Text style={styles.detailTitle}>Contact Details:</Text>
-                        <Text style={styles.detailText}>011 567 0987</Text>
+                        <Text style={styles.detailText}>{securityPersonnel.contact}</Text>
 
                     </View>
+                    
 
                     <View style={styles.buttonsContainer}>
                         <CustomButton
                             title="View Documents"
-                            handlePress={() => router.push('/securityPersonnelUser')}
+                            handlePress={() => navigation.navigate('securityPersonnelUser')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
                         <CustomButton
                             title="Finances"
-                            handlePress={() => router.push('/securityPersonnelPayments')}
+                            handlePress={() => navigation.navigate('securityPersonnelPayments')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
                         <CustomButton
                             title="Back"
-                            handlePress={() => router.push('/securityAdminHome')}
+                            handlePress={() => navigation.navigate('securityAdminHome')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />

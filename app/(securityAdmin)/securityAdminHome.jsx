@@ -15,10 +15,10 @@ const clubs = [
 
 // Dummy data for security personnel
 const securityPersonnel = [
-  { name: 'Jess', logo: (images.profileFemale) },
-  { name: 'Dagan', logo: (images.profileMale) },
-  { name: 'Shannon', logo: (images.profileFemale) },
-  { name: 'Rudi', logo: (images.profileMale) },
+  { name: 'Jess', logo: (images.profileFemale), rate: 500, address: 'JHB', contact: '011 567 0987' },
+  { name: 'Dagan', logo: (images.profileMale), rate: 200, address: 'CPT', contact: '011 567 0987' },
+  { name: 'Shannon', logo: (images.profileFemale), rate: 750, address: 'JHB', contact: '011 567 0987' },
+  { name: 'Rudi', logo: (images.profileMale), rate: 700, address: 'CPT', contact: '011 567 0987' },
 ];
 
 // Dummy data for club managers
@@ -35,12 +35,18 @@ const SecurityAdmin = () => {
 
   // Handle the navigation when a club, security personnel, or club manager is selected
   const handleNavigation = (type, item) => {
+   
     if (type == 'clubs') {
-      // Navigate to ClubDetails and pass the entire club object to the details page
+      // Navigate to ClubDetails and pass the entire club object to the page
       navigation.navigate('clubDetails', { club: item });
-    } else if (type == 'securityPersonnel') {
-      navigation.navigate('securityPersonnelProfile', { securityName: item.name });
-    } else if (type == 'clubManagers') {
+    } 
+    
+    else if (type == 'securityPersonnel') {
+      // Navigate to securityPersonnelProfile and pass the entire personnel object to the page
+      navigation.navigate('securityPersonnelProfile', { securityPersonnel: item });
+    } 
+    
+    else if (type == 'clubManagers') {
       navigation.navigate('clubManagerDetails', { managerName: item.name });
     }
   };
