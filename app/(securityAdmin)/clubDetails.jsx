@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';  // Correct hook for React Navigation
+import commonStyles from '../../components/Styles';
 
 const { width } = Dimensions.get('window');
 
@@ -21,20 +22,20 @@ const ClubDetails = () => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Club Details */}
           <View style={styles.detailsContainer}>
-            <Text style={styles.detailTitle}>Address:</Text>
-            <Text style={styles.detailText}>{club.address}</Text>
+            <Text style={commonStyles.detailTitle}>Address:</Text>
+            <Text style={commonStyles.detailText}>{club.address}</Text>
 
-            <Text style={styles.detailTitle}>Manager:</Text>
-            <Text style={styles.detailText}>{club.manager}</Text>
+            <Text style={commonStyles.detailTitle}>Manager:</Text>
+            <Text style={commonStyles.detailText}>{club.manager}</Text>
 
-            <Text style={styles.detailTitle}>Contact Details:</Text>
-            <Text style={styles.detailText}>{club.contact}</Text>
+            <Text style={commonStyles.detailTitle}>Contact Details:</Text>
+            <Text style={commonStyles.detailText}>{club.contact}</Text>
 
-            <Text style={styles.detailTitle}>Opening Time:</Text>
-            <Text style={styles.detailText}>{club.opening}</Text>
+            <Text style={commonStyles.detailTitle}>Opening Time:</Text>
+            <Text style={commonStyles.detailText}>{club.opening}</Text>
 
-            <Text style={styles.detailTitle}>Closing Time:</Text>
-            <Text style={styles.detailText}>{club.closing}</Text>
+            <Text style={commonStyles.detailTitle}>Closing Time:</Text>
+            <Text style={commonStyles.detailText}>{club.closing}</Text>
           </View>
 
           {/* Buttons */}

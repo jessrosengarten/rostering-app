@@ -40,13 +40,13 @@ const clubs = [
 
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity
-                                        onPress={() => navigation.navigate('/assignSecurityPersonnel')}
+                                        onPress={() => { router.push('/assignSecurityPersonnel'); }} // Navigate to 'AssignSecurityPersonnel' page
                                         style={styles.assignButton}
                                     >
                                         <Text style={styles.buttonText}>Assign Personnel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        onPress={() => navigation.navigate('/clubManagerPayments')}
+                                         onPress={() => { router.push('/clubManagerPayments'); }} // Navigate to 'ClubManagerPayments' page
                                         style={styles.paymentButton}
                                     >
                                         <Text style={styles.buttonText}>Payments</Text>
