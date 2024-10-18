@@ -25,28 +25,28 @@ const SignUp = () => {
 
   const handleRegister = async () => {
     try {
-      const { email, password, role } = form;
-      await register(email, password); // Assuming you have a register function
-      console.log("Sign-Up Success");
+      const { email, password, role } = form
+      await register(email, password)
+      console.log("Sign-Up Success")
 
       // Store user data in Realtime Database
-      const userRef = ref(db, 'users/' + email.replace('.', ','));
+      const userRef = ref(db, 'users/' + email.replace('.', ','))
       await set(userRef, {
         email: email,
         role: role,
       });
 
       console.log("User data stored in Realtime Database");
-      alert('Sign-Up Successful');
-      router.push('/sign-in'); // Navigate to user home page after sign-up
+      alert('Sign-Up Successful')
+      router.push('/sign-in')
     } catch (e) {
-      alert(e.message);
+      alert(e.message)
     }
   };
 
   const submit = () => {
-    setIsSubmitting(true);
-    handleRegister().finally(() => setIsSubmitting(false));
+    setIsSubmitting(true)
+    handleRegister().finally(() => setIsSubmitting(false))
   }
   return (
     <SafeAreaView edges={[]}>
