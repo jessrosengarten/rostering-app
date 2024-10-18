@@ -50,7 +50,6 @@ const securityPersonnelProfile = () => {
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
-
                     </View>
                 </ScrollView>
             </ImageBackground>

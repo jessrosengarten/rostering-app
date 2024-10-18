@@ -4,17 +4,16 @@ import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
-import { router } from 'expo-router';
 
-// Dummy data
+// Dummy data for clubs
 const clubs = [
-  { name: 'Omnia', logo: (images.omnia) },
-  { name: 'Jail Night Club', logo: (images.jail) },
-  { name: 'Oasis Disco Bar', logo: (images.oasis) },
-  { name: 'Neon Night Club', logo: (images.neon) },
+  { name: 'Omnia', logo: (images.omnia), address: 'Cape Town', manager: 'Alice', contact: '012 345 6789', opening: '20:00', closing: '02:00' },
+  { name: 'Jail Night Club', logo: (images.jail), address: 'Johannesburg', manager: 'Tom', contact: '011 123 4567', opening: '21:00', closing: '03:00' },
+  { name: 'Oasis Disco Bar', logo: (images.oasis), address: 'Sandton', manager: 'Donald', contact: '011 567 0987', opening: '19:00', closing: '00:00' },
+  { name: 'Neon Night Club', logo: (images.neon), address: 'Durban', manager: 'Kate', contact: '031 876 5432', opening: '22:00', closing: '04:00' },
 ];
 
-// Dummy data
+// Dummy data for security personnel
 const securityPersonnel = [
   { name: 'Jess', logo: (images.profileFemale) },
   { name: 'Dagan', logo: (images.profileMale) },
@@ -22,7 +21,7 @@ const securityPersonnel = [
   { name: 'Rudi', logo: (images.profileMale) },
 ];
 
-// Dummy data
+// Dummy data for club managers
 const clubManagers = [
   { name: 'Bob', logo: (images.profileMale) },
   { name: 'Jason', logo: (images.profileMale) },
@@ -34,29 +33,27 @@ const clubManagers = [
 const SecurityAdmin = () => {
   const navigation = useNavigation();
 
-  // Handle the navigation
-  const handleNavigation = (type, name) => {
+  // Handle the navigation when a club, security personnel, or club manager is selected
+  const handleNavigation = (type, item) => {
     if (type == 'clubs') {
-      navigation.navigate('clubDetails', { clubName: name });
-    }
-    else if (type == 'securityPersonnel') {
-      navigation.navigate('securityPersonnelProfile', { securityName: name });
-    }
-    else if (type == 'clubManagers') {
-      navigation.navigate('clubManagerDetails', { managerName: name });
+      // Navigate to ClubDetails and pass the entire club object to the details page
+      navigation.navigate('clubDetails', { club: item });
+    } else if (type == 'securityPersonnel') {
+      navigation.navigate('securityPersonnelProfile', { securityName: item.name });
+    } else if (type == 'clubManagers') {
+      navigation.navigate('clubManagerDetails', { managerName: item.name });
     }
   };
 
-  // Display the lists of clubs, security personnel, and club managers
+  // Display the list items
   const displayItems = ({ item }, type) => (
-    <TouchableOpacity onPress={() => handleNavigation(type, item.name)}>
+    <TouchableOpacity onPress={() => handleNavigation(type, item)}>
       <View style={styles.personnelItem}>
         <Image source={item.logo} style={styles.personIcon} />
         <Text style={styles.personName}>{item.name}</Text>
       </View>
     </TouchableOpacity>
   );
-
 
   return (
     <SafeAreaView edges={[]}>
@@ -135,19 +132,6 @@ const styles = StyleSheet.create({
   clubList: {
     paddingHorizontal: 10,
   },
-  clubItem: {
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-  clubLogo: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
-  },
-  clubName: {
-    marginTop: 5,
-    fontSize: 14,
-  },
   personnelList: {
     paddingHorizontal: 10,
   },
@@ -164,23 +148,6 @@ const styles = StyleSheet.create({
   personName: {
     marginTop: 5,
     fontSize: 14,
-  },
-  bottomMenu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#f0f0f0',
-    paddingVertical: 10,
-  },
-  menuItem: {
-    fontSize: 16,
-    color: '#333',
-  },
-  addButton: {
-    backgroundColor: '#FFD700',
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 5,
-    alignItems: 'center',
   },
 });
 
