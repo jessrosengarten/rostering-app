@@ -2,9 +2,23 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch } from 're
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
-
+import { useNavigation } from '@react-navigation/native';
 const Settings = () => {
-    // State for toggling switches - ADD
+    const navigation = useNavigation(); // For navigating
+
+    // State for toggling switches
+
+     const [languageVisible, setLanguageVisible] = useState(false); // State for dropdown visibility
+    const [selectedLanguage, setSelectedLanguage] = useState('English'); // State for selected language
+
+    const toggleLanguageDropdown = () => {
+        setLanguageVisible(!languageVisible); // Toggle dropdown visibility
+    };
+
+    const handleLanguageSelect = (language) => {
+        setSelectedLanguage(language); // Update selected language
+        setLanguageVisible(!languageVisible); // Hide dropdown
+    };
     return (
         <SafeAreaView edges={[]}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -86,6 +100,21 @@ const styles = StyleSheet.create({
     },
     switchContainer: {
         justifyContent: 'flex-end',
+    },
+    dropdown: {
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        marginTop: 10,
+        paddingVertical: 10,
+    },
+    dropdownItem: {
+        padding: 10,
+    },
+    dropdownText: {
+        fontSize: 16,
+        color: '#000',
     },
     logoutButton: {
         backgroundColor: '#ff4d4d',
