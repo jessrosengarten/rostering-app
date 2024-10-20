@@ -55,8 +55,8 @@ const ClubDetails = () => {
             />
 
             <CustomButton
-              title="View Schedule"
-              handlePress={() => navigation.navigate('assignPersonnelManagement')}
+              title="View Club Schedule"
+              handlePress={() => navigation.navigate('clubSpecificSchedule')}
               customStyle={[styles.button, styles.button]}
               textStyle={styles.buttonText}
             />

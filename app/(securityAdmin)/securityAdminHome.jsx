@@ -67,7 +67,7 @@ const SecurityAdmin = () => {
         <ScrollView style={styles.container}>
           {/* Semi-transparent Header */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Clubs</Text>
+            <Text style={styles.headerText}>Security Admin Home</Text>
           </View>
           <View style={styles.section}>
             <FlatList

@@ -25,7 +25,7 @@ const Payments = () => {
 
         {/* Semi-transparent Header */}
       <View style={styles.header}>
-            <Text style={styles.headerText}>Club Payments</Text>
+            <Text style={styles.headerText}>Club Payments: </Text>
         </View> 
 
         <ScrollView contentContainerStyle={{ height: '100%' }}>
