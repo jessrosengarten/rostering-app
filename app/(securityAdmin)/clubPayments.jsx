@@ -22,13 +22,11 @@ const Payments = () => {
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
-
+        <ScrollView contentContainerStyle={{ height: '100%' }}>
         {/* Semi-transparent Header */}
       <View style={styles.header}>
-            <Text style={styles.headerText}>Club Payments: </Text>
+            <Text style={styles.headerText}>Club Payments</Text>
         </View> 
-
-        <ScrollView contentContainerStyle={{ height: '100%' }}>
             {/* Club Name */}
             <View style={styles.clubInfo}>
                     <Text style={styles.clubName}>{paymentData.clubName}</Text>

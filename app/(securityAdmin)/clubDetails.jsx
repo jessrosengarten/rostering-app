@@ -56,14 +56,14 @@ const ClubDetails = () => {
 
             <CustomButton
               title="View Club Schedule"
-              handlePress={() => navigation.navigate('clubSpecificSchedule')}
+              handlePress={() => navigation.navigate('clubSpecificSchedule', {club })}
               customStyle={[styles.button, styles.button]}
               textStyle={styles.buttonText}
             />
 
             <CustomButton
-              title="Back"
-              handlePress={() => navigation.navigate('securityAdminHome')}
+              title="View Club Schedule"
+              handlePress={() => navigation.navigate('clubSpecificSchedule', { club })}  // Pass the club data to the next screen
               customStyle={[styles.button, styles.button]}
               textStyle={styles.buttonText}
             />
