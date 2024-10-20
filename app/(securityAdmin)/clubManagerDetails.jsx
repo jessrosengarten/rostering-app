@@ -10,6 +10,7 @@ const { width } = Dimensions.get('window');
 
 const clubManagerProfile = () => {
     const router = useRouter();
+    
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.backgroundImage}>

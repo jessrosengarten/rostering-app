@@ -2,9 +2,13 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import React from 'react'
+import { useRoute } from '@react-navigation/native'
 
 
 const Payments = () => {
+
+    const route = useRoute();
+    const { club } = route.params; // Get the club data from Club Details page
 
     //Dummy data
     const paymentData = {
@@ -25,16 +29,15 @@ const Payments = () => {
         <ScrollView contentContainerStyle={{ height: '100%' }}>
         {/* Semi-transparent Header */}
       <View style={styles.header}>
-            <Text style={styles.headerText}>Club Payments</Text>
+            <Text style={styles.headerText}>Payments: {club.name}</Text>
         </View> 
-            {/* Club Name */}
+            {/* Spacing - for now *** */}
             <View style={styles.clubInfo}>
-                    <Text style={styles.clubName}>{paymentData.clubName}</Text>
             </View>
 
             {/* Payments List */}
             <View style={styles.paymentDetails}>
-                <Text style={styles.sectionTitle}>Total Income</Text>
+                <Text style={styles.sectionTitle}>Total Income:</Text>
                     {Object.keys(paymentData.payments).map((day, index) => (
                         <View key={index} style={styles.paymentRow}>
                             <Text style={styles.dayText}>{day}:</Text>

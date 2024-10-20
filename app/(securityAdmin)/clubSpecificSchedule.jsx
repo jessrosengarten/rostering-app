@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     marginRight: 10,
+
+    
   },
   personnelName: {
     fontSize: 16,
