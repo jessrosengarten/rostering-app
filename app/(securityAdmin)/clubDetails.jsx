@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 const ClubDetails = () => {
   const route = useRoute();  // Hook to get the current route
   const navigation = useNavigation();  // For navigation
-  const { club } = route.params;  // Get the club object from the route parameters
+  const { club, paymentData } = route.params;  // Get the club object from the route parameters
 
   return (
     <SafeAreaView edges={[]}>
@@ -41,7 +41,7 @@ const ClubDetails = () => {
           <View style={styles.buttonsContainer}>
             <CustomButton
               title="Finances"
-              handlePress={() => navigation.navigate('clubPayments', { club })}
+              handlePress={() => navigation.navigate('clubPayments', { club , paymentData })}
               customStyle={styles.button}
               textStyle={styles.buttonText}
             />

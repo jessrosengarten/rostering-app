@@ -8,20 +8,7 @@ import { useRoute } from '@react-navigation/native'
 const Payments = () => {
 
     const route = useRoute();
-    const { club } = route.params; // Get the club data from Club Details page
-
-    //Dummy data
-    const paymentData = {
-        clubName: 'Neon Night Club',
-        payments: {
-            Thursday: 750.00,
-            Friday: 950.00,
-            Saturday: 500.00,
-            Sunday: 1250.00,
-        },
-        total: 3450.00
-    };
-
+    const { club , paymentData} = route.params; // Get the club data from Club Details page
     
   return (
     <SafeAreaView edges={[]}>

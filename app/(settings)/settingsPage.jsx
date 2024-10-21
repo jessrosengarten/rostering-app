@@ -24,13 +24,13 @@ const Settings = () => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.profileContainer}>
                     <FontAwesome name="user" size={80} color="black" />
-                    <Text style={styles.userName}>User Name</Text>
+                    <Text style={styles.userName}>Softpaws</Text>
                 </View>
 
                 {/* Settings Options */}
                 <View style={styles.settingsItem}>
                     <FontAwesome name="user" size={24} color="black" />
-                    <Text style={styles.settingsText}>User Profile</Text>
+                    <Text style={styles.settingsText}>Profile</Text>
                 </View>
 
                 <View style={styles.settingsItem}>
@@ -42,10 +42,22 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <View style={styles.settingsItem}>
+                 <TouchableOpacity style={styles.settingsItem} onPress={toggleLanguageDropdown}>
                     <FontAwesome name="language" size={24} color="black" />
                     <Text style={styles.settingsText}>Language Preferences</Text>
-                </View>
+                    <FontAwesome name="caret-down" size={24} color="black" />
+                </TouchableOpacity>
+
+                {languageVisible && (
+                    <View style={styles.dropdown}>
+                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('English')}>
+                            <Text style={styles.dropdownText}>English</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('Afrikaans')}>
+                            <Text style={styles.dropdownText}>Afrikaans</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
                 <View style={styles.settingsItem}>
                     <FontAwesome name="bell" size={24} color="black" />
@@ -56,10 +68,11 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <View style={styles.settingsItem}>
+                <TouchableOpacity style={styles.settingsItem} 
+                onPress={() => navigation.navigate('changePassword')}>
                     <FontAwesome name="lock" size={24} color="black" />
                     <Text style={styles.settingsText}>Change Password</Text>
-                </View>
+                </TouchableOpacity>
 
                 {/* Logout Button */}
                 <TouchableOpacity style={styles.logoutButton}>
