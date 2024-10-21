@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   clubText: {
     fontSize: 16,
-    color: '#555',
+    color: '#000',
   },
   noScheduleText: {
     textAlign: 'center',
