@@ -37,7 +37,7 @@ const SecurityAdminLayout = () => {
           borderBottomColor: '#d3d3d3',
           height: 90,
         },
-        header: () => <CustomHeader username={username} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"}  />, // Use the custom header component
+        header: () => <CustomHeader username={username} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
       }}
     >
       <Tabs.Screen
@@ -87,7 +87,7 @@ const SecurityAdminLayout = () => {
           ),
         }}
       />
-      
+
       <Tabs.Screen
         name="assignPersonnelManagement"
         options={{
@@ -138,6 +138,46 @@ const SecurityAdminLayout = () => {
       />
       <Tabs.Screen
         name="settingsPage"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="assignSpecificPersonnel"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="changePassword"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="clubPayments"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="clubSpecificSchedule"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="securityPersonnelPayments"
         options={{
           title: '',
           headerShown: true,
