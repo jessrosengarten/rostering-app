@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 
-
-const assignSecurityPersonnel = () => {
+const AssignSecurityPersonnel = () => {
     const [isClubOpen, setIsClubOpen] = useState({
         Monday: false,
         Tuesday: false,
@@ -24,12 +23,12 @@ const assignSecurityPersonnel = () => {
 
     return (
         <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} className='h-full w-full'>
+            <ImageBackground source={images.background} style={styles.background}>
                 {/* Semi-transparent header */}
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Personnel Needed</Text>
                 </View>
-                <ScrollView contentContainerStyle={{ height: '100%' }}>
+                <ScrollView contentContainerStyle={{ padding: 20 }}>
                     {/* Club Name */}
                     <Text style={styles.clubName}>Neon Night Club</Text>
 
@@ -37,16 +36,20 @@ const assignSecurityPersonnel = () => {
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
                         <View key={index} style={styles.dayContainer}>
                             <Text style={styles.dayText}>{day}</Text>
-                            <Switch
-                                value={isClubOpen[day]}
-                                onValueChange={() => toggleSwitch(day)}
-                            />
-                            <Text style={styles.label}>No of Personnel:</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Input No."
-                                editable={isClubOpen[day]} // Only editable if the switch is on
-                            />
+                            <View style={styles.switchContainer}>
+                                <Switch
+                                    value={isClubOpen[day]}
+                                    onValueChange={() => toggleSwitch(day)}
+                                />
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.label}>No of Personnel:</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Input No."
+                                    editable={isClubOpen[day]} // Only editable if the switch is on
+                                />
+                            </View>
                         </View>
                     ))}
 
@@ -85,26 +88,33 @@ const styles = StyleSheet.create({
     clubName: {
         textAlign: 'center',
         fontSize: 22,
-        color: 'red',
+        color: '#E21A1A',
         marginVertical: 20,
     },
     dayContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#d3d3d3',
+        flexDirection: 'row', // Keep elements in a row
+        alignItems: 'center', // Align items vertically centered
+        marginBottom: 20, // Add space between days
     },
     dayText: {
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
-
+        width: 100, // Fixed width for alignment
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 50, // Fixed width for alignment
     },
     label: {
-        marginLeft: 10,
+        marginRight: 10,
         fontSize: 16,
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 100, // Fixed width for alignment
     },
     input: {
         borderWidth: 1,
@@ -128,4 +138,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default assignSecurityPersonnel;
+export default AssignSecurityPersonnel;

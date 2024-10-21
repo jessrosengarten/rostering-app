@@ -1,14 +1,14 @@
-import { View, Text, ScrollView, Image, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, ScrollView, ImageBackground, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '../../constants'
-import FormField from '../../components/FormField'
-import CustomButton from '../../components/CustomButton'
-import { Link, router, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { images } from '../../constants';
+import FormField from '../../components/FormField';
+import CustomButton from '../../components/CustomButton';
+import { Link, useRouter } from 'expo-router';
 import { Card } from 'react-native-paper';
 import { register } from '../../Backend/loginAndRegister';
-import { db } from '../../Backend/firebaseConfig'
-import { ref, set } from 'firebase/database'
+import { db } from '../../Backend/firebaseConfig';
+import { ref, set } from 'firebase/database';
 
 const SignUp = () => {
   const [form, setform] = useState({
@@ -17,41 +17,41 @@ const SignUp = () => {
     email: "",
     password: "",
     role: "clubManager",
-  })
+  });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-
   const handleRegister = async () => {
     try {
-      const { email, password, role } = form
-      await register(email, password)
-      console.log("Sign-Up Success")
+      const { email, password, role } = form;
+      await register(email, password);
+      console.log("Sign-Up Success");
 
       // Store user data in Realtime Database
-      const userRef = ref(db, 'users/' + email.replace('.', ','))
+      const userRef = ref(db, 'users/' + email.replace('.', ','));
       await set(userRef, {
         email: email,
         role: role,
       });
 
       console.log("User data stored in Realtime Database");
-      alert('Sign-Up Successful')
-      router.push('/sign-in')
+      alert('Sign-Up Successful');
+      router.push('/sign-in');
     } catch (e) {
-      alert(e.message)
+      alert(e.message);
     }
   };
 
   const submit = () => {
-    setIsSubmitting(true)
-    handleRegister().finally(() => setIsSubmitting(false))
-  }
+    setIsSubmitting(true);
+    handleRegister().finally(() => setIsSubmitting(false));
+  };
+
   return (
-    <SafeAreaView edges={[]}>
-      <ImageBackground source={images.background} className='h-full w-full'>
-        <ScrollView contentContainerStyle={Styles.scrollViewContent}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground source={images.background} style={{ flex: 1 }}>
+        {/* <ScrollView contentContainerStyle={Styles.scrollViewContent}> */}
           <View style={Styles.topTextContainer}>
             <Text style={Styles.topText}>Register</Text>
           </View>
@@ -89,7 +89,6 @@ const SignUp = () => {
                   otherStyles="mt-5"
                   keyboardType="email-address"
                 />
-
                 <FormField
                   title="Password"
                   value={form.password}
@@ -102,35 +101,32 @@ const SignUp = () => {
                 />
                 <CustomButton
                   title="Sign Up"
-                  //handlePress={submit}
                   handlePress={handleRegister}
                   containerStyles="mt-7"
-                //isLoading={isSubmitting}
                 />
-                <View className="justify-center pt-5 flex-row gap-2">
-                  <Text className="text-lg text-black font-pregular">
+                <View style={{ justifyContent: 'center', paddingVertical: 5, flexDirection: 'row', gap: 2 }}>
+                  <Text style={{ fontSize: 16, color: 'black' }}>
                     Have an account already?
                   </Text>
-                  <Link href={"/sign-in"} className="text-lg font-psemibold text-secondary">Sign In</Link>
+                  <Link href={"/sign-in"} style={{ fontSize: 16, color: '#E21A1A' }}>Sign In</Link>
                 </View>
               </View>
             </Card.Content>
           </Card>
-        </ScrollView>
+        {/* </ScrollView>  */}
       </ImageBackground>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
 
 const Styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 0,
-    marginTop: 0
+    paddingBottom: 20, // Add bottom padding for better scrolling
   },
   card: {
     width: '85%',
@@ -138,33 +134,27 @@ const Styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
     marginVertical: 20,
-    marginTop: 50,
+    marginTop: 80,
+    marginLeft: 25,
+    backgroundColor: '#fff'
+
   },
   topTextContainer: {
     position: 'absolute',
-    top: 50, // Adjust the top position as needed
+    top: 0,
     width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)', // White background
-    paddingVertical: 10, // Vertical padding
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    paddingVertical: 10,
   },
   topText: {
-    fontSize: 24, // Adjust the font size as needed
+    fontSize: 24,
     fontWeight: 'bold',
-    color: 'black', // Adjust the color as needed
-    marginLeft: 20, // Adjust the left margin as needed
+    color: 'black',
+    marginLeft: 20,
   },
   horizontalLine: {
     width: '90%',
     height: 1,
     backgroundColor: 'black',
-    // Adjust the color as needed
   },
-
-  // formContainer: {
-  //     width: '100%',
-  //     justifyContent: 'center',
-  //     minHeight: '85vh',
-  //     paddingHorizontal: 16,
-  //     marginVertical: 16,
-  // },
 });
