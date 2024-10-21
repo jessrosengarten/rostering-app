@@ -70,7 +70,7 @@ const SecurityAdmin = () => {
    
     if (type == 'clubs') {
       // Navigate to ClubDetails and pass the entire club object to the page
-      navigation.navigate('clubDetails', { club: item });
+      navigation.navigate('clubDetails', { club: item, paymentData: paymentData[item.name] });
     } 
     
     else if (type == 'securityPersonnel') {
