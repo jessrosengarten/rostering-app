@@ -2,21 +2,35 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch } from 're
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
-
+import { useNavigation } from '@react-navigation/native';
 const Settings = () => {
-    // State for toggling switches - ADD
+    const navigation = useNavigation(); // For navigating
+
+    // State for toggling switches
+
+     const [languageVisible, setLanguageVisible] = useState(false); // State for dropdown visibility
+    const [selectedLanguage, setSelectedLanguage] = useState('English'); // State for selected language
+
+    const toggleLanguageDropdown = () => {
+        setLanguageVisible(!languageVisible); // Toggle dropdown visibility
+    };
+
+    const handleLanguageSelect = (language) => {
+        setSelectedLanguage(language); // Update selected language
+        setLanguageVisible(!languageVisible); // Hide dropdown
+    };
     return (
         <SafeAreaView edges={[]}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.profileContainer}>
                     <FontAwesome name="user" size={80} color="black" />
-                    <Text style={styles.userName}>User Name</Text>
+                    <Text style={styles.userName}>Softpaws</Text>
                 </View>
 
                 {/* Settings Options */}
                 <View style={styles.settingsItem}>
                     <FontAwesome name="user" size={24} color="black" />
-                    <Text style={styles.settingsText}>User Profile</Text>
+                    <Text style={styles.settingsText}>Profile</Text>
                 </View>
 
                 <View style={styles.settingsItem}>
@@ -28,10 +42,22 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <View style={styles.settingsItem}>
+                 <TouchableOpacity style={styles.settingsItem} onPress={toggleLanguageDropdown}>
                     <FontAwesome name="language" size={24} color="black" />
                     <Text style={styles.settingsText}>Language Preferences</Text>
-                </View>
+                    <FontAwesome name="caret-down" size={24} color="black" />
+                </TouchableOpacity>
+
+                {languageVisible && (
+                    <View style={styles.dropdown}>
+                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('English')}>
+                            <Text style={styles.dropdownText}>English</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('Afrikaans')}>
+                            <Text style={styles.dropdownText}>Afrikaans</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
                 <View style={styles.settingsItem}>
                     <FontAwesome name="bell" size={24} color="black" />
@@ -42,11 +68,13 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <View style={styles.settingsItem}>
+                <TouchableOpacity style={styles.settingsItem} 
+                onPress={() => navigation.navigate('changePassword')}>
                     <FontAwesome name="lock" size={24} color="black" />
                     <Text style={styles.settingsText}>Change Password</Text>
-                </View>
+                </TouchableOpacity>
 
+                {/* Logout Button */}
                 <TouchableOpacity style={styles.logoutButton}>
                     <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
@@ -86,8 +114,23 @@ const styles = StyleSheet.create({
     switchContainer: {
         justifyContent: 'flex-end',
     },
+    dropdown: {
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        marginTop: 10,
+        paddingVertical: 10,
+    },
+    dropdownItem: {
+        padding: 10,
+    },
+    dropdownText: {
+        fontSize: 16,
+        color: '#000',
+    },
     logoutButton: {
-        backgroundColor: '#E21A1A',
+        backgroundColor: '#ff4d4d',
         paddingVertical: 15,
         alignItems: 'center',
         borderRadius: 10,
