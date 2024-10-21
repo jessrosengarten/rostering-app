@@ -49,6 +49,14 @@ const Assign = () => {
             />
           </View>
           ))}
+
+          <CustomButton
+            title="Randomly Allocate Rest"
+            //handlePress={() => router.push('/securityAdminHome')}
+            customStyle={styles.button}
+            textStyle={styles.buttonText}
+        />
+
           <CustomButton
             title="Assign"
             //handlePress={() => router.push('/securityAdminHome')}

@@ -21,6 +21,38 @@ const securityPersonnel = [
   { name: 'Rudi', logo: (images.profileMale), rate: 700, address: 'CPT', contact: '011 567 0987' },
 ];
 
+
+  // Dummy payment data for different clubs
+  const paymentData = {
+    'Neon Night Club': {
+      payments: {
+        Thursday: 750.00,
+        Friday: 950.00,
+        Saturday: 500.00,
+        Sunday: 1250.00,
+      },
+      total: 3450.00,
+    },
+    'Jail Night Club': {
+      payments: {
+        Thursday: 650.00,
+        Friday: 800.00,
+        Saturday: 700.00,
+        Sunday: 1100.00,
+      },
+      total: 3250.00,
+    },
+    'Omnia': {
+      payments: {
+        Thursday: 550.00,
+        Friday: 1050.00,
+        Saturday: 900.00,
+        Sunday: 1300.00,
+      },
+      total: 3800.00,
+    },
+  };
+
 // Dummy data for club managers
 const clubManagers = [
   { name: 'Bob', logo: (images.profileMale) },
@@ -67,7 +99,7 @@ const SecurityAdmin = () => {
         <ScrollView style={styles.container}>
           {/* Semi-transparent Header */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Clubs</Text>
+            <Text style={styles.headerText}>Security Admin Home</Text>
           </View>
           <View style={styles.section}>
             <FlatList

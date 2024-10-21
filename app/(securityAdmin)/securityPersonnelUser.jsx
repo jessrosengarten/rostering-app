@@ -11,9 +11,7 @@ const SecurityPersonnelUser = () => {
       <View style={styles.header}>
             <Text style={styles.headerText}>Security Personnel Documents</Text>
           </View>
-
         <ScrollView contentContainerStyle={{ height: '100%' }}>
-
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>

@@ -3,9 +3,8 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
-import { useRoute, useNavigation } from '@react-navigation/native';  // Correct hook for React Navigation
+import { useRoute, useNavigation } from '@react-navigation/native';  // Hook for React Navigation
 import commonStyles from '../../components/Styles';
-
 const { width } = Dimensions.get('window');
 
 const ClubDetails = () => {
@@ -42,7 +41,7 @@ const ClubDetails = () => {
           <View style={styles.buttonsContainer}>
             <CustomButton
               title="Finances"
-              handlePress={() => navigation.navigate('clubPayments')}
+              handlePress={() => navigation.navigate('clubPayments', { club })}
               customStyle={styles.button}
               textStyle={styles.buttonText}
             />
@@ -55,15 +54,15 @@ const ClubDetails = () => {
             />
 
             <CustomButton
-              title="View Schedule"
-              handlePress={() => navigation.navigate('assignPersonnelManagement')}
+              title="View Club Schedule"
+              handlePress={() => navigation.navigate('clubSpecificSchedule', {club })}
               customStyle={[styles.button, styles.button]}
               textStyle={styles.buttonText}
             />
 
             <CustomButton
               title="Back"
-              handlePress={() => navigation.navigate('securityAdminHome')}
+              handlePress={() => navigation.navigate('securityAdminHome', { club })}  // Pass the club data to the next screen
               customStyle={[styles.button, styles.button]}
               textStyle={styles.buttonText}
             />
@@ -108,10 +107,10 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 14,
     color: '#555',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   buttonsContainer: {
-    marginTop: 30,
+    marginTop: 5,
   },
   button: {
     marginBottom: 20,
