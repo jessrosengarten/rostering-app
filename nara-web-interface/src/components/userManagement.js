@@ -52,6 +52,11 @@ const UserManagement = () => {
       setAlertVariant('danger');
       setShowAlert(true);
     }
+
+    setTimeout(() => {
+      setAlertMessage('');
+      setShowAlert(false);
+    }, 5000);
   };
 
   const handleEdit = (user) => {
@@ -101,6 +106,11 @@ const UserManagement = () => {
     handleModalClose();
     // Clear the form fields
     setCurrentUser(null);
+
+    setTimeout(() => {
+      setAlertMessage('');
+      setShowAlert(false);
+    }, 5000);
   };
 
   const handleModalChange = (e) => {
