@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';  // Hook for React Navigation
 import commonStyles from '../../components/Styles';
+
 const { width } = Dimensions.get('window');
 
 const ClubDetails = () => {
@@ -39,33 +39,33 @@ const ClubDetails = () => {
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
-            <CustomButton
-              title="Finances"
-              handlePress={() => navigation.navigate('clubPayments', { club , paymentData })}
-              customStyle={styles.button}
-              textStyle={styles.buttonText}
-            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('clubPayments', { club, paymentData })}
+            >
+              <Text style={styles.buttonText}>Finances</Text>
+            </TouchableOpacity>
 
-            <CustomButton
-              title="Assign Personnel"
-              handlePress={() => navigation.navigate('assignPersonnelManagement')}
-              customStyle={[styles.button, styles.button]}
-              textStyle={styles.buttonText}
-            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('assignPersonnelManagement')}
+            >
+              <Text style={styles.buttonText}>Assign Personnel</Text>
+            </TouchableOpacity>
 
-            <CustomButton
-              title="View Club Schedule"
-              handlePress={() => navigation.navigate('clubSpecificSchedule', {club })}
-              customStyle={[styles.button, styles.button]}
-              textStyle={styles.buttonText}
-            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('clubSpecificSchedule', { club })}
+            >
+              <Text style={styles.buttonText}>View Club Schedule</Text>
+            </TouchableOpacity>
 
-            <CustomButton
-              title="Back"
-              handlePress={() => navigation.navigate('securityAdminHome', { club })}  // Pass the club data to the next screen
-              customStyle={[styles.button, styles.button]}
-              textStyle={styles.buttonText}
-            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('securityAdminHome', { club })}  // Pass the club data to the next screen
+            >
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   detailsContainer: {
-    marginVertical: 20,
+    marginVertical: 10,
   },
   detailTitle: {
     fontSize: 16,
@@ -110,9 +110,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   buttonsContainer: {
-    marginTop: 5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 50,
   },
   button: {
+    width: (width / 2) - 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E21A1A',
+    borderRadius: 5,
     marginBottom: 20,
   },
   buttonText: {

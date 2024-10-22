@@ -102,7 +102,7 @@ const SignIn = () => {
                                 <View className="justify-center pt-5 flex-row ">
                                     <Link href={'/change-password'} className="text-lg font-pregular text-black" style={{ textDecorationLine: 'underline' }}>Forgot Password?</Link>
                                 </View>
-                                <View className="justify-center pt-3 flex-row gap-2">
+                                <View className="justify-center pt-3" style={{ flexDirection: 'row' }}>
                                     <Text className="text-lg text-black font-pregular" style={{ textDecorationLine: 'underline' }}>
                                         Don't have an account?
                                     </Text>
@@ -128,13 +128,15 @@ const Styles = StyleSheet.create({
         marginTop: 0
     },
     card: {
-        width: '80%',
-        maxWidth: 400,
+        width: '85%',
+        maxWidth: 450,
         borderRadius: 10,
         elevation: 5,
         marginVertical: 20,
-        marginTop: 220,
-        marginBottom: 50
+        marginTop: 190,
+        marginBottom: 50,
+        paddingHorizontal: 15,
+        backgroundColor:  '#fff'
     },
     topTextContainer: {
         position: 'absolute',
@@ -153,14 +155,5 @@ const Styles = StyleSheet.create({
         width: '90%',
         height: 1,
         backgroundColor: 'black',
-        // Adjust the color as needed
-    },
-
-    // formContainer: {
-    //     width: '100%',
-    //     justifyContent: 'center',
-    //     minHeight: '85vh',
-    //     paddingHorizontal: 16,
-    //     marginVertical: 16,
-    // },
+    }
 });

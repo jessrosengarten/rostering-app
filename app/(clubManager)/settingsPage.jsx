@@ -38,6 +38,7 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Select Light/Dark Mode</Text>
                     <View style={styles.switchContainer}>
                         <Switch
+
                         />
                     </View>
                 </View>
@@ -64,6 +65,7 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Notifications</Text>
                     <View style={styles.switchContainer}>
                         <Switch
+                        
                         />
                     </View>
                 </View>
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     logoutButton: {
-        backgroundColor: '#ff4d4d',
+        backgroundColor: '#E21A1A',
         paddingVertical: 15,
         alignItems: 'center',
         borderRadius: 10,
