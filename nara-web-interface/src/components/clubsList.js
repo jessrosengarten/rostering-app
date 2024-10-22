@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchClubs, deleteClubsFromDatabase, updateClub } from '../backend/ClubManagement';
+import { fetchClubs, deleteClubsFromDatabase, updateClub, fetchManagers } from '../backend/ClubManagement';
 import { Table, Button, Container, Row, Col, Form, Modal, Alert } from 'react-bootstrap';
 
 const ClubsList = () => {
@@ -13,6 +13,7 @@ const ClubsList = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertVariant, setAlertVariant] = useState('success');
+  const [managers, setManagers] = useState([]);
 
   useEffect(() => {
     const getClubs = async () => {
@@ -21,6 +22,16 @@ const ClubsList = () => {
       setFilteredClubs(clubsData);
     };
     getClubs();
+
+    const loadManagers = async () => {
+            try {
+                const managerList = await fetchManagers();
+                setManagers(managerList);
+            } catch (error) {
+                console.error('Error fetching managers:', error);
+            }
+        };
+        loadManagers();
   }, []);
 
   const handleFilterChange = (e) => {
@@ -117,9 +128,12 @@ const ClubsList = () => {
           <Form.Group controlId="filterManager" className="mt-3">
             <Form.Label>Filter by Club Manager</Form.Label>
             <Form.Control as="select" value={filterClubManager} onChange={handleFilterChange}>
-              <option value="">All Managers</option>
-              <option value="John Doe">John Doe</option>
-              <option value="Jane Smith">Jane Smith</option>
+              <option value="">Select a Manager</option>
+                        {managers.map((manager, index) => (
+                            <option key={index} value={manager}>
+                            {manager}
+                            </option>
+                            ))}
             </Form.Control>
           </Form.Group>
           <Table striped bordered hover className="mt-3">
