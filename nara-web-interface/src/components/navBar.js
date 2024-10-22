@@ -14,6 +14,8 @@ function navbar() {
             <Nav.Link href="../components/addUser.js">Home</Nav.Link>
             <Nav.Link as={NavLink} to="/AddUser">Add User</Nav.Link>
             <Nav.Link as={NavLink} to="/UserManagement">User Management</Nav.Link>
+            <Nav.Link as={NavLink} to="/AddClub">Add Clubs</Nav.Link>
+            <Nav.Link as={NavLink} to="/ClubsList">List of Clubs</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
