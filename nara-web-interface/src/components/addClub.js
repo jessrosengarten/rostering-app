@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { db } from '../backend/firebaseConfig';
-import { ref, set } from 'firebase/database';
-import { createClub } from '../backend/ClubManagement';
-import { Form, Button, Container, Row, Col, Alert, InputGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { createClub, fetchManagers } from '../backend/ClubManagement';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import './style.css';
 
 const AddClub = () => {
@@ -14,10 +12,22 @@ const AddClub = () => {
         manager: '',
     });
 
+    const [managers, setManagers] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertVariant, setAlertVariant] = useState('success');
 
+useEffect(() => {
+        const loadManagers = async () => {
+            try {
+                const managerList = await fetchManagers();
+                setManagers(managerList);
+            } catch (error) {
+                console.error('Error fetching managers:', error);
+            }
+        };
+        loadManagers();
+    }, []);
     
     const handleCreateClub = async (e) => {
         e.preventDefault();
@@ -86,14 +96,23 @@ const AddClub = () => {
                                 />
                         </Form.Group>
                         <Form.Group controlId="formManager" className="mt-3">
-                            <Form.Label>Manager</Form.Label>
-                            <Form.Control
-                                type="manager"
-                                value={form.manager}
-                                onChange={(e) => setForm({ ...form, manager: e.target.value })}
-                                required
-                                />
-                        </Form.Group>
+                        
+                        <Form.Label>Manager</Form.Label>
+                        <Form.Control
+                        as="select"
+                        value={form.manager}
+                        onChange={(e) => setForm({ ...form, manager: e.target.value })}
+                        required>
+
+                        <option value="">Select a Manager</option>
+                        {managers.map((manager, index) => (
+                            <option key={index} value={manager}>
+                            {manager}
+                            </option>
+                            ))}
+                            </Form.Control>
+                            </Form.Group>
+
                         <Button type="submit" variant="primary" className="mt-3">
                             Add Club
                         </Button>

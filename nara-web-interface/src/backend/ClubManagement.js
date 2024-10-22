@@ -1,4 +1,3 @@
-import { auth } from './firebaseConfig';
 import { db } from './firebaseConfig';
 import { ref,set, get, child, remove, update } from 'firebase/database';
 
@@ -23,12 +22,21 @@ export const fetchClubs = async () => {
   }
 };
 
+export const fetchManagers = async () => {
+  const dbRef = ref(db);
+  const snapshot = await get(child(dbRef, 'clubManager'));
+  if (snapshot.exists()) {
+    const managersObject = snapshot.val();
+    return Object.keys(managersObject).map(key => managersObject[key].fullName); 
+  } else {
+    return [];
+  }
+};
+
 export const deleteClubsFromDatabase = async (clubName) => {
   try {
     const clubRef = ref(db, 'Clubs/' + clubName);
-    console.log(`Attempting to delete: Clubs/${clubName}`);  // Log for debugging
     await remove(clubRef);
-    console.log(`Successfully deleted: ${clubName}`);
   } catch (error) {
     console.error('Error deleting club:', error);
   }
