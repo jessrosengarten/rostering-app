@@ -89,8 +89,8 @@ const AddUser = () => {
         const { email, role, password, fullName, rate, contactNumber, bankDetails, gender, bouncerType } = form;
         try {
             await register(email, password);
-            const userRef = ref(db, 'users/' + email.replace('.', ','));
-            const userData = { email, role };
+            const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
+            const userData = { email };
 
             if (role === 'clubManager') {
                 userData.fullName = fullName;

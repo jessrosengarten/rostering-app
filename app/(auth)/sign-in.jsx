@@ -21,32 +21,42 @@ const SignIn = () => {
 
     const handleLogin = async () => {
         try {
-            const { email, password } = form
-            await login(email, password)
-            console.log("Login Success")
+            const { email, password } = form;
+            await login(email, password);
+            console.log("Login Success");
 
             // Fetch user role from Realtime Database
-            const userRef = ref(db, 'users/' + email.replace('.', ','))
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                const userData = snapshot.val()
-                const userRole = userData.role
+            const roles = ['securityAdmin', 'securityPersonnel', 'clubManager'];
+            let userRole = null;
 
-                // Navigate based on user role
-                if (userRole === 'securityAdmin') {
-                    router.push('/securityAdminHome')
-                } else if (userRole === 'securityPersonnel') {
-                    router.push('/securityPersonnelHome')
-                } else if (userRole === 'clubManager') {
-                    router.push('/clubManagerHome')
-                } else {
-                    console.log('Unknown user role')
-                    alert('Unsuccessful, User Role Not Found')
-                    return
+            for (const role of roles) {
+                const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
+                const snapshot = await get(userRef);
+                if (snapshot.exists()) {
+                    userRole = role;
+                    break;
+                }
+            }
+
+            if (userRole) {
+                switch (userRole) {
+                    case 'securityAdmin':
+                        router.push('/securityAdminHome');
+                        break;
+                    case 'securityPersonnel':
+                        router.push('/securityPersonnelHome');
+                        break;
+                    case 'clubManager':
+                        router.push('/clubManagerHome');
+                        break;
+                    default:
+                        console.log('Unknown user role');
+                        alert('Unsuccessful, User Role Not Found');
+                        return;
                 }
             } else {
-                alert('No user data found')
-                return
+                alert('No user data found');
+                return;
             }
 
             alert('Login Successful');
