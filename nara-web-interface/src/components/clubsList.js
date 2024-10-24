@@ -98,7 +98,7 @@ const ClubsList = () => {
 
   const handleEdit = async (club) => {
   try {
-    await updateClub(currentClub.clubName, currentClub.contactNum, currentClub.openingTime, currentClub.closingTime, currentClub.manager);
+    await updateClub(currentClub.clubName, currentClub.contactNum, currentClub.openingTime, currentClub.closingTime, currentClub.manager, currentClub.rate);
     const updatedClubs = { ...clubs};
     setClubs(updatedClubs);
     setFilteredClubs(updatedClubs);
@@ -122,7 +122,7 @@ const ClubsList = () => {
   return (
     <Container>
       <Row className="justify-content-md-center">
-        <Col md={8}>
+        <Col md={15}>
           <h1 className="mt-4">Club List</h1>
           {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form.Group controlId="filterManager" className="mt-3">
@@ -144,6 +144,7 @@ const ClubsList = () => {
                 <th>Opening Time</th>
                 <th>Closing Time</th>
                 <th>Manager</th>
+                <th>Rate Per Security Personnel (Rands)</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -155,6 +156,7 @@ const ClubsList = () => {
                   <td>{filteredClubs[key].openingTime}</td>
                   <td>{filteredClubs[key].closingTime}</td>
                   <td>{filteredClubs[key].manager}</td>
+                  <td>{filteredClubs[key].rate}</td>
                   <td>
                     <Button variant="primary" onClick={() => handleSelectEdit(key)} className="mr-5">
                       Edit
@@ -216,10 +218,25 @@ const ClubsList = () => {
               <Form.Group controlId="formManager" className="mt-3">
                 <Form.Label>Club Manager</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="manager"
-                  value={currentClub.manager}
+                  as="select"
+                  //value={currentClub.manager}
                   onChange={(e) => setCurrentClub({ ...currentClub, manager: e.target.value })}
+                  required>
+                    <option value="manager">{currentClub.manager}</option>
+                        {managers.map((manager, index) => (
+                            <option key={index} value={manager}>
+                            {manager}
+                            </option>
+                            ))}
+                            </Form.Control>
+                            </Form.Group>
+              <Form.Group controlId="formRate" className="mt-3">
+                <Form.Label>Rate Per Security Personnel (Rands)</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="rate"
+                  value={currentClub.rate}
+                  onChange={(e) => setCurrentClub({ ...currentClub, rate: e.target.value })}
                 />
               </Form.Group>
             </Form>

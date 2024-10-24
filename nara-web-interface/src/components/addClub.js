@@ -10,14 +10,15 @@ const AddClub = () => {
         openingTime: '',
         closingTime: '',
         manager: '',
+        rate: '',
     });
 
     const [managers, setManagers] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertVariant, setAlertVariant] = useState('success');
-
-useEffect(() => {
+    
+    useEffect(() => {
         const loadManagers = async () => {
             try {
                 const managerList = await fetchManagers();
@@ -31,9 +32,9 @@ useEffect(() => {
     
     const handleCreateClub = async (e) => {
         e.preventDefault();
-        const {clubName, contact, openingTime, closingTime, manager } = form;
+        const {clubName, contact, openingTime, closingTime, manager, rate } = form;
         try {
-            await createClub(clubName, contact, openingTime, closingTime, manager);
+            await createClub(clubName, contact, openingTime, closingTime, manager, rate);
             setAlertMessage('Club added successfully');
             setAlertVariant('success');
             setShowAlert(true);
@@ -44,6 +45,7 @@ useEffect(() => {
               openingTime: '',
               closingTime: '',
               manager: '',
+              rate: '',
             });
         } catch (error) {
             setAlertMessage('Error adding club: ' + error.message);
@@ -80,7 +82,7 @@ useEffect(() => {
                         <Form.Group controlId="formOpeningTime" className="mt-3">
                             <Form.Label>Opening Time</Form.Label>
                             <Form.Control
-                                type="openingTime"
+                                type="time"
                                 value={form.openingTime}
                                 onChange={(e) => setForm({ ...form, openingTime: e.target.value })}
                                 required
@@ -89,14 +91,14 @@ useEffect(() => {
                         <Form.Group controlId="formClosingTime" className="mt-3">
                             <Form.Label>Closing Time</Form.Label>
                             <Form.Control
-                                type="closingTime"
+                                type="time"
                                 value={form.closingTime}
                                 onChange={(e) => setForm({ ...form, closingTime: e.target.value })}
                                 required
                                 />
                         </Form.Group>
+
                         <Form.Group controlId="formManager" className="mt-3">
-                        
                         <Form.Label>Manager</Form.Label>
                         <Form.Control
                         as="select"
@@ -113,6 +115,15 @@ useEffect(() => {
                             </Form.Control>
                             </Form.Group>
 
+                            <Form.Group controlId="formRate" className="mt-3">
+                            <Form.Label>Rate Per Security Personnel (Rands)</Form.Label>
+                            <Form.Control
+                                type="number"
+                                value={form.rate}
+                                onChange={(e) => setForm({ ...form, rate: e.target.value })}
+                                required
+                                />
+                                </Form.Group>
                         <Button type="submit" variant="primary" className="mt-3">
                             Add Club
                         </Button>
