@@ -161,9 +161,4 @@ const Styles = StyleSheet.create({
         color: 'black', // Adjust the color as needed
         marginLeft: 20, // Adjust the left margin as needed
     },
-    horizontalLine: {
-        width: '90%',
-        height: 1,
-        backgroundColor: 'black',
-    }
 });

@@ -4,9 +4,14 @@ import { images } from '../../constants';
 import React from 'react';
 import CustomButton from '../../components/CustomButton';
 import { useRoute } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
 
 
 const Finance = () => {
+
+  const route = useRoute();
+  const navigation = useNavigation(); 
+
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
@@ -26,12 +31,12 @@ const Finance = () => {
           <View style={styles.buttonsContainer}>
                         <CustomButton
                             title="View Data Analytics"
-                            //handlePress={() => navigation.navigate('dataAnalytics')}
+                            handlePress={() => navigation.navigate('dataAnalytics')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
                         />
                         <CustomButton
-                            title="Bacl"
+                            title="Back"
                             //handlePress={() => navigation.navigate('securityAdminHome')}
                             customStyle={styles.button}
                             textStyle={styles.buttonText}
