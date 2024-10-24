@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
@@ -26,7 +26,35 @@ const SecurityPersonnelPayments = () => {
             <Text style={styles.headerText}>Security Personnel Payments</Text>
           </View>
 
+
         <ScrollView contentContainerStyle={{ height: '100%' }}>
+
+        
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+
+                    <View style={styles.paymentDetails}>
+                        <Text style={styles.sectionTitle}>To Pay ...</Text>
+                        {Object.keys(paymentData.payments).map((day, index) => (
+                            <View key={index} style={styles.paymentRow}>
+                                <Text style={styles.dayText}>{day}:</Text>
+                                <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
+                            </View>
+                            ))}
+
+                            {/* Total */}
+                            <View style={styles.paymentRow}>
+                                <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
+                                <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
+                                    R {paymentData.total.toFixed(2)}
+                                </Text>
+                            </View>
+                        </View>
+
+                        {/* Payment Button */}
+                        <TouchableOpacity style={styles.paymentButton}>
+                            <Text style={styles.paymentButtonText}>Make Payment</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>

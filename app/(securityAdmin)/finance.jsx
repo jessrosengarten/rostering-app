@@ -12,15 +12,16 @@ const Finance = () => {
   const navigation = useNavigation(); 
   
   // State for dropdown visibility
-  const [showClubPayments, setShowClubPayments] = useState(false);
-  const [showAllClubsPayments, setShowAllClubsPayments] = useState(false);
-  const [showBouncersPayments, setShowBouncersPayments] = useState(false);
-  const [showProfit, setShowProfit] = useState(false);
+  const [showSection, setShowSection] = useState(null);
+
+  const toggleSection = (section) => {
+    setShowSection((prevSection) => (prevSection === section ? null : section));
+  };
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
-        <ScrollView contentContainerStyle={{ height: '100%' }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
 
           <View style={styles.header}>
             <Text style={styles.headerText}>Finance Management</Text>
@@ -30,28 +31,36 @@ const Finance = () => {
           <View style={styles.summary}>
             <TouchableOpacity 
               style={styles.dropdownButton} 
-              onPress={() => setShowClubPayments(!showClubPayments)}
+              onPress={() => toggleSection('clubPayments')}
             >
               <Text style={styles.summaryTitle}>Payments from ...</Text>
               <Ionicons 
-                name={showClubPayments ? 'chevron-up' : 'chevron-down'} 
+                name={showSection === 'clubPayments' ? 'chevron-up' : 'chevron-down'} 
                 size={20} 
                 color="black" 
               />
             </TouchableOpacity>
 
-            {showClubPayments && (
+            {showSection === 'clubPayments' && (
               <View style={styles.extraInfo}>
-                <Text style={styles.summaryTextTitle}>Total Earned:</Text>
-                <Text style={styles.summaryTextData}>600</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
+                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
-                <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
               </View>
             )}
           </View>
@@ -60,28 +69,36 @@ const Finance = () => {
           <View style={styles.summary}>
             <TouchableOpacity 
               style={styles.dropdownButton} 
-              onPress={() => setShowClubPayments(!showClubPayments)}
+              onPress={() => toggleSection('allClubsPayments')}
             >
               <Text style={styles.summaryTitle}>Payments from All Clubs</Text>
               <Ionicons 
-                name={showClubPayments ? 'chevron-up' : 'chevron-down'} 
+                name={showSection === 'allClubsPayments' ? 'chevron-up' : 'chevron-down'} 
                 size={20} 
                 color="black" 
               />
             </TouchableOpacity>
 
-            {showClubPayments && (
+            {showSection === 'allClubsPayments' && (
               <View style={styles.extraInfo}>
-                <Text style={styles.summaryTextTitle}>Total Earned:</Text>
-                <Text style={styles.summaryTextData}>600</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
+                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
-                <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
               </View>
             )}
           </View>
@@ -90,58 +107,74 @@ const Finance = () => {
           <View style={styles.summary}>
             <TouchableOpacity 
               style={styles.dropdownButton} 
-              onPress={() => setShowClubPayments(!showClubPayments)}
+              onPress={() => toggleSection('bouncersPayments')}
             >
               <Text style={styles.summaryTitle}>Payments to Security Personnel</Text>
               <Ionicons 
-                name={showClubPayments ? 'chevron-up' : 'chevron-down'} 
+                name={showSection === 'bouncersPayments' ? 'chevron-up' : 'chevron-down'} 
                 size={20} 
                 color="black" 
               />
             </TouchableOpacity>
 
-            {showClubPayments && (
+            {showSection === 'bouncersPayments' && (
               <View style={styles.extraInfo}>
-                <Text style={styles.summaryTextTitle}>Total Payments:</Text>
-                <Text style={styles.summaryTextData}>600</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Payments:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
+                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
-                <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
               </View>
             )}
           </View>
 
-{/* Profit Dropdown */}
+          {/* Profit Dropdown */}
           <View style={styles.summary}>
             <TouchableOpacity 
               style={styles.dropdownButton} 
-              onPress={() => setShowClubPayments(!showClubPayments)}
+              onPress={() => toggleSection('profit')}
             >
               <Text style={styles.summaryTitle}>Profit</Text>
               <Ionicons 
-                name={showClubPayments ? 'chevron-up' : 'chevron-down'} 
+                name={showSection === 'profit' ? 'chevron-up' : 'chevron-down'} 
                 size={20} 
                 color="black" 
               />
             </TouchableOpacity>
 
-            {showClubPayments && (
+            {showSection === 'profit' && (
               <View style={styles.extraInfo}>
-                <Text style={styles.summaryTextTitle}>Total Profit:</Text>
-                <Text style={styles.summaryTextData}>600</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Profit:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
+                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
-                <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
-                <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                <Text style={styles.summaryTextData}>200</Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
+                  <Text style={styles.summaryTextData}>200</Text>
+                </View>
               </View>
             )}
           </View>
@@ -163,14 +196,10 @@ const Finance = () => {
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  background: {
-    height: '100%',
-    width: '100%',
-  },
   header: {
     width: '100%',
     padding: 15,
@@ -199,40 +228,36 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  summaryTextTitle: {
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: 'bold'
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
   },
-
-    summaryTextTitle2: {
-    marginTop: 10,
+  summaryTextTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  summaryTextTitle2: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   summaryTextData: {
-    marginTop: 10,
     fontSize: 16,
+    fontWeight: 'normal',
   },
   extraInfo: {
     marginTop: 10,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 5,
+    marginTop: 30,
+    marginHorizontal: 15,
   },
   button: {
-    backgroundColor: '#E21A1A',
-    paddingVertical: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    alignItems: 'center',
+    marginVertical: 10,
   },
   buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 18,
   },
 });
 
