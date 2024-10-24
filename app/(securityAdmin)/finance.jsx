@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import React from 'react';
+import CustomButton from '../../components/CustomButton';
 import { useRoute } from '@react-navigation/native';
 
 
@@ -21,6 +22,21 @@ const Finance = () => {
             <Text style={styles.summaryTextTitle}>Total Amount to be Paid:</Text>
             <Text style={styles.summaryTextData}>600</Text>
           </View>
+
+          <View style={styles.buttonsContainer}>
+                        <CustomButton
+                            title="View Data Analytics"
+                            //handlePress={() => navigation.navigate('dataAnalytics')}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
+                        />
+                        <CustomButton
+                            title="Bacl"
+                            //handlePress={() => navigation.navigate('securityAdminHome')}
+                            customStyle={styles.button}
+                            textStyle={styles.buttonText}
+                        />
+                    </View>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -57,27 +73,18 @@ const styles = StyleSheet.create({
       marginTop: 5,
   },
 
-  assignButton: {
-      backgroundColor: '#E21A1A',
-      paddingVertical: 5,
-      paddingHorizontal: 8,
-      borderRadius: 5,
-      marginHorizontal: 5,
-      alignItems: 'center',
-  },
-
-  paymentButton: {
-      backgroundColor: '#FFD700',
-      paddingVertical: 5,
-      paddingHorizontal:  8,
-      borderRadius: 5,
-      alignItems: 'center',
-  },
-  buttonText: {
-      color: '#FFF',
-      fontWeight: 'bold',
-      fontSize: 10,
-  },
+  button: {
+        backgroundColor: '#E21A1A',
+        paddingVertical: 10,
+        marginBottom: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
   
   summary: {
     marginTop: 20,
