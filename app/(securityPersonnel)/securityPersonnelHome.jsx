@@ -1,20 +1,55 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import CustomButton from '../../components/CustomButton';
+//import CustomButton from '../../components/CustomButton';
+import { db } from '../../Backend/firebaseConfig';
+import { ref, onValue } from 'firebase/database';
 
 const { width, height } = Dimensions.get('window');
 
-// Dummy data
-const shifts = [
-    { day: 'Thursday', club: 'Club A', time: '9:00 PM - 2:00 AM' },
-    { day: 'Friday', club: 'Club B', time: '10:00 PM - 3:00 AM' },
-    { day: 'Saturday', club: 'Club C', time: '8:00 PM - 1:00 AM' },
-    { day: 'Sunday', club: 'Club D', time: '9:00 PM - 12:00 AM' },
-];
+// // Dummy data
+// const shifts = [
+//     { day: 'Thursday', club: 'Club A', time: '9:00 PM - 2:00 AM' },
+//     { day: 'Friday', club: 'Club B', time: '10:00 PM - 3:00 AM' },
+//     { day: 'Saturday', club: 'Club C', time: '8:00 PM - 1:00 AM' },
+//     { day: 'Sunday', club: 'Club D', time: '9:00 PM - 12:00 AM' },
+// ];
 
 const SecurityHome = () => {
+    const [shifts, setShifts] = useState([]);
+    const personnel = "Rudolf Stassen"; 
+
+    useEffect(() => {
+        const shiftsRef = ref(db, 'Shifts');
+        onValue(shiftsRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log('Fetched data:', data); 
+
+            
+            const personnelShifts = [];
+            for (const week in data) {
+                if (data[week].personnel === personnel) {
+                    personnelShifts.push(data[week]);
+                }
+            }
+            // Sort the shifts by date
+            personnelShifts.sort((a, b) => {
+                const dateA = new Date(a.date.split('/').reverse().join('-'));
+                const dateB = new Date(b.date.split('/').reverse().join('-'));
+                return dateA - dateB;
+            });
+
+            console.log('Filtered shifts:', personnelShifts);
+            setShifts(personnelShifts);
+        });
+    }, []);
+
+    const getDayOfWeek = (dateString) => {
+        const date = new Date(dateString.split('/').reverse().join('-'));
+        return date.toLocaleDateString('en-US', { weekday: 'long' });
+    };
+
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
@@ -27,9 +62,9 @@ const SecurityHome = () => {
                         {shifts.map((shift, index) => (
                             <View key={index} style={styles.shiftBox}>
                                 <View style={styles.shiftDetails}>
-                                    <Text style={styles.dayText}>{shift.day}</Text>
+                                    <Text style={styles.dayText}>Day: {getDayOfWeek(shift.date)}</Text>
                                     <Text style={styles.clubText}>Club: {shift.club}</Text>
-                                    <Text style={styles.timeText}>Shift Time: {shift.time}</Text>
+                                    <Text style={styles.timeText}>Shift Time: {shift.startTime} - {shift.endTime}</Text>
                                 </View>
                                 <View style={styles.buttonContainer}>
                                     {/* Replace CustomButton with TouchableOpacity */}
