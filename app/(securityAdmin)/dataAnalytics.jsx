@@ -12,22 +12,22 @@ const DataAnalytics = () => {
     labels: ["Neon Night Club", "Jail Night Club", "Omnia"], // Clubs
     datasets: [
       {
-        data: [45000, 38000, 52000], // Profits for each club
+        data: [4500, 3800, 5200], // Profits for each club
       }
     ]
   };
 
   // Example data for total payments (Pie Chart)
   const personnelPaymentData = [
-    { name: 'Person A', total: 12000, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    { name: 'Person B', total: 10000, color: 'blue', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    { name: 'Person C', total: 9000, color: 'green', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Person A', total: 12000, color: '#93041A', legendFontColor: 'black', legendFontSize: 15 },
+    { name: 'Person B', total: 10000, color: '#D9191C', legendFontColor: 'black', legendFontSize: 15 },
+    { name: 'Person C', total: 9000, color: '#1F2837', legendFontColor: 'black', legendFontSize: 15 },
   ];
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.background}>
-        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+        <ScrollView contentContainerStyle={{ height: '100%' }}>
           
           {/* Header */}
           <View style={styles.header}>
@@ -105,14 +105,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  chartContainer: {
-    marginVertical: 20,
-    paddingHorizontal: 20,
-  },
+
   chartTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+    chartContainer: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
   },
 });
 
