@@ -59,9 +59,16 @@ const ClubManagerLayout = () => {
                 <Tabs.Screen
                     name="clubManagerPayments"
                     options={{
-                        title: '',
+                        title: 'Payments',
                         headerShown: true,
-                        tabBarButton: () => null, // This hides the tab
+                        tabBarIcon: ({ color, focused }) => (
+                            <TabIcon
+                                icon={icons.bookmark}
+                                color={color}
+                                name="Payments"
+                                focused={focused}
+                            />
+                        ),
                     }}
                 />
                 <Tabs.Screen
