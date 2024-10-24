@@ -24,7 +24,7 @@ const UserManagement = () => {
     getUsers();
   }, []);
 
-  const handleDelete = async (email) => {
+  const handleDelete = async (email, role) => {
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -37,7 +37,7 @@ const UserManagement = () => {
 
     try {
       await deleteUser(user);
-      await deleteUserFromDatabase(email);
+      await deleteUserFromDatabase(email, role);
       const updatedUsers = { ...users };
       delete updatedUsers[email.replace('.', ',')];
       setUsers(updatedUsers);
@@ -88,25 +88,39 @@ const UserManagement = () => {
   const handleModalSave = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-
+  
     if (!user) {
       setAlertMessage('Error updating user: User is not authenticated.');
       setAlertVariant('danger');
       setShowAlert(true);
       return;
     }
+  
+    const role = currentUser.role;
+    const updatedData = { ...currentUser };
 
-    await updateUser(currentUser.email, currentUser);
-    const updatedUsers = { ...users, [currentUser.email.replace('.', ',')]: currentUser };
+    if (role === 'Club Manager' || role === 'Security Admin') {
+      updatedData.fullName = currentUser.fullName;
+      updatedData.contactNumber = currentUser.contactNumber;
+    } else if (role === 'Security Personnel') {
+      updatedData.fullName = currentUser.fullName;
+      updatedData.rate = currentUser.rate;
+      updatedData.contactNumber = currentUser.contactNumber;
+      updatedData.bankDetails = currentUser.bankDetails;
+      updatedData.gender = currentUser.gender;
+      updatedData.personnelType = currentUser.personnelType;
+    }
+
+    await updateUser(currentUser.email, updatedData, role);
+    const updatedUsers = { ...users, [currentUser.email.replace('.', ',')]: updatedData };
     setUsers(updatedUsers);
     setFilteredUsers(updatedUsers);
     setAlertMessage('User updated successfully');
     setAlertVariant('success');
     setShowAlert(true);
     handleModalClose();
-    // Clear the form fields
     setCurrentUser(null);
-
+  
     setTimeout(() => {
       setAlertMessage('');
       setShowAlert(false);
@@ -124,7 +138,7 @@ const UserManagement = () => {
   };
 
   const handleConfirmDelete = () => {
-    handleDelete(userToDelete.email);
+    handleDelete(userToDelete.email, userToDelete.role);
   };
 
   const handleConfirmModalClose = () => {
@@ -136,15 +150,15 @@ const UserManagement = () => {
     <Container>
       <Row className="justify-content-md-center">
         <Col md={8}>
-          <h1 className="mt-4">User Management</h1>
+          <h1 className="mt-4">User List</h1>
           {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form.Group controlId="filterRole" className="mt-3">
             <Form.Label>Filter by Role</Form.Label>
             <Form.Control as="select" value={filterRole} onChange={handleFilterChange}>
               <option value="">All Roles</option>
-              <option value="clubManager">Club Manager</option>
-              <option value="securityAdmin">Security Admin</option>
-              <option value="securityPersonnel">Security Personnel</option>
+              <option value="Club Manager">Club Manager</option>
+              <option value="Security Admin">Security Admin</option>
+              <option value="Security Personnel">Security Personnel</option>
             </Form.Control>
           </Form.Group>
           <Table striped bordered hover className="mt-3">
@@ -195,16 +209,91 @@ const UserManagement = () => {
               <Form.Group controlId="formRole" className="mt-3">
                 <Form.Label>Role</Form.Label>
                 <Form.Control
-                  as="select"
+                  type="text"
                   name="role"
                   value={currentUser.role}
-                  onChange={handleModalChange}
-                >
-                  <option value="clubManager">Club Manager</option>
-                  <option value="securityAdmin">Security Admin</option>
-                  <option value="securityPersonnel">Security Personnel</option>
-                </Form.Control>
+                  readOnly
+                />
               </Form.Group>
+              {currentUser.role === 'Club Manager' || currentUser.role === 'Security Admin' ? (
+                <>
+                  <Form.Group controlId="formFullName" className="mt-3">
+                    <Form.Label>Full Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="fullName"
+                      value={currentUser.fullName || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formContactNumber" className="mt-3">
+                    <Form.Label>Contact Number</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="contactNumber"
+                      value={currentUser.contactNumber || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                </>
+              ) : currentUser.role === 'Security Personnel' ? (
+                <>
+                  <Form.Group controlId="formFullName" className="mt-3">
+                    <Form.Label>Full Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="fullName"
+                      value={currentUser.fullName || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formRate" className="mt-3">
+                    <Form.Label>Rate</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="rate"
+                      value={currentUser.rate || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formContactNumber" className="mt-3">
+                    <Form.Label>Contact Number</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="contactNumber"
+                      value={currentUser.contactNumber || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formBankDetails" className="mt-3">
+                    <Form.Label>Bank Details</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="bankDetails"
+                      value={currentUser.bankDetails || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formGender" className="mt-3">
+                    <Form.Label>Gender</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="gender"
+                      value={currentUser.gender || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formPersonnelType" className="mt-3">
+                    <Form.Label>Personnel Type</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="personnelType"
+                      value={currentUser.personnelType || ''}
+                      onChange={handleModalChange}
+                    />
+                  </Form.Group>
+                </>
+              ) : null}
             </Form>
           )}
         </Modal.Body>

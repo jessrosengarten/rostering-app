@@ -20,10 +20,11 @@ const SignIn = () => {
     const router = useRouter()
 
     const handleLogin = async () => {
+        const { email, password } = form;
+
         try {
-            const { email, password } = form;
             await login(email, password);
-            console.log("Login Success");
+            //console.log("Login Success");
 
             // Fetch user role from Realtime Database
             const roles = ['securityAdmin', 'securityPersonnel', 'clubManager'];
@@ -54,30 +55,25 @@ const SignIn = () => {
                         alert('Unsuccessful, User Role Not Found');
                         return;
                 }
-            } else {
-                alert('No user data found');
-                return;
             }
 
-            alert('Login Successful');
         } catch (e) {
             alert(e.message);
         }
     };
 
-
     const submit = () => {
         setIsSubmitting(true);
         handleLogin().finally(() => setIsSubmitting(false));
     }
+
     return (
         <SafeAreaView edges={[]} >
             <ImageBackground source={images.background} className='h-full w-full'>
+                <View style={Styles.topTextContainer}>
+                    <Text style={Styles.topText}>Log In</Text>
+                </View>
                 <ScrollView contentContainerStyle={Styles.scrollViewContent}>
-                    <View style={Styles.topTextContainer}>
-                        <Text style={Styles.topText}>Log In</Text>
-                    </View>
-                    <View style={Styles.horizontalLine} />
                     <Card style={Styles.card}>
                         <Card.Content>
                             <View>
@@ -105,7 +101,7 @@ const SignIn = () => {
                                 />
                                 <CustomButton
                                     title="Sign In"
-                                    handlePress={handleLogin}
+                                    handlePress={submit}
                                     containerStyles="mt-7"
                                     isLoading={isSubmitting}
                                 />
@@ -143,10 +139,10 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
         marginVertical: 20,
-        marginTop: 190,
+        marginTop: 100,
         marginBottom: 50,
         paddingHorizontal: 15,
-        backgroundColor:  '#fff'
+        backgroundColor: '#fff'
     },
     topTextContainer: {
         position: 'absolute',

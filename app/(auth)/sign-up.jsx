@@ -49,13 +49,12 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ImageBackground source={images.background} style={{ flex: 1 }}>
-        {/* <ScrollView contentContainerStyle={Styles.scrollViewContent}> */}
+    <SafeAreaView edges={[]} style={Styles.safeArea}>
+      <ImageBackground source={images.background} style={Styles.imageBackground}>
+        <View style={Styles.container}>
           <View style={Styles.topTextContainer}>
             <Text style={Styles.topText}>Register</Text>
           </View>
-          <View style={Styles.horizontalLine} />
           <Card style={Styles.card}>
             <Card.Content>
               <View>
@@ -113,7 +112,7 @@ const SignUp = () => {
               </View>
             </Card.Content>
           </Card>
-        {/* </ScrollView>  */}
+        </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -122,26 +121,31 @@ const SignUp = () => {
 export default SignUp;
 
 const Styles = StyleSheet.create({
-  scrollViewContent: {
-    flexGrow: 1,
+  safeArea: {
+    flex: 1,
+  },
+  imageBackground: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20, // Add bottom padding for better scrolling
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   card: {
-    width: '85%',
-    maxWidth: 400,
+    width: '78%',
+    //maxWidth: 600, 
     borderRadius: 10,
     elevation: 5,
-    marginVertical: 20,
-    marginTop: 80,
-    marginLeft: 25,
-    backgroundColor: '#fff'
-
+    backgroundColor: '#fff',
+    marginTop: 40,
   },
   topTextContainer: {
     position: 'absolute',
-    top: 0,
+    top: 50,
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     paddingVertical: 10,
@@ -151,10 +155,5 @@ const Styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     marginLeft: 20,
-  },
-  horizontalLine: {
-    width: '90%',
-    height: 1,
-    backgroundColor: 'black',
   },
 });

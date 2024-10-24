@@ -15,7 +15,7 @@ const AddUser = () => {
         contactNumber: '',
         bankDetails: '',
         gender: '',
-        bouncerType: '',
+        personnelType: '',
     });
 
     const [showAlert, setShowAlert] = useState(false);
@@ -52,7 +52,7 @@ const AddUser = () => {
                 contactNumber: '',
                 bankDetails: '',
                 gender: '',
-                bouncerType: '',
+                personnelType: '',
             });
             setErrors({});
         } else {
@@ -75,7 +75,7 @@ const AddUser = () => {
             if (!form.rate) newErrors.rate = 'Rate is required';
             if (!form.bankDetails) newErrors.bankDetails = 'Bank Details are required';
             if (!form.gender) newErrors.gender = 'Gender is required';
-            if (!form.bouncerType) newErrors.bouncerType = 'Bouncer Type is required';
+            if (!form.personnelType) newErrors.personnelType = 'Personnel Type is required';
         }
     
         setErrors(newErrors);
@@ -86,7 +86,7 @@ const AddUser = () => {
         e.preventDefault();
         if (!validateForm()) return;
 
-        const { email, role, password, fullName, rate, contactNumber, bankDetails, gender, bouncerType } = form;
+        const { email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType } = form;
         try {
             await register(email, password);
             const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
@@ -104,7 +104,7 @@ const AddUser = () => {
                 userData.contactNumber = contactNumber;
                 userData.bankDetails = bankDetails;
                 userData.gender = gender;
-                userData.bouncerType = bouncerType;
+                userData.personnelType = personnelType;
             }
 
             await set(userRef, userData);
@@ -123,7 +123,7 @@ const AddUser = () => {
                 contactNumber: '',
                 bankDetails: '',
                 gender: '',
-                bouncerType: '',
+                personnelType: '',
             });
         } catch (error) {
             setAlertMessage('Error adding user: ' + error.message);
@@ -251,20 +251,20 @@ const AddUser = () => {
                                             </Form.Control>
                                             <Form.Control.Feedback type="invalid">{errors.gender}</Form.Control.Feedback>
                                         </Form.Group>
-                                        <Form.Group controlId="formBouncerType" className="mt-3">
-                                            <Form.Label>Bouncer Type</Form.Label>
+                                        <Form.Group controlId="formPersonnelType" className="mt-3">
+                                            <Form.Label>Personnel Type</Form.Label>
                                             <Form.Control
                                                 as="select"
-                                                name="bouncerType"
-                                                value={form.bouncerType}
+                                                name="personnelType"
+                                                value={form.personnelType}
                                                 onChange={handleChange}
-                                                isInvalid={!!errors.bouncerType}
+                                                isInvalid={!!errors.personnelType}
                                             >
-                                                <option value="">Select Bouncer Type</option>
-                                                <option value="headBouncer">Head Bouncer</option>
-                                                <option value="standardBouncer">Standard Bouncer</option>
+                                                <option value="">Select Personnel Type</option>
+                                                <option value="headSecurity">Head Security</option>
+                                                <option value="standardSecurity">Standard Security</option>
                                             </Form.Control>
-                                            <Form.Control.Feedback type="invalid">{errors.bouncerType}</Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{errors.personnelType}</Form.Control.Feedback>
                                         </Form.Group>
                                     </>
                                 )}
