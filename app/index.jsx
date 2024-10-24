@@ -3,12 +3,19 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, ScrollView, ImageBackground, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../constants'
-import CustomButton from '../components/CustomButton';
+import CustomButton from '../components/CustomButton'
+import { useRoute } from '@react-navigation/native'
 
 export default function App() {
+    const route = useRoute();
+    const isDarkMode = route.params?.isDarkMode || false; // Get Dark Mode state
     return (
         <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} className='h-full w-full'>
+
+            <ImageBackground 
+                source={isDarkMode ? images.darkmodeBackgroundImage : images.background} 
+                style={{ height: '100%', width: '100%' }}
+            >
                 <ScrollView contentContainerStyle={{ flex: 1 }}>
                     <View className="flex-1 items-center justify-center">
                         <Image

@@ -1,4 +1,5 @@
 import background from "../assets/images/backgroundImage.jpg"
+import darkmodeBackgroundImage from "../assets/images/darkmodeBackgroundImage.png";
 import naraLogo from "../assets/images/naraLogo.jpg"
 import omnia from "../assets/images/omnia.jpeg";
 import oasis from "../assets/images/oasis.jpeg";
@@ -7,4 +8,4 @@ import jail from "../assets/images/jail.jpeg";
 import profileMale from "../assets/images/profileMale.png";
 import profileFemale from "../assets/images/profileFemale.png";
 
-export default { background, naraLogo, omnia, oasis, neon, jail, profileMale, profileFemale };
+export default { background, darkmodeBackgroundImage, naraLogo, omnia, oasis, neon, jail, profileMale, profileFemale };

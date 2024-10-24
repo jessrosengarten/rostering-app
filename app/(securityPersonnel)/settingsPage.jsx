@@ -3,13 +3,18 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
 import { useNavigation } from '@react-navigation/native';
+
 const Settings = () => {
     const navigation = useNavigation(); // For navigating
 
     // State for toggling switches
-
-     const [languageVisible, setLanguageVisible] = useState(false); // State for dropdown visibility
+    const [isDarkMode, setIsDarkMode] = useState(false); // Light/Dark mode state
+    const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false); // Notifications switch state
+    const [languageVisible, setLanguageVisible] = useState(false); // State for dropdown visibility
     const [selectedLanguage, setSelectedLanguage] = useState('English'); // State for selected language
+
+    const toggleDarkMode = () => setIsDarkMode((prev) => !prev); // Toggle dark mode state
+    const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev); // Toggle notifications state
 
     const toggleLanguageDropdown = () => {
         setLanguageVisible(!languageVisible); // Toggle dropdown visibility
@@ -19,6 +24,7 @@ const Settings = () => {
         setSelectedLanguage(language); // Update selected language
         setLanguageVisible(!languageVisible); // Hide dropdown
     };
+
     return (
         <SafeAreaView edges={[]}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -38,12 +44,15 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Select Light/Dark Mode</Text>
                     <View style={styles.switchContainer}>
                         <Switch
-                        
+                            trackColor={{ false: "#767577", true: "#767577" }}
+                            thumbColor={isDarkMode ? "#E21A1A" : "#f4f3f4"}
+                            onValueChange={toggleDarkMode} // Toggle switch handler
+                            value={isDarkMode} // Bind switch to state
                         />
                     </View>
                 </View>
 
-                 <TouchableOpacity style={styles.settingsItem} onPress={toggleLanguageDropdown}>
+                <TouchableOpacity style={styles.settingsItem} onPress={toggleLanguageDropdown}>
                     <FontAwesome name="language" size={24} color="black" />
                     <Text style={styles.settingsText}>Language Preferences</Text>
                     <FontAwesome name="caret-down" size={24} color="black" />
@@ -65,7 +74,10 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Notifications</Text>
                     <View style={styles.switchContainer}>
                         <Switch
-
+                            trackColor={{ false: "#767577", true: "#767577" }}
+                            thumbColor={isNotificationsEnabled ? "#E21A1A" : "#f4f3f4"}
+                            onValueChange={toggleNotifications} // Toggle handler for Notifications
+                            value={isNotificationsEnabled} // Bind value to state
                         />
                     </View>
                 </View>
