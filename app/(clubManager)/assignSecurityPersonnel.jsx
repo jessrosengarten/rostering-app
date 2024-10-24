@@ -29,8 +29,6 @@ const AssignSecurityPersonnel = () => {
                     <Text style={styles.headerText}>Personnel Needed</Text>
                 </View>
                 <ScrollView contentContainerStyle={{ padding: 20 }}>
-                    {/* Club Name */}
-                    <Text style={styles.clubName}>Neon Night Club</Text>
 
                     {/* Day Elements */}
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
@@ -43,10 +41,9 @@ const AssignSecurityPersonnel = () => {
                                 />
                             </View>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.label}>No of Personnel:</Text>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Input No."
+                                    placeholder="Number of Personnel"
                                     editable={isClubOpen[day]} // Only editable if the switch is on
                                 />
                             </View>
@@ -120,7 +117,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#d3d3d3',
         padding: 10,
-        width: 100,
+        width: 150,
         textAlign: 'center',
         borderRadius: 5,
     },
