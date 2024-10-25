@@ -112,7 +112,7 @@ const SignIn = () => {
                                     <Text className="text-lg text-black font-pregular" style={{ textDecorationLine: 'underline' }}>
                                         Don't have an account?
                                     </Text>
-                                    <Link href={'/sign-up'} className="text-lg font-psemibold text-secondary">Sign Up</Link>
+                                    <Link href={'/sign-up'} className="text-lg font-psemibold text-secondary">  Sign Up</Link>
                                 </View>
                             </View>
                         </Card.Content>

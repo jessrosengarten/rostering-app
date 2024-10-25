@@ -92,12 +92,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     clubItem: {
-        width: '90%',
+        width: '85%',
         padding: 15,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 255)',
         marginVertical: 10,
         borderRadius: 10,
         alignItems: 'flex-start',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        elevation: 3,
     },
     clubInfo: {
         flexDirection: 'row',

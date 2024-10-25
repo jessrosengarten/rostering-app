@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import React from 'react';
 
-const EarningsHistory = () => {
+const EarningsHistory = () => { 
   return (
     <SafeAreaView edges={[]} style={styles.safeArea}>
       <ImageBackground source={images.background} style={styles.background}>
@@ -16,34 +16,52 @@ const EarningsHistory = () => {
           <View style={styles.earningsContainer}>
             <Text style={styles.sectionTitle}>Week Ending</Text>
             <Text style={styles.sectionValue}>01/09/2024</Text>
-            <Text style={styles.detailText}>Rate per shift:</Text>
-            <Text style={styles.valueText}>R200.00</Text>
-            <Text style={styles.detailText}>Number of shifts:</Text>
-            <Text style={styles.valueText}>4</Text>
-            <Text style={styles.detailText}>Total earned:</Text>
-            <Text style={styles.valueText}>R 800.00</Text>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Rate per shift:</Text>
+              <Text style={styles.valueText}>R200.00</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Number of shifts:</Text>
+              <Text style={styles.valueText}>4</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Total earned:</Text>
+              <Text style={styles.valueText}>R 800.00</Text>
+            </View>
           </View>
 
           <View style={styles.earningsContainer}>
             <Text style={styles.sectionTitle}>Week Ending</Text>
             <Text style={styles.sectionValue}>25/08/2024</Text>
-            <Text style={styles.detailText}>Rate per shift:</Text>
-            <Text style={styles.valueText}>R300.00</Text>
-            <Text style={styles.detailText}>Number of shifts:</Text>
-            <Text style={styles.valueText}>3</Text>
-            <Text style={styles.detailText}>Total earned:</Text>
-            <Text style={styles.valueText}>R 600.00</Text>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Rate per shift:</Text>
+              <Text style={styles.valueText}>R300.00</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Number of shifts:</Text>
+              <Text style={styles.valueText}>3</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Total earned:</Text>
+              <Text style={styles.valueText}>R 600.00</Text>
+            </View>
           </View>
 
           <View style={styles.earningsContainer}>
             <Text style={styles.sectionTitle}>Week Ending</Text>
             <Text style={styles.sectionValue}>18/08/2024</Text>
-            <Text style={styles.detailText}>Rate per shift:</Text>
-            <Text style={styles.valueText}>R200.00</Text>
-            <Text style={styles.detailText}>Number of shifts:</Text>
-            <Text style={styles.valueText}>5</Text>
-            <Text style={styles.detailText}>Total earned:</Text>
-            <Text style={styles.valueText}>R 1000.00</Text>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Rate per shift:</Text>
+              <Text style={styles.valueText}>R200.00</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Number of shifts:</Text>
+              <Text style={styles.valueText}>5</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.labelText}>Total earned:</Text>
+              <Text style={styles.valueText}>R 1000.00</Text>
+            </View>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -66,6 +84,7 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     padding: 15,
+    marginBottom: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderBottomWidth: 1,
     borderBottomColor: '#d3d3d3',
@@ -77,12 +96,14 @@ const styles = StyleSheet.create({
   },
   earningsContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: 15,
+    padding: 20,
     borderRadius: 10,
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#d3d3d3',
-    alignItems: 'center',
+    marginHorizontal: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   sectionTitle: {
     fontSize: 18,
@@ -94,20 +115,27 @@ const styles = StyleSheet.create({
   sectionValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 15,
     color: '#000',
     textAlign: 'center',
   },
-  detailText: {
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 5,
+    paddingLeft: 10,
+  },
+  labelText: {
     fontSize: 16,
     color: '#333',
-    marginBottom: 2,
-    fontWeight: 'bold',
+    flex: 1,
   },
   valueText: {
     fontSize: 16,
     color: '#333',
+    width: 100,
   },
 });
+
 
 export default EarningsHistory;

@@ -76,14 +76,14 @@ const styles = StyleSheet.create({
   },
   dayContainer: {
     marginBottom: 15,
-    backgroundColor: 'rgba(226, 26, 26, 0.2)',
+    marginHorizontal: 20,
+    backgroundColor: 'rgba(255, 255, 255, 1)',
     borderRadius: 10,
     padding: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   dayTitle: {
     fontSize: 18,

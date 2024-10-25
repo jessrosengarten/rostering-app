@@ -82,13 +82,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   shiftBox: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 255)',
     borderRadius: 10,
     padding: 15,
     marginVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   scheduleItem: {
     marginVertical: 10,
