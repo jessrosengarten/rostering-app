@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
@@ -35,27 +35,25 @@ const securityPersonnelProfile = () => {
                         <Text style={styles.detailText}>{securityPersonnel.contact}</Text>
 
                     </View>
-                    
-
                     <View style={styles.buttonsContainer}>
-                        <CustomButton
-                            title="View Documents"
-                            handlePress={() => navigation.navigate('securityPersonnelUser')}
-                            customStyle={styles.button}
-                            textStyle={styles.buttonText}
-                        />
-                        <CustomButton
-                            title="Finances"
-                            handlePress={() => navigation.navigate('securityPersonnelPayments')}
-                            customStyle={styles.button}
-                            textStyle={styles.buttonText}
-                        />
-                        <CustomButton
-                            title="Back"
-                            handlePress={() => navigation.navigate('securityAdminHome')}
-                            customStyle={styles.button}
-                            textStyle={styles.buttonText}
-                        />
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => navigation.navigate('securityPersonnelUser')}
+                        >
+                            <Text style={styles.buttonText}>View Documents</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => navigation.navigate('securityPersonnelPayments')}
+                        >
+                            <Text style={styles.buttonText}>Finances</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => navigation.navigate('securityAdminHome')}
+                        >
+                            <Text style={styles.buttonText}>Back</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -64,24 +62,15 @@ const securityPersonnelProfile = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    backgroundImage: {
-        width: '100%',
-        height: '100%',
-    },
     scrollContainer: {
         padding: 20,
         flexGrow: 1,
         justifyContent: 'center',
     },
-
     header: {
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        alignItems: 'left',
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },
@@ -89,18 +78,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
-    },
-
-    clubLogo: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 15,
-    },
-    clubName: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#E21A1A',
     },
     detailsContainer: {
         marginBottom: 20,
@@ -118,20 +95,24 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonsContainer: {
-        marginTop: 20,
-    },
-    button: {
-        backgroundColor: '#E21A1A',
-        paddingVertical: 10,
-        marginBottom: 10,
-        borderRadius: 5,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginTop: 50,
+      },
+      button: {
+        width: (width / 2) - 30,
+        height: 50,
+        justifyContent: 'center',
         alignItems: 'center',
-    },
-    buttonText: {
-        color: '#FFF',
-        fontWeight: 'bold',
-        fontSize: 14,
-    },
+        backgroundColor: '#E21A1A',
+        borderRadius: 5,
+        marginBottom: 20,
+      },
+      buttonText: {
+        fontSize: 16,
+        color: '#fff',
+      },
 });
 
 export default securityPersonnelProfile;

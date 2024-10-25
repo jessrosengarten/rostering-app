@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions,
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-//import CustomButton from '../../components/CustomButton';
 import { db } from '../../Backend/firebaseConfig';
 import { ref, onValue } from 'firebase/database';
 
@@ -54,7 +53,7 @@ const SecurityHome = () => {
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>i like</Text>
+                    <Text style={styles.headerText}>i liiike</Text>
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.container}>
@@ -62,13 +61,26 @@ const SecurityHome = () => {
                         {shifts.map((shift, index) => (
                             <View key={index} style={styles.shiftBox}>
                                 <View style={styles.shiftDetails}>
-                                    <Text style={styles.dayText}>Day: {getDayOfWeek(shift.date)}</Text>
-                                    <Text style={styles.clubText}>Club: {shift.club}</Text>
-                                    <Text style={styles.timeText}>Shift Time: {shift.startTime} - {shift.endTime}</Text>
+                                    <Text>
+                                        <Text style={styles.labelText}>Day: </Text>
+                                        <Text style={styles.normalText}>{getDayOfWeek(shift.date)}</Text>
+                                    </Text>
+                                    <View style={{ height: 10 }} />
+                                    <Text>
+                                        <Text style={styles.labelText}>Club: </Text>
+                                        <Text style={styles.normalText}>{shift.club}</Text>
+                                    </Text>
+                                    <Text>
+                                        <Text style={styles.labelText}>Shift Time: </Text>
+                                        <Text style={styles.normalText}>
+                                            {shift.startTime} - {shift.endTime}
+                                        </Text>
+                                    </Text>
                                 </View>
                                 <View style={styles.buttonContainer}>
-                                    {/* Replace CustomButton with TouchableOpacity */}
-                                    <TouchableOpacity style={styles.cancelButton} onPress={() => console.log('Cancel pressed')}>
+                                    <TouchableOpacity
+                                        style={styles.cancelButton}
+                                        onPress={() => console.log('Cancel pressed')}>
                                         <Text style={styles.buttonText}>Cancel</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -103,26 +115,29 @@ const styles = StyleSheet.create({
     },
     shiftBox: {
         padding: 15,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
         marginVertical: 10,
         borderRadius: 10,
-        alignItems: 'center', // Center all items horizontally
-        flexDirection: 'row', // Align text and button in a row
-        justifyContent: 'space-between', // Space between text and button
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        elevation: 3,
     },
     shiftDetails: {
-        flex: 1, // Allow text to take up available space
-        marginRight: 10, // Space between text and button
+        flex: 1,
+        marginRight: 10,
     },
-    dayText: {
-        fontSize: 18,
+    labelText: {
+        fontSize: 16,
         fontWeight: 'bold',
     },
-    clubText: {
+    normalText: {
         fontSize: 16,
-    },
-    timeText: {
-        fontSize: 14,
+        fontWeight: 'normal',
+        color: '#333',
     },
     buttonContainer: {
         justifyContent: 'center',
@@ -139,7 +154,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontWeight: 'bold',
         fontSize: 16,
-    }
+    },
 });
 
 export default SecurityHome;

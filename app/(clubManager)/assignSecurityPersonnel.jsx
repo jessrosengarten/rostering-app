@@ -28,9 +28,9 @@ const AssignSecurityPersonnel = () => {
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Personnel Needed</Text>
                 </View>
-                <ScrollView contentContainerStyle={{ padding: 20 }}>
 
-                    {/* Day Elements */}
+                <ScrollView contentContainerStyle={{ padding: 20 }}>
+                  <View style={styles.daysContainer}> 
                     {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
                         <View key={index} style={styles.dayContainer}>
                             <Text style={styles.dayText}>{day}</Text>
@@ -43,7 +43,7 @@ const AssignSecurityPersonnel = () => {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="Number of Personnel"
+                                    placeholder="No. of Personnel"
                                     editable={isClubOpen[day]} // Only editable if the switch is on
                                 />
                             </View>
@@ -54,6 +54,7 @@ const AssignSecurityPersonnel = () => {
                     <TouchableOpacity style={styles.assignButton}>
                         <Text style={styles.assignButtonText}>Assign</Text>
                     </TouchableOpacity>
+                  </View>
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
@@ -61,6 +62,17 @@ const AssignSecurityPersonnel = () => {
 };
 
 const styles = StyleSheet.create({
+    daysContainer: {
+        padding: 20, 
+        backgroundColor: 'rgba(255, 255, 255, 255)', 
+        borderRadius: 10, 
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3, // Android shadow
+        marginBottom: 20, 
+    },
     container: {
         flex: 1,
     },
@@ -97,12 +109,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
-        width: 100, // Fixed width for alignment
+        width: 105, // Fixed width for alignment
     },
     switchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 50, // Fixed width for alignment
+        width: 80, // Fixed width for alignment
     },
     label: {
         marginRight: 10,
@@ -111,7 +123,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 100, // Fixed width for alignment
+        flex: 1, // Fixed width for alignment
     },
     input: {
         borderWidth: 1,
