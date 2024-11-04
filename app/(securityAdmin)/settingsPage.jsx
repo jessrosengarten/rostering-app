@@ -30,7 +30,7 @@ const Settings = () => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.profileContainer}>
                     <FontAwesome name="user" size={80} color="black" />
-                    <Text style={styles.userName}>Softpaws</Text>
+                    
                 </View>
 
                 {/* Settings Options */}

@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/native';
 
 const Schedule = () => {
   const route = useRoute();
-  const { day = 'Unknown Day', assignedPersonnel = [] } = route.params || {}; // Set default values if undefined
+  const { day, assignedPersonnel } = route.params; // Get the assigned personnel from the route params
 
   return (
     <SafeAreaView edges={[]}>
@@ -14,7 +14,7 @@ const Schedule = () => {
         <ScrollView contentContainerStyle={{ height: '100%' }}>
           {/* Semi-transparent Header */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Schedule </Text>
+            <Text style={styles.headerText}>Schedule: {day} </Text>
           </View>
 
           {/* Schedule List */}
@@ -26,7 +26,7 @@ const Schedule = () => {
                 </View>
               ))
             ) : (
-              <Text style={styles.noScheduleText}>No personnel assigned.</Text>
+              <Text style={styles.noScheduleText}>No personnel assigned for {day}.</Text>
             )}
           </View>
         </ScrollView>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   noScheduleText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#000',
+    color: '#888',
     marginTop: 50,
   },
 });

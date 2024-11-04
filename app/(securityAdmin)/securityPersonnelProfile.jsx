@@ -38,7 +38,7 @@ const securityPersonnelProfile = () => {
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity
                             style={styles.button}
-                            onPress={() => navigation.navigate('securityPersonnelUser')}
+                            onPress={() => navigation.navigate('securityPersonnelDocuments')}
                         >
                             <Text style={styles.buttonText}>View Documents</Text>
                         </TouchableOpacity>

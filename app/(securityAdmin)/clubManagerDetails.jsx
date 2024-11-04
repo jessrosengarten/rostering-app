@@ -1,21 +1,24 @@
+// Updated version of clubManagerProfile.jsx
+
 import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
-// import { useNavigation } from 'expo-router';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router'; // Updated import to include useLocalSearchParams
 
 const { width } = Dimensions.get('window');
 
-const clubManagerProfile = () => {
+const clubManagerProfile = () => { // Removed route prop
     const router = useRouter();
+    const { managerName } = useLocalSearchParams(); // Updated to use useLocalSearchParams to get managerName
     
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.backgroundImage}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>Club Manager</Text>
+                    {/* Updated headerText to display the specific manager's name */}
+                    <Text style={styles.headerText}>{managerName}</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
 

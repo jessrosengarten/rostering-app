@@ -27,8 +27,11 @@ const AssignPersonnelManagement = () => {
   const renderScheduleItem = (item) => (
     <View style={styles.scheduleItem}>
       <View style={styles.shiftBox}>
-        <Text style={styles.dayText}>{item.day}:</Text>
+       <View style={styles.textContainer}>
+       <Text style={styles.dayText}>{item.day}:</Text>
         <Text style={styles.personnelText}>{item.personnel} Security Personnel</Text>
+       </View>
+        
         <TouchableOpacity style={styles.assignButton} onPress={() => handleAssignPress(item.day, item.personnel)}>
           <Text style={styles.assignButtonText}>Assign</Text>
         </TouchableOpacity>
@@ -102,21 +105,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 2,
   },
-  personnelText: {
-    fontSize: 14,
-    color: '#000',
-    marginRight: 10,
-    flex: 2,
+   personnelText: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 5,
   },
   assignButton: {
     backgroundColor: 'red',
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 8,
+    flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
   },
-  assignButtonText: {
+  textContainer: {
+    flex: 3,  
+  },
+   assignButtonText: {
     fontSize: 14,
     color: '#fff',
+    fontWeight: 'bold',
   },
 });
 
