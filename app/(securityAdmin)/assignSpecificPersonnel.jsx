@@ -1,145 +1,198 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
-import { images } from '../../constants'; 
-import { useRoute } from '@react-navigation/native';
+import { images } from '../../constants';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
-const { width, height } = Dimensions.get('window');
-
-// Main component for assigning specific personnel
 const Assign = () => {
-  const route = useRoute();  // Use the route object to get the day and personnel count parameters
-  const { day, personnelCount } = route.params;  // Get the day and personnelCount from the route params
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { day, personnelCount, club } = route.params;
 
-  // State to store selected personnel for each dropdown
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // Handle the change for each dropdown
   const handlePersonnelChange = (value, index) => {
     const newSelectedPersonnel = [...selectedPersonnel];
     newSelectedPersonnel[index] = value;
     setSelectedPersonnel(newSelectedPersonnel);
   };
 
+  const handleAssign = () => {
+    setModalVisible(true);
+  };
+
+  const handleViewSchedule = () => {
+    setModalVisible(false);
+    navigation.navigate('clubSpecificSchedule', { club, day, assignedPersonnel: selectedPersonnel });
+  };
+
+  const handleReturn = () => {
+    setModalVisible(false);
+    navigation.navigate('assignPersonnelManagement');
+  };
+
   return (
     <SafeAreaView edges={[]} style={styles.container}>
       <ImageBackground source={images.background} style={styles.background}>
-        
-        {/* Display the selected day as the header */}
         <View style={styles.header}>
           <Text style={styles.headerText}>Assign Personnel for {day}</Text>
         </View>
 
-        {/* Dynamically create personnel dropdowns based on the personnelCount */}
-        <ScrollView contentContainerStyle={styles.pickerContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
           {Array.from({ length: personnelCount }).map((_, index) => (
             <View key={index} style={styles.pickerItemContainer}>
-            <RNPickerSelect
-              onValueChange={(value) => handlePersonnelChange(value, index)}
-              items={[
-                { label: 'Shan', value: 'Shan' },
-                { label: 'Rudolf', value: 'Rudolf' },
-                { label: 'Dagan', value: 'Dagan' },
-                { label: 'Jess', value: 'Jess' },
-              ]}
-              placeholder={{ label: 'Select a person...', value: null }}
-              style={pickerSelectStyles}
-            />
-          </View>
+              <Text style={styles.pickerLabel}>Personnel {index + 1}:</Text>
+              <View style={styles.pickerWrapper}>
+                <RNPickerSelect
+                  onValueChange={(value) => handlePersonnelChange(value, index)}
+                  items={[
+                    { label: 'Shan', value: 'Shan' },
+                    { label: 'Rudolf', value: 'Rudolf' },
+                    { label: 'Dagan', value: 'Dagan' },
+                    { label: 'Jess', value: 'Jess' },
+                  ]}
+                  placeholder={{ label: 'Select a person...', value: null }}
+                  style={pickerSelectStyles}
+                />
+              </View>
+            </View>
           ))}
-
-          <CustomButton
-            title="Randomly Allocate Rest"
-            //handlePress={() => router.push('/securityAdminHome')}
-            customStyle={styles.button}
-            textStyle={styles.buttonText}
-        />
-
-          <CustomButton
-            title="Assign"
-            //handlePress={() => router.push('/securityAdminHome')}
-            customStyle={styles.button}
-            textStyle={styles.buttonText}
-        />
+          <CustomButton title="Assign" handlePress={handleAssign} customStyle={styles.button} textStyle={styles.buttonText} />
         </ScrollView>
+
+        <Modal
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+  animationType="slide"
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.modalContainer}>
+      <Text style={styles.modalText}>
+        Personnel successfully assigned for {day} at {club.name}.
+      </Text>
+      <View style={styles.modalButtonsContainer}>
+        <TouchableOpacity style={styles.modalButton} onPress={handleViewSchedule}>
+          <Text style={styles.modalButtonText}>View Schedule</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.modalButton} onPress={handleReturn}>
+          <Text style={styles.modalButtonText}>Return</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</Modal>
+
       </ImageBackground>
     </SafeAreaView>
   );
 };
 
-export default Assign;
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-  },
-  background: {
-    height: '100%',
-    width: '100%',
-  },
-  header: {
-    width: '100%',
-    padding: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderBottomWidth: 1,
-    borderBottomColor: '#d3d3d3',
-    alignItems: 'flex-start', 
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  pickerContainer: {
-    padding: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  pickerItemContainer: {
-    marginBottom: 20, // Add space between each picker
-  },
-  buttonsContainer: {
-    marginTop: 20,
-},
-button: {
-    backgroundColor: '#E21A1A',
-    paddingVertical: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-},
-buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 14,
-},
+  container: { 
+    flex: 1, 
+    width: '100%' 
+    },
+  
+  scrollContainer: { 
+    paddingHorizontal: 20, 
+    paddingBottom: 30 
+    },
+  
+  background: { 
+    height: '100%', 
+    width: '100%' 
+    },
+  
+  header: { 
+    padding: 15, 
+    backgroundColor: 'rgba(255, 255, 255, 0.7)' 
+    },
+  
+  headerText: { 
+    fontSize: 20, 
+    fontWeight: 'bold', 
+    color: '#000' 
+    },
+  
+  pickerItemContainer: { 
+    padding: 20, 
+    backgroundColor: '#FFF', 
+    borderRadius: 10, 
+    marginTop: 20, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 4 }, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 5, 
+    elevation: 3 
+    },
+  
+  button: { 
+    backgroundColor: '#E21A1A', 
+    paddingVertical: 10, 
+    borderRadius: 5 
+    },
+  
+  buttonText: { 
+    color: '#FFF', 
+    fontWeight: 'bold'
+     },
+  
+  pickerLabel: { 
+    fontSize: 16, 
+    fontWeight: '500', 
+    color: '#444', 
+    marginBottom: 5 
+    },
+  
+  modalOverlay: { 
+    flex: 1, 
+    backgroundColor: 'rgba(0, 0, 0, 0.9)', 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+    },
+  
+  modalContainer: { 
+    width: '80%', 
+    padding: 20, 
+    backgroundColor: '#FFF', 
+    borderRadius: 10, 
+    alignItems: 'center' },
+  
+  modalText: { 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    textAlign: 'center', 
+    marginBottom: 20 
+    },
+  
+  modalButtonsContainer: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    width: '100%' 
+    },
+  
+  modalButton: { 
+    backgroundColor: '#E21A1A', 
+    paddingVertical: 10, 
+    paddingHorizontal: 15, 
+    borderRadius: 5, 
+    marginHorizontal: 5 
+    },
+  
+  modalButtonText: { 
+    color: '#FFF', 
+    fontWeight: 'bold' 
+    },
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'gray',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-  },
+  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderRadius: 8, color: '#333', backgroundColor: '#F2F2F2' },
+  inputAndroid: { fontSize: 16, paddingVertical: 8, paddingHorizontal: 10, borderRadius: 8, color: '#333', backgroundColor: '#F2F2F2' },
+  placeholder: { color: '#666' },
 });
+
+export default Assign;

@@ -101,7 +101,10 @@ const SecurityAdmin = () => {
           <View style={styles.header}>
             <Text style={styles.headerText}>Security Admin Home</Text>
           </View>
-          <View style={styles.section}>
+
+          {/* Clubs Section */}
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>Clubs</Text>
             <FlatList
               data={clubs}
               horizontal
@@ -112,7 +115,8 @@ const SecurityAdmin = () => {
             />
           </View>
 
-          <View style={styles.section}>
+          {/* Security Personnel Section */}
+          <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Security Personnel</Text>
             <FlatList
               data={securityPersonnel}
@@ -124,7 +128,8 @@ const SecurityAdmin = () => {
             />
           </View>
 
-          <View style={styles.section}>
+          {/* Club Managers Section */}
+          <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>Club Managers</Text>
             <FlatList
               data={clubManagers}
@@ -152,6 +157,18 @@ const styles = StyleSheet.create({
     alignItems: 'left',
     borderBottomWidth: 1,
     borderBottomColor: '#d3d3d3',
+  },
+  sectionContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginVertical: 15,
+    marginHorizontal: 15,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   headerText: {
     fontSize: 20,
@@ -186,6 +203,16 @@ const styles = StyleSheet.create({
   personName: {
     marginTop: 5,
     fontSize: 14,
+  },
+    documentContainer: {
+    backgroundColor: '#FFF',
+    padding: 20,
+    borderRadius: 10,
+    marginVertical: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
 });
 

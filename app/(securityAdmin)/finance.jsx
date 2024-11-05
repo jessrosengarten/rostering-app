@@ -218,11 +218,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  summary: {
+   summary: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff', 
     borderRadius: 10,
+    marginHorizontal: 15, // Reduced width by adding margin on sides
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5, // Shadow effect
   },
   summaryTitle: {
     fontSize: 20,

@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         borderRadius: 5,
     },
+    
     assignButton: {
         backgroundColor: '#E21A1A',
         padding: 15,

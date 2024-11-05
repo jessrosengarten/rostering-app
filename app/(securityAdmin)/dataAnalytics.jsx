@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
-import { BarChart, PieChart } from 'react-native-chart-kit'; // Using PieChart instead of LineChart
+import { BarChart, PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select'; // Importing dropdown component
-import { images } from '../../constants'; // Assuming the images object includes your background
+import RNPickerSelect from 'react-native-picker-select';
+import { images } from '../../constants';
 
 const screenWidth = Dimensions.get('window').width;
 
-const DataAnalytics = () => { 
-  // Example data for profit per club
+const DataAnalytics = () => {
   const profitDataByMonth = {
     July: [4500, 3800, 5200],
     August: [4800, 4200, 5300],
@@ -21,50 +20,17 @@ const DataAnalytics = () => {
     September: [12500, 10500, 15500],
   };
 
-  // State to track selected month and club
   const [selectedMonth, setSelectedMonth] = useState('July');
-  const [selectedClub, setSelectedClub] = useState(null);
 
-  // Profit Data based on selected month
-  const profitData = {
-    labels: ["Neon", "Jail", "Omnia"], // Clubs
-    datasets: [
-      {
-        data: profitDataByMonth[selectedMonth], // Display profits for selected month
-      }
-    ]
-  };
+  const profitData = profitDataByMonth[selectedMonth];
+  const earningsData = earningsByClub[selectedMonth];
 
-  // Pie chart data for earnings comparison
-  const earningsComparisonData = [
-    {
-      name: "Neon",
-      population: earningsByClub[selectedMonth][0],
-      color: "#810819", // Customize colors as needed
-      legendFontColor: "#000",
-      legendFontSize: 15
-    },
-    {
-      name: "Jail",
-      population: earningsByClub[selectedMonth][1],
-      color: "#E21A1A",
-      legendFontColor: "#000",
-      legendFontSize: 15
-    },
-    {
-      name: "Omnia",
-      population: earningsByClub[selectedMonth][2],
-      color: "#1F2837",
-      legendFontColor: "#000",
-      legendFontSize: 15
-    }
-  ];
+  const hasData = profitData && earningsData;
 
   return (
-    <SafeAreaView edges={[]}>
+    <SafeAreaView edges={[]}>  
       <ImageBackground source={images.background} style={styles.background}>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Data Analytics</Text>
@@ -74,44 +40,90 @@ const DataAnalytics = () => {
           <View style={styles.dropdownContainer}>
             <Text style={styles.dropdownLabel}>Select Month:</Text>
             <RNPickerSelect
-              onValueChange={(value) => setSelectedMonth(value)} // Update state when a different month is selected
+              onValueChange={(value) => setSelectedMonth(value)}
               items={[
+                { label: 'January', value: 'January' },
+                { label: 'February', value: 'February' },
+                { label: 'March', value: 'March' },
+                { label: 'April', value: 'April' },
+                { label: 'May', value: 'May' },
+                { label: 'June', value: 'June' },
                 { label: 'July', value: 'July' },
                 { label: 'August', value: 'August' },
                 { label: 'September', value: 'September' },
+                { label: 'October', value: 'October' },
+                { label: 'November', value: 'November' },
+                { label: 'December', value: 'December' }
               ]}
               style={pickerSelectStyles}
               value={selectedMonth}
             />
           </View>
 
-          {/* Bar Chart - Profit Per Club */}
-          <View style={styles.chartContainer}>
-            <Text style={styles.chartTitle}>Profit per Club ({selectedMonth} 2024)</Text>
-            <BarChart
-              data={profitData} // Pass in the profit data for the selected month
-              width={screenWidth - 40} // Adjust width accordingly
-              height={220}
-              chartConfig={chartConfig}
-              verticalLabelRotation={30}
-            />
-          </View>
+          {/* Conditional Rendering */}
+          {hasData ? (
+            <>
+              {/* Bar Chart - Profit Per Club */}
+              <View style={styles.chartContainer}>
+                <Text style={styles.chartTitle}>Profit per Club ({selectedMonth} 2024)</Text>
+                <BarChart
+                  data={{
+                    labels: ["Neon", "Jail", "Omnia"],
+                    datasets: [
+                      {
+                        data: profitData,
+                      }
+                    ]
+                  }}
+                  width={screenWidth - 40}
+                  height={220}
+                  chartConfig={chartConfig}
+                  verticalLabelRotation={30}
+                />
+              </View>
 
-          {/* Pie Chart - Earnings Comparison */}
-          <View style={styles.chartContainer}>
-            <Text style={styles.chartTitle}>Club Earnings Comparison ({selectedMonth})</Text>
-            <PieChart
-              data={earningsComparisonData} // Pie chart data for earnings comparison
-              width={screenWidth - 40}
-              height={220}
-              chartConfig={chartConfig}
-              accessor={"population"} // Key to access the data value for each section
-              backgroundColor={"transparent"}
-              paddingLeft={"15"}
-              absolute
-            />
-          </View>
-
+              {/* Pie Chart - Earnings Comparison */}
+              <View style={styles.chartContainer}>
+                <Text style={styles.chartTitle}>Club Earnings Comparison ({selectedMonth})</Text>
+                <PieChart
+                  data={[
+                    {
+                      name: "Neon",
+                      population: earningsData[0],
+                      color: "#810819",
+                      legendFontColor: "#000",
+                      legendFontSize: 15
+                    },
+                    {
+                      name: "Jail",
+                      population: earningsData[1],
+                      color: "#E21A1A",
+                      legendFontColor: "#000",
+                      legendFontSize: 15
+                    },
+                    {
+                      name: "Omnia",
+                      population: earningsData[2],
+                      color: "#1F2837",
+                      legendFontColor: "#000",
+                      legendFontSize: 15
+                    }
+                  ]}
+                  width={screenWidth - 40}
+                  height={220}
+                  chartConfig={chartConfig}
+                  accessor={"population"}
+                  backgroundColor={"transparent"}
+                  paddingLeft={"15"}
+                  absolute
+                />
+              </View>
+            </>
+          ) : (
+            <View style={styles.noDataContainer}>
+              <Text style={styles.noDataText}>No data available for {selectedMonth}</Text>
+            </View>
+          )}
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -120,10 +132,10 @@ const DataAnalytics = () => {
 
 // Chart configuration for styling
 const chartConfig = {
-  backgroundColor: '#1cc910',
+  backgroundColor: '#FFF',
   backgroundGradientFrom: '#eff3ff',
   backgroundGradientTo: '#efefef',
-  decimalPlaces: 2, // optional, defaults to 2dp
+  decimalPlaces: 2,
   color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   style: {
@@ -180,9 +192,23 @@ const styles = StyleSheet.create({
   chartContainer: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
+  noDataContainer: {
+    marginTop: 40,
+    alignItems: 'center',
+  },
+  noDataText: {
+    fontSize: 18,
+    color: '#000',
+    fontWeight: 'bold',
+  }
 });
 
 // Styles for the picker
@@ -195,7 +221,7 @@ const pickerSelectStyles = {
     borderColor: 'gray',
     borderRadius: 4,
     color: 'black',
-    paddingRight: 30, // to ensure the text is not overlapping with the dropdown
+    paddingRight: 30,
   },
   inputAndroid: {
     fontSize: 16,
@@ -205,7 +231,7 @@ const pickerSelectStyles = {
     borderColor: 'gray',
     borderRadius: 4,
     color: 'black',
-    paddingRight: 30, // to ensure the text is not overlapping with the dropdown
+    paddingRight: 30,
   },
 };
 
