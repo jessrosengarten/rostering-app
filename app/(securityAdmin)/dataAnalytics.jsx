@@ -132,7 +132,7 @@ const DataAnalytics = () => {
 
 // Chart configuration for styling
 const chartConfig = {
-  backgroundColor: '#1cc910',
+  backgroundColor: '#FFF',
   backgroundGradientFrom: '#eff3ff',
   backgroundGradientTo: '#efefef',
   decimalPlaces: 2,
@@ -192,8 +192,13 @@ const styles = StyleSheet.create({
   chartContainer: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   noDataContainer: {
     marginTop: 40,

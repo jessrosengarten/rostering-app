@@ -56,7 +56,7 @@ const SecurityHome = () => {
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>i liiike</Text>
+                    <Text style={styles.headerText}>Shifts</Text>
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={styles.container}>
@@ -136,8 +136,6 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        borderBottomWidth: 1,
-        borderBottomColor: '#d3d3d3',
     },
     headerText: {
         fontSize: 20,
@@ -199,10 +197,10 @@ const styles = StyleSheet.create({
         width: width * 0.8,
         padding: 20,
         backgroundColor: 'white',
-        borderRadius: 10,
+        borderRadius: 12,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 5,
@@ -222,7 +220,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#d3d3d3',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        borderRadius: 5,
+        borderRadius: 8,
         alignItems: 'center',
         marginRight: 10,
     },

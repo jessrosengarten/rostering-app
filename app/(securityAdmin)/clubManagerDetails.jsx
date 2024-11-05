@@ -1,131 +1,134 @@
-// Updated version of clubManagerProfile.jsx
-
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomButton from '../../components/CustomButton';
 import { images } from '../../constants';
-import { useRouter, useLocalSearchParams } from 'expo-router'; // Updated import to include useLocalSearchParams
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const clubManagerProfile = () => { // Removed route prop
-    const router = useRouter();
-    const { managerName } = useLocalSearchParams(); // Updated to use useLocalSearchParams to get managerName
-    
-    return (
-        <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} style={styles.backgroundImage}>
-                <View style={styles.header}>
-                    {/* Updated headerText to display the specific manager's name */}
-                    <Text style={styles.headerText}>{managerName}</Text>
-                </View>
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
+const ClubManagerProfile = () => {
+  const router = useRouter();
+  const { managerName } = useLocalSearchParams();
 
-                    {/* Club Details */}
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.detailTitle}>Club Managed:</Text>
-                        <Text style={styles.detailText}>Jail</Text>
+  return (
+    <SafeAreaView edges={[]}>
+      <ImageBackground source={images.background} style={styles.backgroundImage}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerText}>{managerName}</Text>
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {/* Manager Details */}
+          <View style={styles.detailsContainer}>
+            <View style={styles.detailRow}>
+              <Ionicons name="business-outline" size={18} color="#E21A1A" />
+              <Text style={styles.detailTitle}>Club Managed:</Text>
+            </View>
+            <Text style={styles.detailText}>Jail</Text>
 
-                        <Text style={styles.detailTitle}>Contact Details:</Text>
-                        <Text style={styles.detailText}>011 567 0987</Text>
-                    </View>
+            <View style={styles.detailRow}>
+              <Ionicons name="call-outline" size={18} color="#E21A1A" />
+              <Text style={styles.detailTitle}>Contact:</Text>
+            </View>
+            <Text style={styles.detailText}>011 567 0987</Text>
+          </View>
 
-                    {/* Buttons */}
-                    <View style={styles.buttonsContainer}>
+          {/* Buttons */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.push('/clubDetails')}
+            >
+              <Text style={styles.buttonText}>View Club</Text>
+            </TouchableOpacity>
 
-                        <CustomButton
-                            title="View Club"
-                            handlePress={() => router.push('/clubDetails')}
-                            customStyle={[styles.button, styles.clubViewButton]} 
-                            textStyle={styles.buttonText}
-                        />
-
-                        <CustomButton
-                            title="Back"
-                            handlePress={() => router.push('/securityAdminHome')}
-                            customStyle={[styles.button, styles.clubViewButton]} 
-                            textStyle={styles.buttonText}
-                        />
-                    </View>
-                </ScrollView>
-            </ImageBackground>
-        </SafeAreaView>
-    );
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.push('/securityAdminHome')}
+            >
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </ImageBackground>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    backgroundImage: {
-        width: '100%',
-        height: '100%',
-    },
-    scrollContainer: {
-        padding: 20,
-        flexGrow: 1,
-        justifyContent: 'center',
-    },
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
 
-    header: {
-        width: '100%',
-        padding: 15,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        alignItems: 'left',
-        borderBottomWidth: 1,
-        borderBottomColor: '#d3d3d3',
-    },
-    headerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#000',
-    },
-
-    clubLogo: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 15,
-    },
-    clubName: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#E21A1A',
-    },
-    detailsContainer: {
-        marginBottom: 20,
-    },
-    detailTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
-        textAlign: 'center',
-    },
-    detailText: {
-        fontSize: 16,
-        color: '#000',
-        marginBottom: 10,
-        textAlign: 'center',
-    },
-    buttonsContainer: {
-        marginTop: 20,
-    },
-    button: {
-        backgroundColor: '#E21A1A',
-        paddingVertical: 10,
-        marginBottom: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    clubViewButton: {
-        backgroundColor: '#FF0000',
-    },
-    buttonText: {
-        color: '#FFF',
-        fontWeight: 'bold',
-        fontSize: 14,
-    },
+  },
+  scrollContainer: {
+    padding: 20,
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  header: {
+    width: '100%',
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
+  },
+  detailsContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  detailTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#333',
+    marginLeft: 5,
+  },
+  detailText: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 30,
+  },
+  button: {
+    width: (width / 2) - 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E21A1A',
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#FFF',
+  },
 });
 
-export default clubManagerProfile;
+export default ClubManagerProfile;

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';  // Import Ionicons for icons
+import { Ionicons } from '@expo/vector-icons';  
 import commonStyles from '../../components/Styles';
 
 const { width } = Dimensions.get('window');
