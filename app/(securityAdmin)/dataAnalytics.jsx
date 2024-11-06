@@ -1,238 +1,178 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
-import { BarChart, PieChart } from 'react-native-chart-kit';
-import { Dimensions } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
+import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import { useRoute } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import CustomButton from '../../components/CustomButton';
 
-const screenWidth = Dimensions.get('window').width;
+const Finance = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const [showSection, setShowSection] = useState(null);
 
-const DataAnalytics = () => {
-  const profitDataByMonth = {
-    July: [4500, 3800, 5200],
-    August: [4800, 4200, 5300],
-    September: [5000, 4100, 5500],
+  const toggleSection = (section) => {
+    setShowSection((prevSection) => (prevSection === section ? null : section));
   };
-
-  const earningsByClub = {
-    July: [12000, 11000, 15000],
-    August: [13000, 10000, 16000],
-    September: [12500, 10500, 15500],
-  };
-
-  const [selectedMonth, setSelectedMonth] = useState('July');
-
-  const profitData = profitDataByMonth[selectedMonth];
-  const earningsData = earningsByClub[selectedMonth];
-
-  const hasData = profitData && earningsData;
 
   return (
-    <SafeAreaView edges={[]}>  
+    <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.background}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          {/* Header */}
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+
           <View style={styles.header}>
-            <Text style={styles.headerText}>Data Analytics</Text>
+            <Text style={styles.headerText}>Finance Management</Text>
           </View>
 
-          {/* Dropdown for Selecting Month */}
-          <View style={styles.dropdownContainer}>
-            <Text style={styles.dropdownLabel}>Select Month:</Text>
-            <RNPickerSelect
-              onValueChange={(value) => setSelectedMonth(value)}
-              items={[
-                { label: 'January', value: 'January' },
-                { label: 'February', value: 'February' },
-                { label: 'March', value: 'March' },
-                { label: 'April', value: 'April' },
-                { label: 'May', value: 'May' },
-                { label: 'June', value: 'June' },
-                { label: 'July', value: 'July' },
-                { label: 'August', value: 'August' },
-                { label: 'September', value: 'September' },
-                { label: 'October', value: 'October' },
-                { label: 'November', value: 'November' },
-                { label: 'December', value: 'December' }
-              ]}
-              style={pickerSelectStyles}
-              value={selectedMonth}
+          {['clubPayments', 'allClubsPayments', 'bouncersPayments', 'profit'].map((section) => (
+            <View key={section} style={styles.dropdownContainer}>
+              <TouchableOpacity
+                style={styles.dropdownButton}
+                onPress={() => toggleSection(section)}
+              >
+                <Text style={styles.dropdownTitle}>
+                  {section === 'clubPayments'
+                    ? 'Payments from Specific Club'
+                    : section === 'allClubsPayments'
+                    ? 'Payments from All Clubs'
+                    : section === 'bouncersPayments'
+                    ? 'Payments to Security Personnel'
+                    : 'Profit'}
+                </Text>
+                <Ionicons
+                  name={showSection === section ? 'chevron-up' : 'chevron-down'}
+                  size={20}
+                  color="black"
+                />
+              </TouchableOpacity>
+
+              {showSection === section && (
+                <View style={styles.dropdownContent}>
+                  <View style={styles.row}>
+                    <Text style={styles.textLabel}>Total Earned:</Text>
+                    <Text style={styles.textValue}>600</Text>
+                  </View>
+                  <Text style={styles.textLabel}>Breakdown by Night:</Text>
+                  {['Monday', 'Tuesday', 'Wednesday'].map((day) => (
+                    <View key={day} style={styles.row}>
+                      <Text style={styles.textLabelSecondary}>{day}:</Text>
+                      <Text style={styles.textValue}>200</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+          ))}
+
+          <View style={styles.buttonsContainer}>
+            <CustomButton
+              title="View Data Analytics"
+              handlePress={() => navigation.navigate('dataAnalytics')}
+              customStyle={styles.button}
+              textStyle={styles.buttonText}
+            />
+            <CustomButton
+              title="Back"
+              handlePress={() => navigation.navigate('securityAdminHome')}
+              customStyle={styles.button}
+              textStyle={styles.buttonText}
             />
           </View>
-
-          {/* Conditional Rendering */}
-          {hasData ? (
-            <>
-              {/* Bar Chart - Profit Per Club */}
-              <View style={styles.chartContainer}>
-                <Text style={styles.chartTitle}>Profit per Club ({selectedMonth} 2024)</Text>
-                <BarChart
-                  data={{
-                    labels: ["Neon", "Jail", "Omnia"],
-                    datasets: [
-                      {
-                        data: profitData,
-                      }
-                    ]
-                  }}
-                  width={screenWidth - 40}
-                  height={220}
-                  chartConfig={chartConfig}
-                  verticalLabelRotation={30}
-                />
-              </View>
-
-              {/* Pie Chart - Earnings Comparison */}
-              <View style={styles.chartContainer}>
-                <Text style={styles.chartTitle}>Club Earnings Comparison ({selectedMonth})</Text>
-                <PieChart
-                  data={[
-                    {
-                      name: "Neon",
-                      population: earningsData[0],
-                      color: "#810819",
-                      legendFontColor: "#000",
-                      legendFontSize: 15
-                    },
-                    {
-                      name: "Jail",
-                      population: earningsData[1],
-                      color: "#E21A1A",
-                      legendFontColor: "#000",
-                      legendFontSize: 15
-                    },
-                    {
-                      name: "Omnia",
-                      population: earningsData[2],
-                      color: "#1F2837",
-                      legendFontColor: "#000",
-                      legendFontSize: 15
-                    }
-                  ]}
-                  width={screenWidth - 40}
-                  height={220}
-                  chartConfig={chartConfig}
-                  accessor={"population"}
-                  backgroundColor={"transparent"}
-                  paddingLeft={"15"}
-                  absolute
-                />
-              </View>
-            </>
-          ) : (
-            <View style={styles.noDataContainer}>
-              <Text style={styles.noDataText}>No data available for {selectedMonth}</Text>
-            </View>
-          )}
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
   );
 };
 
-// Chart configuration for styling
-const chartConfig = {
-  backgroundColor: '#FFF',
-  backgroundGradientFrom: '#eff3ff',
-  backgroundGradientTo: '#efefef',
-  decimalPlaces: 2,
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  style: {
-    borderRadius: 16,
-  },
-  propsForDots: {
-    r: '6',
-    strokeWidth: '2',
-    stroke: '#ffa726',
-  }
-};
-
-// Styles
 const styles = StyleSheet.create({
   background: {
-    height: '100%',
-    width: '100%',
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  scrollContent: {
+    paddingBottom: 20,
   },
   header: {
-    width: '100%',
-    padding: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderBottomWidth: 1,
+    paddingVertical: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    paddingHorizontal: 20,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#d3d3d3',
-    alignItems: 'left',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#000',
-  },
-  dropdownContainer: {
-    margin: 20,
-    padding: 15,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 4,
-  },
-  dropdownLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
     color: '#333',
   },
-  chartTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  chartContainer: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+  dropdownContainer: {
+    marginVertical: 10,
+    marginHorizontal: 15,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    elevation: 5,
+    elevation: 6,
   },
-  noDataContainer: {
-    marginTop: 40,
+  dropdownButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    borderBottomColor: '#e0e0e0',
+    borderBottomWidth: 1,
+    paddingBottom: 10,
   },
-  noDataText: {
+  dropdownTitle: {
     fontSize: 18,
-    color: '#000',
     fontWeight: 'bold',
-  }
+    color: '#333',
+  },
+  dropdownContent: {
+    marginTop: 10,
+    backgroundColor: '#fafafa',
+    padding: 15,
+    borderRadius: 8,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  textLabel: {
+    fontSize: 16,
+    color: '#555',
+    fontWeight: '600',
+  },
+  textLabelSecondary: {
+    fontSize: 15,
+    color: '#777',
+  },
+  textValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  buttonsContainer: {
+    marginTop: 20,
+    marginHorizontal: 15,
+  },
+  button: {
+    marginVertical: 8,
+    backgroundColor: '#4CAF50',
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#FFF',
+    textAlign: 'center',
+  },
 });
 
-// Styles for the picker
-const pickerSelectStyles = {
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30,
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30,
-  },
-};
-
-export default DataAnalytics;
+export default Finance;
