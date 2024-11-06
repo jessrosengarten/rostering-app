@@ -19,6 +19,10 @@ const SecurityPersonnelPayments = () => {
     total: 3450.00
 };
 
+// Temporary payment status
+    //REPLACE WITH ACTUAL DATA IN THE FUTURE
+  const paymentStatus = paymentData.isPaid ? "Paid" : "Not Paid";
+
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
@@ -54,7 +58,18 @@ const SecurityPersonnelPayments = () => {
                         <TouchableOpacity style={styles.paymentButton}>
                             <Text style={styles.paymentButtonText}>Make Payment</Text>
                         </TouchableOpacity>
+
+                                  {/* Payment Status */}
+          <View style={styles.statusContainer}>
+            <Text style={styles.statusText}>
+              Payment Status: 
+              <Text style={paymentStatus === "Paid" ? styles.paidText : styles.notPaidText}>
+                {` ${paymentStatus}`}
+              </Text>
+            </Text>
+          </View>
                     </ScrollView>
+          
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -98,6 +113,34 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: 'red',
       marginBottom: 10,
+  },
+
+  statusContainer: {
+    marginTop: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    marginHorizontal: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+
+  statusText: {
+    fontSize: 18,
+    color: '#333',
+    fontWeight: 'bold',
+  },
+  paidText: {
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  notPaidText: {
+    color: 'red',
+    fontWeight: 'bold',
   },
 
   paymentDetails: {

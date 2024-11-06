@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
 
   assignButton: { 
-    backgroundColor: 'red', 
+    backgroundColor: '#E21A1A', 
     paddingVertical: 10, 
     paddingHorizontal: 15, 
     borderRadius: 8, 

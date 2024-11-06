@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert } from 'react-native'; // Import Alert
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import { images } from '../../constants';
@@ -12,21 +12,48 @@ const Assign = () => {
   const { day, personnelCount, club } = route.params;
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
+  const [assignedPersonnel, setAssignedPersonnel] = useState([]); // Track assigned personnel
   const [modalVisible, setModalVisible] = useState(false);
 
+  // State to store the complete schedule for each day
+  const [clubSchedule, setClubSchedule] = useState({});
+
   const handlePersonnelChange = (value, index) => {
-    const newSelectedPersonnel = [...selectedPersonnel];
-    newSelectedPersonnel[index] = value;
-    setSelectedPersonnel(newSelectedPersonnel);
+    if (value) {
+      const newSelectedPersonnel = [...selectedPersonnel];
+      const previousValue = newSelectedPersonnel[index];
+
+      newSelectedPersonnel[index] = value;
+      setSelectedPersonnel(newSelectedPersonnel);
+
+      setAssignedPersonnel((prev) => {
+        const updatedAssignedPersonnel = prev.filter((person) => person !== previousValue);
+        return [...updatedAssignedPersonnel, value];
+      });
+    }
   };
 
+  // Check if all positions are filled before allowing assignment
   const handleAssign = () => {
-    setModalVisible(true);
+    if (selectedPersonnel.includes('')) {
+      Alert.alert("Incomplete Assignment", "Please assign a person for each spot before proceeding.", [{ text: "OK" }]);
+    } else {
+      // Save selected personnel for the current day in the clubSchedule state
+      setClubSchedule((prev) => ({
+        ...prev,
+        [day]: selectedPersonnel, // Save the assigned personnel for the specific day
+      }));
+      setModalVisible(true);
+    }
   };
 
   const handleViewSchedule = () => {
     setModalVisible(false);
-    navigation.navigate('clubSpecificSchedule', { club, day, assignedPersonnel: selectedPersonnel });
+    //navigation.navigate('clubSpecificSchedule', { club, day, assignedPersonnel: selectedPersonnel });
+    // REMOVED THE ABOVE
+
+    // Pass the full clubSchedule object to the ClubSpecificSchedule screen
+    navigation.navigate('clubSpecificSchedule', { club, clubSchedule });
   };
 
   const handleReturn = () => {
@@ -53,7 +80,11 @@ const Assign = () => {
                     { label: 'Rudolf', value: 'Rudolf' },
                     { label: 'Dagan', value: 'Dagan' },
                     { label: 'Jess', value: 'Jess' },
-                  ]}
+                    { label: 'Shan 2', value: 'Shan 2' },
+                    { label: 'Rudolf 2', value: 'Rudolf 2' },
+                    { label: 'Dagan 2', value: 'Dagan 2' },
+                    { label: 'Jess 2', value: 'Jess 2' },
+                  ].filter((person) => !assignedPersonnel.includes(person.value))}
                   placeholder={{ label: 'Select a person...', value: null }}
                   style={pickerSelectStyles}
                 />
@@ -64,28 +95,27 @@ const Assign = () => {
         </ScrollView>
 
         <Modal
-  transparent={true}
-  visible={modalVisible}
-  onRequestClose={() => setModalVisible(false)}
-  animationType="slide"
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContainer}>
-      <Text style={styles.modalText}>
-        Personnel successfully assigned for {day} at {club.name}.
-      </Text>
-      <View style={styles.modalButtonsContainer}>
-        <TouchableOpacity style={styles.modalButton} onPress={handleViewSchedule}>
-          <Text style={styles.modalButtonText}>View Schedule</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.modalButton} onPress={handleReturn}>
-          <Text style={styles.modalButtonText}>Return</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  </View>
-</Modal>
-
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+          animationType="slide"
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalText}>
+                Personnel successfully assigned for {day} at {club.name}.
+              </Text>
+              <View style={styles.modalButtonsContainer}>
+                <TouchableOpacity style={styles.modalButton} onPress={handleViewSchedule}>
+                  <Text style={styles.modalButtonText}>View Schedule</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.modalButton} onPress={handleReturn}>
+                  <Text style={styles.modalButtonText}>Return</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -120,26 +150,26 @@ const styles = StyleSheet.create({
   
   pickerItemContainer: { 
     padding: 20, 
-    backgroundColor: '#FFF', 
-    borderRadius: 10, 
-    marginTop: 20, 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 4 }, 
-    shadowOpacity: 0.1, 
-    shadowRadius: 5, 
-    elevation: 3 
-    },
+    backgroundColor: '#FFF',
+     borderRadius: 10, 
+     marginTop: 20, 
+     shadowColor: '#000', 
+     shadowOffset: { width: 0, height: 4 }, 
+     shadowOpacity: 0.1, 
+     shadowRadius: 5, 
+     elevation: 3 
+     },
   
   button: { 
     backgroundColor: '#E21A1A', 
-    paddingVertical: 10, 
+    paddingVertical: 10,
     borderRadius: 5 
     },
   
   buttonText: { 
     color: '#FFF', 
-    fontWeight: 'bold'
-     },
+    fontWeight: 'bold' 
+    },
   
   pickerLabel: { 
     fontSize: 16, 
@@ -148,25 +178,25 @@ const styles = StyleSheet.create({
     marginBottom: 5 
     },
   
-  modalOverlay: { 
-    flex: 1, 
-    backgroundColor: 'rgba(0, 0, 0, 0.9)', 
-    justifyContent: 'center', 
-    alignItems: 'center' 
-    },
+  modalOverlay: { flex: 1, 
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  justifyContent: 'center', 
+  alignItems: 'center' 
+  },
   
   modalContainer: { 
     width: '80%', 
     padding: 20, 
     backgroundColor: '#FFF', 
     borderRadius: 10, 
-    alignItems: 'center' },
+    alignItems: 'center'
+     },
   
   modalText: { 
-    fontSize: 18, 
+    fontSize: 20, 
     fontWeight: 'bold', 
     textAlign: 'center', 
-    marginBottom: 20 
+    marginBottom: 25 
     },
   
   modalButtonsContainer: { 
@@ -177,22 +207,41 @@ const styles = StyleSheet.create({
   
   modalButton: { 
     backgroundColor: '#E21A1A', 
-    paddingVertical: 10, 
-    paddingHorizontal: 15, 
-    borderRadius: 5, 
-    marginHorizontal: 5 
-    },
+    paddingVertical: 15, 
+    paddingHorizontal: 20, 
+    borderRadius: 8,
+     marginHorizontal: 5 
+     },
   
   modalButtonText: { 
     color: '#FFF', 
-    fontWeight: 'bold' 
+    fontWeight: 'bold',
+    fontSize: 18 
     },
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderRadius: 8, color: '#333', backgroundColor: '#F2F2F2' },
-  inputAndroid: { fontSize: 16, paddingVertical: 8, paddingHorizontal: 10, borderRadius: 8, color: '#333', backgroundColor: '#F2F2F2' },
-  placeholder: { color: '#666' },
+  inputIOS: { 
+    fontSize: 16, 
+    paddingVertical: 12, 
+    paddingHorizontal: 10, 
+    borderRadius: 8, 
+    color: '#333', 
+    backgroundColor: '#F2F2F2' 
+    },
+  
+  inputAndroid: { 
+    fontSize: 16, 
+    paddingVertical: 8, 
+    paddingHorizontal: 10, 
+    borderRadius: 8, 
+    color: '#333', 
+    backgroundColor: '#F2F2F2' 
+    },
+  
+  placeholder: { 
+    color: '#666' 
+    },
 });
 
 export default Assign;
