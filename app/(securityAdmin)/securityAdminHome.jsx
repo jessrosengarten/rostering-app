@@ -1,27 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, FlatList, ImageBackground } from 'react-native';
 import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
 import { useRoute } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
-
-// Dummy data for clubs
-const clubs = [
-  { name: 'Omnia', logo: (images.omnia), address: 'Cape Town', manager: 'Alice', contact: '012 345 6789', opening: '20:00', closing: '02:00' },
-  { name: 'Jail Night Club', logo: (images.jail), address: 'Johannesburg', manager: 'Tom', contact: '011 123 4567', opening: '21:00', closing: '03:00' },
-  { name: 'Oasis Disco Bar', logo: (images.oasis), address: 'Sandton', manager: 'Donald', contact: '011 567 0987', opening: '19:00', closing: '00:00' },
-  { name: 'Neon Night Club', logo: (images.neon), address: 'Durban', manager: 'Kate', contact: '031 876 5432', opening: '22:00', closing: '04:00' },
-];
-
-// Dummy data for security personnel
-const securityPersonnel = [
-  { name: 'Jess', logo: (images.profileFemale), rate: 500, address: 'JHB', contact: '011 567 0987' },
-  { name: 'Dagan', logo: (images.profileMale), rate: 200, address: 'CPT', contact: '011 567 0987' },
-  { name: 'Shannon', logo: (images.profileFemale), rate: 750, address: 'JHB', contact: '011 567 0987' },
-  { name: 'Rudi', logo: (images.profileMale), rate: 700, address: 'CPT', contact: '011 567 0987' },
-];
-
+import { fetchAllClubs, fetchAllSecurityPersonnel, fetchAllClubManagers } from '../../Backend/securityAdmin';
 
 // Dummy payment data for different clubs
 const paymentData = {
@@ -54,19 +38,45 @@ const paymentData = {
   },
 };
 
-// Dummy data for club managers
-const clubManagers = [
-  { name: 'Bob', logo: (images.profileMale) },
-  { name: 'Jason', logo: (images.profileMale) },
-  { name: 'Megan', logo: (images.profileFemale) },
-  { name: 'Sally', logo: (images.profileMale) },
-  { name: 'Ben', logo: (images.profileMale) },
-];
-
 const SecurityAdmin = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { adminName } = route.params;
+  const [clubs, setClubs] = useState([]);
+  const [securityPersonnel, setSecurityPersonnel] = useState([]);
+  const [clubManagers, setClubManagers] = useState([]);
+
+  useEffect(() => {
+    const loadClubs = async () => {
+      const clubsData = await fetchAllClubs();
+      const clubsArray = Object.keys(clubsData).map(key => ({
+        name: key,
+        ...clubsData[key],
+      }));
+      setClubs(clubsArray);
+    };
+
+    const loadPersonnel =async() => {
+      const personnelData =await fetchAllSecurityPersonnel();
+      const personnelArray = Object.keys(personnelData).map(key => ({
+        name: key,
+        ...personnelData[key],
+      }));
+      setSecurityPersonnel(personnelArray);
+    };
+
+    const loadManagers =async() => {
+      const managersData =await fetchAllClubManagers();
+      const managersArray = Object.keys(managersData).map(key => ({
+        name: key,
+        ...managersData[key],
+      }));
+      setClubManagers(managersArray);
+    };
+    loadManagers();
+    loadClubs();
+    loadPersonnel();
+  }, []);
 
   // Handle the navigation when a club, security personnel, or club manager is selected
   const handleNavigation = (type, item) => {
@@ -87,14 +97,27 @@ const SecurityAdmin = () => {
   };
 
   // Display the list items
-  const displayItems = ({ item }, type) => (
+ const displayItems = ({ item }, type) => {
+  let logoSource = null;
+  let displayName = "";
+
+  if (type === 'clubs') {
+    displayName = item.name; 
+    logoSource = item.logo || images.clubDefaultLogo; 
+  } else if (type === 'securityPersonnel'|| type === 'clubManagers') {
+    displayName = item.fullName; 
+    logoSource = images.profileMale;
+  } 
+
+  return (
     <TouchableOpacity onPress={() => handleNavigation(type, item)}>
       <View style={styles.personnelItem}>
-        <Image source={item.logo} style={styles.personIcon} />
-        <Text style={styles.personName}>{item.name}</Text>
+        <Image source={logoSource} style={styles.personIcon} />
+        <Text style={styles.personName}>{displayName}</Text>
       </View>
     </TouchableOpacity>
   );
+};
 
   return (
     <SafeAreaView edges={[]}>

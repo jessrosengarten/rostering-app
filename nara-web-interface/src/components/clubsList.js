@@ -98,7 +98,7 @@ const ClubsList = () => {
 
   const handleEdit = async (club) => {
   try {
-    await updateClub(currentClub.clubName, currentClub.contactNum, currentClub.openingTime, currentClub.closingTime, currentClub.manager, currentClub.rate);
+    await updateClub(currentClub.clubName, currentClub.address ,currentClub.contactNum, currentClub.openingTime, currentClub.closingTime, currentClub.manager, currentClub.rate);
     const updatedClubs = { ...clubs};
     setClubs(updatedClubs);
     setFilteredClubs(updatedClubs);
@@ -140,6 +140,7 @@ const ClubsList = () => {
             <thead>
               <tr>
                 <th>Club Name</th>
+                <th>Address</th>
                 <th>Contact Number</th>
                 <th>Opening Time</th>
                 <th>Closing Time</th>
@@ -152,6 +153,7 @@ const ClubsList = () => {
               {Object.keys(filteredClubs).map((key) => (
                 <tr key={key}>
                   <td>{key}</td> 
+                  <td>{filteredClubs[key].address}</td>
                   <td>{filteredClubs[key].contactNum}</td>
                   <td>{filteredClubs[key].openingTime}</td>
                   <td>{filteredClubs[key].closingTime}</td>
@@ -186,6 +188,15 @@ const ClubsList = () => {
                   name="clubName"
                   value={currentClub.clubName}
                   disabled
+                />
+              </Form.Group>
+              <Form.Group controlId="formAddress">
+                <Form.Label>Address</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="address"
+                  value={currentClub.address}
+                  onChange={(e) => setCurrentClub({ ...currentClub, address: e.target.value })}
                 />
               </Form.Group>
               <Form.Group controlId="formContactNumber" className="mt-3">
