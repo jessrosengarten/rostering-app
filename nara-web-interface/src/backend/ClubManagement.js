@@ -1,10 +1,10 @@
 import { db } from './firebaseConfig';
 import { ref,set, get, child, remove, update } from 'firebase/database';
 
-export const createClub = async (clubName, contactNum, openingTime, closingTime, manager, rate) => {
+export const createClub = async (clubName, address, contactNum, openingTime, closingTime, manager, rate) => {
   try {
     const clubRef = ref(db, 'Clubs/' + clubName);
-    await set(clubRef, {contactNum, openingTime, closingTime, manager , rate});
+    await set(clubRef, {address,contactNum, openingTime, closingTime, manager, rate});
     return clubName;
   } catch (error) {
     console.error('Registration Error:', error);
@@ -43,7 +43,7 @@ export const deleteClubsFromDatabase = async (clubName) => {
 };
 
 
-export const updateClub = async (clubName, contactNum, openingTime, closingTime, manager, rate) => {
+export const updateClub = async (clubName, address, contactNum, openingTime, closingTime, manager, rate) => {
   const clubRef = ref(db, 'Clubs/' + clubName);
-  await update(clubRef, {contactNum, openingTime, closingTime, manager, rate });
+  await update(clubRef, {address, contactNum, openingTime, closingTime, manager, rate });
 };
