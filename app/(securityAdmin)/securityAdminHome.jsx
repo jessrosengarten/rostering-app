@@ -154,14 +154,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    width: '100%',
-    padding: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    alignItems: 'left',
-    borderBottomWidth: 1,
-    borderBottomColor: '#d3d3d3',
-  },
+  header: { padding: 15, backgroundColor: 'rgba(255, 255, 255, 0.7)' },
+  headerText: { fontSize: 20, fontWeight: 'bold', color: '#000' },
+
   sectionContainer: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -174,11 +169,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-  },
+
   section: {
     marginVertical: 15,
   },
