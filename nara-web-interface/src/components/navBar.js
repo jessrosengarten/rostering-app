@@ -13,9 +13,9 @@ function navbar() {
           <Nav className="me-auto">
             <Nav.Link href="../components/addUser.js">Home</Nav.Link>
             <Nav.Link as={NavLink} to="/AddUser">Add User</Nav.Link>
-            <Nav.Link as={NavLink} to="/UserManagement">User Management</Nav.Link>
-            <Nav.Link as={NavLink} to="/AddClub">Add Clubs</Nav.Link>
-            <Nav.Link as={NavLink} to="/ClubsList">List of Clubs</Nav.Link>
+            <Nav.Link as={NavLink} to="/UserList">Manage Users</Nav.Link>
+            <Nav.Link as={NavLink} to="/AddClub">Add Club</Nav.Link>
+            <Nav.Link as={NavLink} to="/ClubsList">Manage Clubs</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

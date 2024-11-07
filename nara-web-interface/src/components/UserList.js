@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUsers, deleteUserFromDatabase, updateUser } from '../backend/UserManage';
+import { fetchUsers, deleteUserFromDatabase, updateUser } from '../backend/UserManagement';
 import { Table, Button, Container, Row, Col, Form, Modal, Alert } from 'react-bootstrap';
 import { getAuth, deleteUser } from 'firebase/auth';
 
@@ -88,14 +88,14 @@ const UserManagement = () => {
   const handleModalSave = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) {
       setAlertMessage('Error updating user: User is not authenticated.');
       setAlertVariant('danger');
       setShowAlert(true);
       return;
     }
-  
+
     const role = currentUser.role;
     const updatedData = { ...currentUser };
 
@@ -120,7 +120,7 @@ const UserManagement = () => {
     setShowAlert(true);
     handleModalClose();
     setCurrentUser(null);
-  
+
     setTimeout(() => {
       setAlertMessage('');
       setShowAlert(false);
@@ -149,7 +149,7 @@ const UserManagement = () => {
   return (
     <Container>
       <Row className="justify-content-md-center">
-        <Col md={8}>
+        <Col md={15}>
           <h1 className="mt-4">User List</h1>
           {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form.Group controlId="filterRole" className="mt-3">
@@ -164,6 +164,8 @@ const UserManagement = () => {
           <Table striped bordered hover className="mt-3">
             <thead>
               <tr>
+                <th>Full Name</th>
+                <th>Contact Number</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Actions</th>
@@ -172,6 +174,8 @@ const UserManagement = () => {
             <tbody>
               {Object.keys(filteredUsers).map((key) => (
                 <tr key={key}>
+                  <td>{filteredUsers[key].fullName}</td>
+                  <td>{filteredUsers[key].contactNumber}</td>
                   <td>{filteredUsers[key].email}</td>
                   <td>{filteredUsers[key].role}</td>
                   <td>
