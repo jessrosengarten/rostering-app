@@ -6,6 +6,7 @@ import './style.css';
 const AddClub = () => {
     const [form, setForm] = useState({
         clubName: '',
+        address: '',
         contact: '',
         openingTime: '',
         closingTime: '',
@@ -32,15 +33,16 @@ const AddClub = () => {
     
     const handleCreateClub = async (e) => {
         e.preventDefault();
-        const {clubName, contact, openingTime, closingTime, manager, rate } = form;
+        const {clubName,address, contact, openingTime, closingTime, manager, rate } = form;
         try {
-            await createClub(clubName, contact, openingTime, closingTime, manager, rate);
+            await createClub(clubName,address, contact, openingTime, closingTime, manager, rate);
             setAlertMessage('Club added successfully');
             setAlertVariant('success');
             setShowAlert(true);
 
             setForm({
               clubName: '',
+              address: '',
               contact: '',
               openingTime: '',
               closingTime: '',
@@ -64,16 +66,25 @@ const AddClub = () => {
                         <Form.Group controlId="formClubName">
                             <Form.Label>Club Name</Form.Label>
                             <Form.Control
-                                type="clubName"
+                                type="text"
                                 value={form.clubName}
                                 onChange={(e) => setForm({ ...form, clubName: e.target.value })}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formAddress">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={form.address}
+                                onChange={(e) => setForm({ ...form, address: e.target.value })}
                                 required
                             />
                         </Form.Group>
                         <Form.Group controlId="formContact" className="mt-3">
                             <Form.Label>Contact Number</Form.Label>
                             <Form.Control
-                                type="contactNumber"
+                                type="tel"
                                 value={form.contact}
                                 onChange={(e) => setForm({ ...form, contact: e.target.value })}
                                 required
