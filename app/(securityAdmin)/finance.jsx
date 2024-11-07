@@ -9,8 +9,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Finance = () => {
   const route = useRoute();
-  const navigation = useNavigation(); 
-  
+  const navigation = useNavigation();
+
   // State for dropdown visibility
   const [showSection, setShowSection] = useState(null);
 
@@ -29,15 +29,15 @@ const Finance = () => {
 
           {/* Payments from Specific Club Dropdown */}
           <View style={styles.summary}>
-            <TouchableOpacity 
-              style={styles.dropdownButton} 
+            <TouchableOpacity
+              style={styles.dropdownButton}
               onPress={() => toggleSection('clubPayments')}
             >
               <Text style={styles.summaryTitle}>Payments from ...</Text>
-              <Ionicons 
-                name={showSection === 'clubPayments' ? 'chevron-up' : 'chevron-down'} 
-                size={20} 
-                color="black" 
+              <Ionicons
+                name={showSection === 'clubPayments' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color="black"
               />
             </TouchableOpacity>
 
@@ -67,15 +67,15 @@ const Finance = () => {
 
           {/* Payments from All Clubs Dropdown */}
           <View style={styles.summary}>
-            <TouchableOpacity 
-              style={styles.dropdownButton} 
+            <TouchableOpacity
+              style={styles.dropdownButton}
               onPress={() => toggleSection('allClubsPayments')}
             >
               <Text style={styles.summaryTitle}>Payments from All Clubs</Text>
-              <Ionicons 
-                name={showSection === 'allClubsPayments' ? 'chevron-up' : 'chevron-down'} 
-                size={20} 
-                color="black" 
+              <Ionicons
+                name={showSection === 'allClubsPayments' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color="black"
               />
             </TouchableOpacity>
 
@@ -105,15 +105,15 @@ const Finance = () => {
 
           {/* Payments to Bouncers Dropdown */}
           <View style={styles.summary}>
-            <TouchableOpacity 
-              style={styles.dropdownButton} 
+            <TouchableOpacity
+              style={styles.dropdownButton}
               onPress={() => toggleSection('bouncersPayments')}
             >
               <Text style={styles.summaryTitle}>Payments to Security Personnel</Text>
-              <Ionicons 
-                name={showSection === 'bouncersPayments' ? 'chevron-up' : 'chevron-down'} 
-                size={20} 
-                color="black" 
+              <Ionicons
+                name={showSection === 'bouncersPayments' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color="black"
               />
             </TouchableOpacity>
 
@@ -143,15 +143,15 @@ const Finance = () => {
 
           {/* Profit Dropdown */}
           <View style={styles.summary}>
-            <TouchableOpacity 
-              style={styles.dropdownButton} 
+            <TouchableOpacity
+              style={styles.dropdownButton}
               onPress={() => toggleSection('profit')}
             >
               <Text style={styles.summaryTitle}>Profit</Text>
-              <Ionicons 
-                name={showSection === 'profit' ? 'chevron-up' : 'chevron-down'} 
-                size={20} 
-                color="black" 
+              <Ionicons
+                name={showSection === 'profit' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color="black"
               />
             </TouchableOpacity>
 
@@ -218,10 +218,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-   summary: {
+  summary: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
     borderRadius: 10,
     marginHorizontal: 15, // Reduced width by adding margin on sides
     shadowColor: '#000',

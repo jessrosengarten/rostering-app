@@ -83,18 +83,18 @@ const Finances = () => {
 
 const styles = StyleSheet.create({
   header: {
-      width: '100%',
-      padding: 15,
-      marginBottom: 20,
-      backgroundColor: 'rgba(255, 255, 255, 0.7)',
-      alignItems: 'left',
-      borderBottomWidth: 1,
-      borderBottomColor: '#d3d3d3',
+    width: '100%',
+    padding: 15,
+    marginBottom: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
   },
   headerText: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: '#000',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
   },
   earningsContainer: {
     backgroundColor: '#FFF',

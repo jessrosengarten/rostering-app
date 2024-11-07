@@ -35,10 +35,10 @@ const Finance = () => {
                   {section === 'clubPayments'
                     ? 'Payments from Specific Club'
                     : section === 'allClubsPayments'
-                    ? 'Payments from All Clubs'
-                    : section === 'bouncersPayments'
-                    ? 'Payments to Security Personnel'
-                    : 'Profit'}
+                      ? 'Payments from All Clubs'
+                      : section === 'bouncersPayments'
+                        ? 'Payments to Security Personnel'
+                        : 'Profit'}
                 </Text>
                 <Ionicons
                   name={showSection === section ? 'chevron-up' : 'chevron-down'}

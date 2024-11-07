@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';  
+import { Ionicons } from '@expo/vector-icons';
 import commonStyles from '../../components/Styles';
 
 const { width } = Dimensions.get('window');
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
   },
-    detailsContainer: {
+  detailsContainer: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,

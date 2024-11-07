@@ -87,6 +87,14 @@ const ClubManagerLayout = () => {
                         tabBarButton: () => null, // This hides the tab
                     }}
                 />
+                                <Tabs.Screen
+                    name="changePassword"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        tabBarButton: () => null, // This hides the tab
+                    }}
+                />
             </Tabs>
         </>
     );

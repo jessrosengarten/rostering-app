@@ -13,7 +13,8 @@ const SecurityHome = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedShift, setSelectedShift] = useState(null); // Store shift to be canceled
     const route = useRoute();
-    const { personnelName } = route.params;
+    //const { personnelName } = route.params;
+    const personnelName = 'Rudolf Stassen'; // Hardcoded for testing
 
     useEffect(() => {
         const shiftsRef = ref(db, 'Shifts');

@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
 import { router, useRouter } from 'expo-router';
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
-import{fetchClubsByManager} from '../../Backend/clubManager'
+import { fetchClubsByManager } from '../../Backend/clubManager'
 import { useRoute } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window')
 
-  const clubManagerHome = () => {
+const clubManagerHome = () => {
     const [clubs, setClubs] = useState([]);
     const navigation = useNavigation();
     const route = useRoute();
@@ -60,7 +60,7 @@ const { width, height } = Dimensions.get('window')
                                         <Text style={styles.buttonText}>Select number of Personnel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                         onPress={() => navigation.navigate('ClubManagerPayments', { clubName: club.name })}
+                                        onPress={() => navigation.navigate('ClubManagerPayments', { clubName: club.name })}
                                         style={styles.paymentButton}
                                     >
                                         <Text style={styles.buttonText}>Payments</Text>
@@ -71,7 +71,7 @@ const { width, height } = Dimensions.get('window')
                                     >
                                         <Text style={styles.buttonText}>Schedule</Text>
                                     </TouchableOpacity>
-                                    
+
                                     <TouchableOpacity
                                         style={styles.paymentButton}
                                     >
@@ -93,13 +93,13 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 
- buttonRow: {
+    buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
         marginBottom: 10,
     },
-    
+
     header: {
         width: '100%',
         padding: 15,

@@ -19,7 +19,7 @@ const SignIn = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const router = useRouter()
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
 
     const handleLogin = async () => {
         const { email, password } = form;
@@ -31,7 +31,7 @@ const SignIn = () => {
             // Fetch user role from Realtime Database
             const roles = ['securityAdmin', 'securityPersonnel', 'clubManager'];
             let userRole = null;
-            let userData=null;
+            let userData = null;
 
             for (const role of roles) {
                 const userRef = ref(db, `${role}/${email.replace('.', ',')}`);

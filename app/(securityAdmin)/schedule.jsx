@@ -47,17 +47,17 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  header: { 
-    padding: 15, 
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', 
-    alignItems: 'left', 
-    borderBottomWidth: 1, 
+  header: {
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
     borderBottomColor: '#d3d3d3',
   },
-  headerText: { 
-    fontSize: 20, 
-    fontWeight: 'bold', 
-    color: '#000' 
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000'
   },
   dayContainer: {
     marginTop: 20,

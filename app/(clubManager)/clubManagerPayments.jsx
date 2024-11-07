@@ -19,31 +19,31 @@ const clubManagerPayments = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} className='h-full w-full'>
-            {/* Semi-transparent Header */}
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Payments</Text>
-            </View>
-            <ScrollView contentContainerStyle={{ height: '100%' }}>
+                {/* Semi-transparent Header */}
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>Payments</Text>
+                </View>
+                <ScrollView contentContainerStyle={{ height: '100%' }}>
 
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {/* Club Name and Logo */}
-                <View style={styles.clubInfo}>
-                    <Text style={styles.clubName}>{paymentData.clubName}</Text>
-                    <Image
-                            source={paymentData.clubLogo} 
-                            style={styles.clubLogo}
-                            resizeMode='contain'
-                        />
-                    </View>
+                    <ScrollView contentContainerStyle={styles.scrollContainer}>
+                        {/* Club Name and Logo */}
+                        <View style={styles.clubInfo}>
+                            <Text style={styles.clubName}>{paymentData.clubName}</Text>
+                            <Image
+                                source={paymentData.clubLogo}
+                                style={styles.clubLogo}
+                                resizeMode='contain'
+                            />
+                        </View>
 
-                    {/* Payments List */}
-                    <View style={styles.paymentDetails}>
-                        <Text style={styles.sectionTitle}>Total Invoice to Pay</Text>
-                        {Object.keys(paymentData.payments).map((day, index) => (
-                            <View key={index} style={styles.paymentRow}>
-                                <Text style={styles.dayText}>{day}:</Text>
-                                <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
-                            </View>
+                        {/* Payments List */}
+                        <View style={styles.paymentDetails}>
+                            <Text style={styles.sectionTitle}>Total Invoice to Pay</Text>
+                            {Object.keys(paymentData.payments).map((day, index) => (
+                                <View key={index} style={styles.paymentRow}>
+                                    <Text style={styles.dayText}>{day}:</Text>
+                                    <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
+                                </View>
                             ))}
 
                             {/* Total */}
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 10,
-      },
+    },
     paymentDetails: {
         width: '100%',
         backgroundColor: '#FFF',

@@ -19,7 +19,7 @@ const SecurityPersonnelUser = ({ documents }) => {
   };
 
   return (
-    <SafeAreaView edges={[]}> 
+    <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
         {/* Semi-transparent Header */}
         <View style={styles.header}>
