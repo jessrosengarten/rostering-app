@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity, 
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import { useRoute } from '@react-navigation/native';
 import { db } from '../../Backend/firebaseConfig';
 import { ref, onValue } from 'firebase/database';
 
@@ -11,7 +12,8 @@ const SecurityHome = () => {
     const [shifts, setShifts] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedShift, setSelectedShift] = useState(null); // Store shift to be canceled
-    const personnel = "Rudolf Stassen";
+    const route = useRoute();
+    const { personnelName } = route.params;
 
     useEffect(() => {
         const shiftsRef = ref(db, 'Shifts');
@@ -21,7 +23,7 @@ const SecurityHome = () => {
 
             const personnelShifts = [];
             for (const week in data) {
-                if (data[week].personnel === personnel) {
+                if (data[week].personnel === personnelName) {
                     personnelShifts.push(data[week]);
                 }
             }
@@ -56,6 +58,7 @@ const SecurityHome = () => {
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
                 <View style={styles.header}>
+                    <Text style={styles.headerText}>{personnelName}</Text>
                     <Text style={styles.headerText}>Shifts</Text>
                 </View>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

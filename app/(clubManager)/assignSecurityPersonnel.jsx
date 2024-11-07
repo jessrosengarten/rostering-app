@@ -2,8 +2,42 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import { useRoute } from '@react-navigation/native';
+import { addPersonnelNeeded } from '../../Backend/clubManager';
 
 const AssignSecurityPersonnel = () => {
+    const route = useRoute();
+    const { clubName } = route.params; 
+    const weekRange = getWeekRange();
+
+    console.log("Selected Club:", clubName);
+
+    function getWeekRange(date = new Date()) {
+        const currentDate = new Date(date);
+    
+        const startOfWeekDay = 1; // Monday
+        const currentDay = currentDate.getDay();
+    
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+    
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+    
+       const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+};
+
+    
+        const startFormatted = formatDate(startOfWeek);
+        const endFormatted = formatDate(endOfWeek);
+    
+        return `${startFormatted} to ${endFormatted}`;
+    }
+
     const [isClubOpen, setIsClubOpen] = useState({
         Monday: false,
         Tuesday: false,
@@ -14,11 +48,47 @@ const AssignSecurityPersonnel = () => {
         Sunday: false
     });
 
+    const [personnelCount, setPersonnelCount] = useState({
+        Monday: '',
+        Tuesday: '',
+        Wednesday: '',
+        Thursday: '',
+        Friday: '',
+        Saturday: '',
+        Sunday: ''
+    });
+
     const toggleSwitch = (day) => {
         setIsClubOpen(prevState => ({
             ...prevState,
             [day]: !prevState[day]
         }));
+    };
+
+    const handlePersonnelChange = (day, value) => {
+        setPersonnelCount(prevState => ({
+            ...prevState,
+            [day]: value
+        }));
+    };
+
+    const handleAssign = async () => {
+        const week = weekRange; 
+
+        try {
+            for (const day of Object.keys(isClubOpen)) {
+                if (isClubOpen[day] && personnelCount[day]) {
+                    await addPersonnelNeeded(clubName, week, day, parseInt(personnelCount[day]));
+                }
+            }
+            const Success= addPersonnelNeeded
+                if(Success!=null){
+                    alert("Personnel requirements assigned successfully!");
+                }
+        } catch (error) {
+            console.error("Error assigning personnel:", error);
+            alert("Failed to assign personnel requirements.");
+        }
     };
 
     return (
@@ -42,9 +112,12 @@ const AssignSecurityPersonnel = () => {
                             </View>
                             <View style={styles.inputContainer}>
                                 <TextInput
-                                    style={styles.input}
-                                    placeholder="No. of Personnel"
-                                    editable={isClubOpen[day]} // Only editable if the switch is on
+                                style={styles.input}
+                                placeholder="No. of Personnel"
+                                editable={isClubOpen[day]} // Only editable if the switch is on
+                                keyboardType="numeric"
+                                value={personnelCount[day]} // Bind the input value to the state
+                                onChangeText={(value) => handlePersonnelChange(day, value)} // Handle input change
                                 />
                             </View>
                         </View>
@@ -54,6 +127,7 @@ const AssignSecurityPersonnel = () => {
                     <TouchableOpacity style={styles.assignButton}>
                         <Text style={styles.assignButtonText}>Confirm Number of Personnel</Text>
                     </TouchableOpacity>
+
                   </View>
                 </ScrollView>
             </ImageBackground>
