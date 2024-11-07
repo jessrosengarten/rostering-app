@@ -142,8 +142,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 3, // Android shadow
-        marginBottom: 20, 
+        elevation: 3, 
+        marginBottom: 20,
     },
     container: {
         flex: 1,
@@ -173,20 +173,20 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     dayContainer: {
-        flexDirection: 'row', // Keep elements in a row
-        alignItems: 'center', // Align items vertically centered
-        marginBottom: 20, // Add space between days
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        marginBottom: 20, 
     },
     dayText: {
         fontSize: 18,
         color: 'black',
         fontWeight: 'bold',
-        width: 105, // Fixed width for alignment
+        width: 105, 
     },
     switchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 80, // Fixed width for alignment
+        width: 80, 
     },
     label: {
         marginRight: 10,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        flex: 1, // Fixed width for alignment
+        flex: 1, 
     },
     input: {
         borderWidth: 1,
