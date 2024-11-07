@@ -59,7 +59,7 @@ const AddClub = () => {
     return (
         <Container style={{ marginTop: '50px' }}>
             <Row className="justify-content-md-center">
-                <Col md={6}>
+                <Col md={8}>
                     <h1 className="mt-4">Add a Club</h1>
                     {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
                     <Form onSubmit={handleCreateClub} style={{ backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { db } from '../backend/firebaseConfig';
-import { ref, set } from 'firebase/database';
-import { register } from '../backend/loginAndRegister';
 import { Form, Button, Container, Row, Col, Alert, InputGroup } from 'react-bootstrap';
 import './style.css';
+import { addUser } from '../backend/UserManagement';
 
 const AddUser = () => {
     const [form, setForm] = useState({
@@ -70,14 +68,14 @@ const AddUser = () => {
         if (!form.contactNumber) newErrors.contactNumber = 'Contact Number is required';
         if (!form.email) newErrors.email = 'Email is required';
         if (!form.password) newErrors.password = 'Password is required';
-    
+
         if (form.role === 'securityPersonnel') {
             if (!form.rate) newErrors.rate = 'Rate is required';
             if (!form.bankDetails) newErrors.bankDetails = 'Bank Details are required';
             if (!form.gender) newErrors.gender = 'Gender is required';
             if (!form.personnelType) newErrors.personnelType = 'Personnel Type is required';
         }
-    
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -88,31 +86,11 @@ const AddUser = () => {
 
         const { email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType } = form;
         try {
-            await register(email, password);
-            const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
-            const userData = { email };
-
-            if (role === 'clubManager') {
-                userData.fullName = fullName;
-                userData.contactNumber = contactNumber;
-            } else if (role === 'securityAdmin') {
-                userData.fullName = fullName;
-                userData.contactNumber = contactNumber;
-            } else if (role === 'securityPersonnel') {
-                userData.fullName = fullName;
-                userData.rate = rate;
-                userData.contactNumber = contactNumber;
-                userData.bankDetails = bankDetails;
-                userData.gender = gender;
-                userData.personnelType = personnelType;
-            }
-
-            await set(userRef, userData);
+            await addUser({ email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType });
             setAlertMessage('User added successfully');
             setAlertVariant('success');
             setShowAlert(true);
 
-            
             // Clear the form fields
             setForm({
                 email: '',
@@ -140,7 +118,7 @@ const AddUser = () => {
     return (
         <Container style={{ marginTop: '50px', marginBottom: '50px' }}>
             <Row className="justify-content-md-center">
-                <Col md={6}>
+                <Col md={8}>
                     <h1 className="mt-4">Add a User</h1>
                     {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
                     <Form onSubmit={handleSubmit} style={{ backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>

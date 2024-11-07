@@ -1,5 +1,6 @@
 import { db } from './firebaseConfig';
-import { ref, get, child, remove, update } from 'firebase/database';
+import { ref, get, child, remove, update, set } from 'firebase/database';
+import { register } from './loginAndRegister';
 
 const fetchUsersFromFolder = async (folder) => {
   const dbRef = ref(db);
@@ -53,4 +54,27 @@ export const updateUser = async (email, updatedData, role) => {
   };
   const userRef = ref(db, `${roleMap[role]}/${email.replace('.', ',')}`);
   await update(userRef, updatedData);
+};
+
+export const addUser = async ({ email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType }) => {
+    await register(email, password);
+    const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
+    const userData = { email };
+
+    if (role === 'clubManager') {
+        userData.fullName = fullName;
+        userData.contactNumber = contactNumber;
+    } else if (role === 'securityAdmin') {
+        userData.fullName = fullName;
+        userData.contactNumber = contactNumber;
+    } else if (role === 'securityPersonnel') {
+        userData.fullName = fullName;
+        userData.rate = rate;
+        userData.contactNumber = contactNumber;
+        userData.bankDetails = bankDetails;
+        userData.gender = gender;
+        userData.personnelType = personnelType;
+    }
+
+    await set(userRef, userData);
 };
