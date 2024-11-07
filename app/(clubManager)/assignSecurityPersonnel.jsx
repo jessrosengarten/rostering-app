@@ -124,9 +124,10 @@ const AssignSecurityPersonnel = () => {
                     ))}
 
                     {/* Assign Button */}
-                    <TouchableOpacity style={styles.assignButton} onPress={handleAssign}>
-                        <Text style={styles.assignButtonText}>Assign</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity style={styles.assignButton}>
+                        <Text style={styles.assignButtonText}>Confirm Number of Personnel</Text>
+                    </TouchableOpacity>
+
                   </View>
                 </ScrollView>
             </ImageBackground>
