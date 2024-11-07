@@ -18,7 +18,7 @@ const SecurityPersonnelProfile = () => {
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>{securityPersonnel.name}</Text>
+          <Text style={styles.headerText}>{securityPersonnel.fullName}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Personnel Info */}
@@ -31,15 +31,15 @@ const SecurityPersonnelProfile = () => {
 
             <View style={styles.detailRow}>
               <Ionicons name="location-outline" size={18} color="#E21A1A" />
-              <Text style={styles.detailTitle}>Address:</Text>
+              <Text style={styles.detailTitle}>Email:</Text>
             </View>
-            <Text style={styles.detailText}>{securityPersonnel.address}</Text>
+            <Text style={styles.detailText}>{securityPersonnel.email}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Contact Details:</Text>
             </View>
-            <Text style={styles.detailText}>{securityPersonnel.contact}</Text>
+            <Text style={styles.detailText}>{securityPersonnel.contactNumber}</Text>
           </View>
 
           {/* Buttons */}
