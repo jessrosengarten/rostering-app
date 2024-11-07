@@ -89,10 +89,12 @@ const SecurityAdmin = () => {
     else if (type == 'securityPersonnel') {
       // Navigate to securityPersonnelProfile and pass the entire personnel object to the page
       navigation.navigate('securityPersonnelProfile', { securityPersonnel: item });
+      console.log({securityPersonnel: item})
     }
 
     else if (type == 'clubManagers') {
-      navigation.navigate('clubManagerDetails', { managerName: item.name });
+      navigation.navigate('clubManagerDetails', { clubmanager: item });
+      console.log({clubManager: item})
     }
   };
 

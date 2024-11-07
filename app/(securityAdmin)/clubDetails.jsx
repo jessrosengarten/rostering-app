@@ -40,20 +40,26 @@ const ClubDetails = () => {
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Contact:</Text>
             </View>
-            <Text style={styles.detailText}>{club.contact}</Text>
+            <Text style={styles.detailText}>{club.contactNum}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Opening Time:</Text>
             </View>
-            <Text style={styles.detailText}>{club.opening}</Text>
+            <Text style={styles.detailText}>{club.openingTime}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Closing Time:</Text>
             </View>
-            <Text style={styles.detailText}>{club.closing}</Text>
-          </View>
+            <Text style={styles.detailText}>{club.closingTime}</Text>
+
+          <View style={styles.detailRow}>
+              <Ionicons name="time-outline" size={18} color="#E21A1A" /> 
+              <Text style={styles.detailTitle}>Rate:</Text>
+            </View>
+            <Text style={styles.detailText}>R{club.rate}</Text>
+         </View>
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>

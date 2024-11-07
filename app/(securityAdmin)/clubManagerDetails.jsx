@@ -3,27 +3,30 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useNavigation } from 'expo-router';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-const ClubManagerProfile = () => {
-  const router = useRouter();
-  const { managerName } = useLocalSearchParams();
+const ClubManagerDetails = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { clubmanager } = route.params;
+  console.log(clubmanager);
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>{managerName}</Text>
+          <Text style={styles.headerText}>{clubmanager.fullName}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Manager Details */}
           <View style={styles.detailsContainer}>
             <View style={styles.detailRow}>
               <Ionicons name="business-outline" size={18} color="#E21A1A" />
-              <Text style={styles.detailTitle}>Club Managed:</Text>
+              <Text style={styles.detailTitle}>Club/s Managed:</Text>
             </View>
             <Text style={styles.detailText}>Jail</Text>
 
@@ -31,21 +34,27 @@ const ClubManagerProfile = () => {
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Contact:</Text>
             </View>
-            <Text style={styles.detailText}>011 567 0987</Text>
+            <Text style={styles.detailText}>{clubmanager.contactNumber}</Text>
+
+          <View style={styles.detailRow}>
+              <Ionicons name="call-outline" size={18} color="#E21A1A" />
+              <Text style={styles.detailTitle}>Email:</Text>
+            </View>
+            <Text style={styles.detailText}>{clubmanager.email}</Text>
           </View>
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push('/clubDetails')}
+              onPress={() => navigation.navigate('clubDetails', { club: item })}
             >
               <Text style={styles.buttonText}>View Club</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push('/securityAdminHome')}
+              onPress={() => navigation.navigate('securityAdminHome')}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
@@ -131,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ClubManagerProfile;
+export default ClubManagerDetails;
