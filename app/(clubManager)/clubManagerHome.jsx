@@ -43,13 +43,25 @@ const clubs = [
                                         onPress={() => { router.push('/assignSecurityPersonnel'); }} // Navigate to 'AssignSecurityPersonnel' page
                                         style={styles.assignButton}
                                     >
-                                        <Text style={styles.buttonText}>Assign Personnel</Text>
+                                        <Text style={styles.buttonText}>Select number of Personnel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                          onPress={() => { router.push('/clubManagerPayments'); }} // Navigate to 'ClubManagerPayments' page
                                         style={styles.paymentButton}
                                     >
                                         <Text style={styles.buttonText}>Payments</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.paymentButton}
+                                    >
+                                        <Text style={styles.buttonText}>Schedule</Text>
+                                    </TouchableOpacity>
+                                    
+                                    <TouchableOpacity
+                                        style={styles.paymentButton}
+                                    >
+                                        <Text style={styles.buttonText}>Club Info</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -66,6 +78,14 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
+
+ buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 10,
+    },
+    
     header: {
         width: '100%',
         padding: 15,
@@ -110,24 +130,27 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     buttonsContainer: {
-        flexDirection: 'row', // Stack buttons vertically
+        flexDirection: 'row',
+        flexWrap: 'wrap', // Enable wrapping to create two rows
         justifyContent: 'space-between',
-        width: '100%', // Ensure full width for buttons
     },
     assignButton: {
         backgroundColor: '#E21A1A',
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginRight: 10,
+        width: '48%', // Take half the width of the container
         alignItems: 'center',
+        marginBottom: 10,
     },
     paymentButton: {
         backgroundColor: '#E21A1A',
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 5,
+        width: '48%', // Take half the width of the container
         alignItems: 'center',
+        marginBottom: 10,
     },
     buttonText: {
         color: '#FFF',

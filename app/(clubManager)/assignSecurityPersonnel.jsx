@@ -52,7 +52,7 @@ const AssignSecurityPersonnel = () => {
 
                     {/* Assign Button */}
                     <TouchableOpacity style={styles.assignButton}>
-                        <Text style={styles.assignButtonText}>Assign</Text>
+                        <Text style={styles.assignButtonText}>Confirm Number of Personnel</Text>
                     </TouchableOpacity>
                   </View>
                 </ScrollView>

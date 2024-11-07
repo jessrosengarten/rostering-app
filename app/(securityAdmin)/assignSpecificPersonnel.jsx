@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert } from 'react-native'; // Import Alert
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import { images } from '../../constants';
@@ -12,10 +12,8 @@ const Assign = () => {
   const { day, personnelCount, club } = route.params;
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
-  const [assignedPersonnel, setAssignedPersonnel] = useState([]); // Track assigned personnel
+  const [assignedPersonnel, setAssignedPersonnel] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-
-  // State to store the complete schedule for each day
   const [clubSchedule, setClubSchedule] = useState({});
 
   const handlePersonnelChange = (value, index) => {
@@ -33,15 +31,13 @@ const Assign = () => {
     }
   };
 
-  // Check if all positions are filled before allowing assignment
   const handleAssign = () => {
     if (selectedPersonnel.includes('')) {
       Alert.alert("Incomplete Assignment", "Please assign a person for each spot before proceeding.", [{ text: "OK" }]);
     } else {
-      // Save selected personnel for the current day in the clubSchedule state
       setClubSchedule((prev) => ({
         ...prev,
-        [day]: selectedPersonnel, // Save the assigned personnel for the specific day
+        [day]: selectedPersonnel,
       }));
       setModalVisible(true);
     }
@@ -49,10 +45,6 @@ const Assign = () => {
 
   const handleViewSchedule = () => {
     setModalVisible(false);
-    //navigation.navigate('clubSpecificSchedule', { club, day, assignedPersonnel: selectedPersonnel });
-    // REMOVED THE ABOVE
-
-    // Pass the full clubSchedule object to the ClubSpecificSchedule screen
     navigation.navigate('clubSpecificSchedule', { club, clubSchedule });
   };
 
@@ -68,31 +60,33 @@ const Assign = () => {
           <Text style={styles.headerText}>Assign Personnel for {day}</Text>
         </View>
 
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {Array.from({ length: personnelCount }).map((_, index) => (
-            <View key={index} style={styles.pickerItemContainer}>
-              <Text style={styles.pickerLabel}>Personnel {index + 1}:</Text>
-              <View style={styles.pickerWrapper}>
-                <RNPickerSelect
-                  onValueChange={(value) => handlePersonnelChange(value, index)}
-                  items={[
-                    { label: 'Shan', value: 'Shan' },
-                    { label: 'Rudolf', value: 'Rudolf' },
-                    { label: 'Dagan', value: 'Dagan' },
-                    { label: 'Jess', value: 'Jess' },
-                    { label: 'Shan 2', value: 'Shan 2' },
-                    { label: 'Rudolf 2', value: 'Rudolf 2' },
-                    { label: 'Dagan 2', value: 'Dagan 2' },
-                    { label: 'Jess 2', value: 'Jess 2' },
-                  ].filter((person) => !assignedPersonnel.includes(person.value))}
-                  placeholder={{ label: 'Select a person...', value: null }}
-                  style={pickerSelectStyles}
-                />
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            {Array.from({ length: personnelCount }).map((_, index) => (
+              <View key={index} style={styles.pickerItemContainer}>
+                <Text style={styles.pickerLabel}>Personnel {index + 1}:</Text>
+                <View style={styles.pickerWrapper}>
+                  <RNPickerSelect
+                    onValueChange={(value) => handlePersonnelChange(value, index)}
+                    items={[
+                      { label: 'Shan', value: 'Shan' },
+                      { label: 'Rudolf', value: 'Rudolf' },
+                      { label: 'Dagan', value: 'Dagan' },
+                      { label: 'Jess', value: 'Jess' },
+                      { label: 'Shan 2', value: 'Shan 2' },
+                      { label: 'Rudolf 2', value: 'Rudolf 2' },
+                      { label: 'Dagan 2', value: 'Dagan 2' },
+                      { label: 'Jess 2', value: 'Jess 2' },
+                    ].filter((person) => !assignedPersonnel.includes(person.value))}
+                    placeholder={{ label: 'Select a person...', value: null }}
+                    style={pickerSelectStyles}
+                  />
+                </View>
               </View>
-            </View>
-          ))}
-          <CustomButton title="Assign" handlePress={handleAssign} customStyle={styles.button} textStyle={styles.buttonText} />
-        </ScrollView>
+            ))}
+            <CustomButton title="Assign" handlePress={handleAssign} customStyle={styles.button} textStyle={styles.buttonText} />
+          </ScrollView>
+        </KeyboardAvoidingView>
 
         <Modal
           transparent={true}
@@ -120,6 +114,8 @@ const Assign = () => {
     </SafeAreaView>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: { 
@@ -193,8 +189,7 @@ const styles = StyleSheet.create({
      },
   
   modalText: { 
-    fontSize: 20, 
-    fontWeight: 'bold', 
+    fontSize: 20,  
     textAlign: 'center', 
     marginBottom: 25 
     },
@@ -215,7 +210,6 @@ const styles = StyleSheet.create({
   
   modalButtonText: { 
     color: '#FFF', 
-    fontWeight: 'bold',
     fontSize: 18 
     },
 });
