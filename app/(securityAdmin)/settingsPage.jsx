@@ -30,7 +30,7 @@ const Settings = () => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.profileContainer}>
                     <FontAwesome name="user" size={80} color="black" />
-                    
+
                 </View>
 
                 {/* Settings Options */}
@@ -82,8 +82,8 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.settingsItem} 
-                onPress={() => navigation.navigate('changePassword')}>
+                <TouchableOpacity style={styles.settingsItem}
+                    onPress={() => navigation.navigate('changePassword')}>
                     <FontAwesome name="lock" size={24} color="black" />
                     <Text style={styles.settingsText}>Change Password</Text>
                 </TouchableOpacity>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     settingsItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
         paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     settingsText: {
         marginLeft: 15,
         fontSize: 16,
-        flex: 1, 
+        flex: 1,
     },
     switchContainer: {
         justifyContent: 'flex-end',

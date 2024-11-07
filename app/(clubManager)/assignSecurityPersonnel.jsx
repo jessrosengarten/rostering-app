@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
@@ -7,34 +7,34 @@ import { addPersonnelNeeded } from '../../Backend/clubManager';
 
 const AssignSecurityPersonnel = () => {
     const route = useRoute();
-    const { clubName } = route.params; 
+    const { clubName } = route.params;
     const weekRange = getWeekRange();
 
     console.log("Selected Club:", clubName);
 
     function getWeekRange(date = new Date()) {
         const currentDate = new Date(date);
-    
+
         const startOfWeekDay = 1; // Monday
         const currentDay = currentDate.getDay();
-    
+
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
-    
+
         const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
-    
-       const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-};
 
-    
+        const formatDate = (date) => {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
+
+
         const startFormatted = formatDate(startOfWeek);
         const endFormatted = formatDate(endOfWeek);
-    
+
         return `${startFormatted} to ${endFormatted}`;
     }
 
@@ -73,7 +73,7 @@ const AssignSecurityPersonnel = () => {
     };
 
     const handleAssign = async () => {
-        const week = weekRange; 
+        const week = weekRange;
 
         try {
             for (const day of Object.keys(isClubOpen)) {
@@ -81,10 +81,10 @@ const AssignSecurityPersonnel = () => {
                     await addPersonnelNeeded(clubName, week, day, parseInt(personnelCount[day]));
                 }
             }
-            const Success= addPersonnelNeeded
-                if(Success!=null){
-                    alert("Personnel requirements assigned successfully!");
-                }
+            const Success = addPersonnelNeeded
+            if (Success != null) {
+                alert("Personnel requirements assigned successfully!");
+            }
         } catch (error) {
             console.error("Error assigning personnel:", error);
             alert("Failed to assign personnel requirements.");
@@ -100,35 +100,35 @@ const AssignSecurityPersonnel = () => {
                 </View>
 
                 <ScrollView contentContainerStyle={{ padding: 20 }}>
-                  <View style={styles.daysContainer}> 
-                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
-                        <View key={index} style={styles.dayContainer}>
-                            <Text style={styles.dayText}>{day}</Text>
-                            <View style={styles.switchContainer}>
-                                <Switch
-                                    value={isClubOpen[day]}
-                                    onValueChange={() => toggleSwitch(day)}
-                                />
+                    <View style={styles.daysContainer}>
+                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
+                            <View key={index} style={styles.dayContainer}>
+                                <Text style={styles.dayText}>{day}</Text>
+                                <View style={styles.switchContainer}>
+                                    <Switch
+                                        value={isClubOpen[day]}
+                                        onValueChange={() => toggleSwitch(day)}
+                                    />
+                                </View>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="No. of Personnel"
+                                        editable={isClubOpen[day]} // Only editable if the switch is on
+                                        keyboardType="numeric"
+                                        value={personnelCount[day]} // Bind the input value to the state
+                                        onChangeText={(value) => handlePersonnelChange(day, value)} // Handle input change
+                                    />
+                                </View>
                             </View>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                style={styles.input}
-                                placeholder="No. of Personnel"
-                                editable={isClubOpen[day]} // Only editable if the switch is on
-                                keyboardType="numeric"
-                                value={personnelCount[day]} // Bind the input value to the state
-                                onChangeText={(value) => handlePersonnelChange(day, value)} // Handle input change
-                                />
-                            </View>
-                        </View>
-                    ))}
+                        ))}
 
-                    {/* Assign Button */}
-                    <TouchableOpacity style={styles.assignButton}>
-                        <Text style={styles.assignButtonText}>Confirm Number of Personnel</Text>
-                    </TouchableOpacity>
+                        {/* Assign Button */}
+                        <TouchableOpacity style={styles.assignButton}>
+                            <Text style={styles.assignButtonText}>Confirm Number of Personnel</Text>
+                        </TouchableOpacity>
 
-                  </View>
+                    </View>
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
@@ -137,15 +137,15 @@ const AssignSecurityPersonnel = () => {
 
 const styles = StyleSheet.create({
     daysContainer: {
-        padding: 20, 
-        backgroundColor: 'rgba(255, 255, 255, 255)', 
-        borderRadius: 10, 
+        padding: 20,
+        backgroundColor: 'rgba(255, 255, 255, 255)',
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3, // Android shadow
-        marginBottom: 20, 
+        marginBottom: 20,
     },
     container: {
         flex: 1,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         borderRadius: 5,
     },
-    
+
     assignButton: {
         backgroundColor: '#E21A1A',
         padding: 15,

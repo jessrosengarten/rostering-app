@@ -32,11 +32,11 @@ const ChangePassword = () => {
         <SafeAreaView edges={[]} style={Styles.container}>
             <ImageBackground source={images.background} style={Styles.background}>
                 <View style={Styles.header}>
-                        <Text style={Styles.headerText}>Change Password</Text>
-                    </View>
+                    <Text style={Styles.headerText}>Change Password</Text>
+                </View>
                 <ScrollView contentContainerStyle={Styles.scrollContainer}>
-                    
-                    <View/>
+
+                    <View />
                     <Card style={Styles.card}>
                         <Card.Content>
                             <View>
@@ -80,10 +80,10 @@ const ChangePassword = () => {
 export default ChangePassword
 
 const Styles = StyleSheet.create({
-  
-  scrollContainer: { 
-    paddingHorizontal: 20, 
-    paddingBottom: 30 
+
+    scrollContainer: {
+        paddingHorizontal: 20,
+        paddingBottom: 30
     },
 
     card: {
@@ -95,26 +95,26 @@ const Styles = StyleSheet.create({
         marginTop: 80,
         marginBottom: 250
     },
-     header: { 
-    padding: 15, 
-    backgroundColor: 'rgba(255, 255, 255, 0.7)' 
-    },
-    
-      background: { 
-    height: '100%', 
-    width: '100%' 
+    header: {
+        padding: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)'
     },
 
-    container: { 
-    flex: 1, 
-    width: '100%' 
+    background: {
+        height: '100%',
+        width: '100%'
     },
-  
+
+    container: {
+        flex: 1,
+        width: '100%'
+    },
+
 
     headerText: {
-        fontSize: 24, 
+        fontSize: 24,
         fontWeight: 'bold',
-        color: 'black', 
-        marginLeft: 20, 
+        color: 'black',
+        marginLeft: 20,
     },
 });

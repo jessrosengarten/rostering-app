@@ -9,15 +9,15 @@ import CustomButton from '../../components/CustomButton';
 
 const ClubManagerUser = () => {
   return (
-    
+
     <SafeAreaView edges={[]}>
-    <ImageBackground source={images.background} className='h-full w-full'>
+      <ImageBackground source={images.background} className='h-full w-full'>
 
         <View style={styles.header}>
-            <Text style={styles.headerText}>List of Clubs</Text>
+          <Text style={styles.headerText}>List of Clubs</Text>
         </View>
-    </ImageBackground>
-</SafeAreaView>
+      </ImageBackground>
+    </SafeAreaView>
 
   )
 }
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   background: {
     height: '100%',
     width: '100%',
-},
+  },
   header: {
     width: '100%',
     padding: 15,
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     alignItems: 'left',
     borderBottomWidth: 1,
     borderBottomColor: '#d3d3d3',
-},
-headerText: {
+  },
+  headerText: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#000',
-},
+  },
 })

@@ -118,124 +118,125 @@ const Assign = () => {
 
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    width: '100%' 
-    },
-  
-  scrollContainer: { 
-    paddingHorizontal: 20, 
-    paddingBottom: 30 
-    },
-  
-  background: { 
-    height: '100%', 
-    width: '100%' 
-    },
-  
-  header: { 
-    padding: 15, 
-    backgroundColor: 'rgba(255, 255, 255, 0.7)' 
-    },
-  
-  headerText: { 
-    fontSize: 20, 
-    fontWeight: 'bold', 
-    color: '#000' 
-    },
-  
-  pickerItemContainer: { 
-    padding: 20, 
-    backgroundColor: '#FFF',
-     borderRadius: 10, 
-     marginTop: 20, 
-     shadowColor: '#000', 
-     shadowOffset: { width: 0, height: 4 }, 
-     shadowOpacity: 0.1, 
-     shadowRadius: 5, 
-     elevation: 3 
-     },
-  
-  button: { 
-    backgroundColor: '#E21A1A', 
-    paddingVertical: 10,
-    borderRadius: 5 
-    },
-  
-  buttonText: { 
-    color: '#FFF', 
-    fontWeight: 'bold' 
-    },
-  
-  pickerLabel: { 
-    fontSize: 16, 
-    fontWeight: '500', 
-    color: '#444', 
-    marginBottom: 5 
-    },
-  
-  modalOverlay: { flex: 1, 
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-  justifyContent: 'center', 
-  alignItems: 'center' 
+  container: {
+    flex: 1,
+    width: '100%'
   },
-  
-  modalContainer: { 
-    width: '80%', 
-    padding: 20, 
-    backgroundColor: '#FFF', 
-    borderRadius: 10, 
+
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 30
+  },
+
+  background: {
+    height: '100%',
+    width: '100%'
+  },
+
+  header: {
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)'
+  },
+
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000'
+  },
+
+  pickerItemContainer: {
+    padding: 20,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3
+  },
+
+  button: {
+    backgroundColor: '#E21A1A',
+    paddingVertical: 10,
+    borderRadius: 5
+  },
+
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold'
+  },
+
+  pickerLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#444',
+    marginBottom: 5
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
     alignItems: 'center'
-     },
-  
-  modalText: { 
-    fontSize: 20,  
-    textAlign: 'center', 
-    marginBottom: 25 
-    },
-  
-  modalButtonsContainer: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-around', 
-    width: '100%' 
-    },
-  
-  modalButton: { 
-    backgroundColor: '#E21A1A', 
-    paddingVertical: 15, 
-    paddingHorizontal: 20, 
+  },
+
+  modalContainer: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+
+  modalText: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 25
+  },
+
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%'
+  },
+
+  modalButton: {
+    backgroundColor: '#E21A1A',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     borderRadius: 8,
-     marginHorizontal: 5 
-     },
-  
-  modalButtonText: { 
-    color: '#FFF', 
-    fontSize: 18 
-    },
+    marginHorizontal: 5
+  },
+
+  modalButtonText: {
+    color: '#FFF',
+    fontSize: 18
+  },
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: { 
-    fontSize: 16, 
-    paddingVertical: 12, 
-    paddingHorizontal: 10, 
-    borderRadius: 8, 
-    color: '#333', 
-    backgroundColor: '#F2F2F2' 
-    },
-  
-  inputAndroid: { 
-    fontSize: 16, 
-    paddingVertical: 8, 
-    paddingHorizontal: 10, 
-    borderRadius: 8, 
-    color: '#333', 
-    backgroundColor: '#F2F2F2' 
-    },
-  
-  placeholder: { 
-    color: '#666' 
-    },
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    color: '#333',
+    backgroundColor: '#F2F2F2'
+  },
+
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    color: '#333',
+    backgroundColor: '#F2F2F2'
+  },
+
+  placeholder: {
+    color: '#666'
+  },
 });
 
 export default Assign;

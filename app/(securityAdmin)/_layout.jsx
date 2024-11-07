@@ -129,14 +129,6 @@ const SecurityAdminLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="securityPersonnelUser"
-        options={{
-          title: '',
-          headerShown: true,
-          tabBarButton: () => null, // This hides the tab
-        }}
-      />
-      <Tabs.Screen
         name="settingsPage"
         options={{
           title: '',
@@ -178,6 +170,22 @@ const SecurityAdminLayout = () => {
       />
       <Tabs.Screen
         name="securityPersonnelPayments"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="securityPersonnelDocuments"
+        options={{
+          title: '',
+          headerShown: true,
+          tabBarButton: () => null, // This hides the tab
+        }}
+      />
+      <Tabs.Screen
+        name="dataAnalytics"
         options={{
           title: '',
           headerShown: true,

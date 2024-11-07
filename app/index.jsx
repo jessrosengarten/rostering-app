@@ -12,8 +12,8 @@ export default function App() {
     return (
         <SafeAreaView edges={[]}>
 
-            <ImageBackground 
-                source={isDarkMode ? images.darkmodeBackgroundImage : images.background} 
+            <ImageBackground
+                source={isDarkMode ? images.darkmodeBackgroundImage : images.background}
                 style={{ height: '100%', width: '100%' }}
             >
                 <ScrollView contentContainerStyle={{ flex: 1 }}>

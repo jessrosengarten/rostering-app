@@ -63,63 +63,63 @@ const AssignPersonnelManagement = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flexGrow: 1, 
-    padding: 20 
-    },
-
-  header: { 
-    padding: 15, 
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', 
-    },
-  
-  headerText: { 
-    fontSize: 20, 
-    fontWeight: 'bold', 
-    color: '#000' 
-    },
-  
-  scheduleContainer: { 
-    marginTop: 20 
+  container: {
+    flexGrow: 1,
+    padding: 20
   },
 
-  shiftBox: { 
-    backgroundColor: '#fff', 
-    borderRadius: 10, 
-    padding: 15, 
-    marginVertical: 15, 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
+  header: {
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000'
+  },
+
+  scheduleContainer: {
+    marginTop: 20
+  },
+
+  shiftBox: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginVertical: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    },
-  
-  dayText: { 
-    fontSize: 18, 
-  fontWeight: 'bold' 
-  },
-  
-  personnelText: { 
-    fontSize: 16, 
-  color: '#666' 
   },
 
-  assignButton: { 
-    backgroundColor: '#E21A1A', 
-    paddingVertical: 10, 
-    paddingHorizontal: 15, 
-    borderRadius: 8, 
-    flexDirection: 'row', 
-    alignItems: 'center' 
-    },
-  
-  assignButtonText: { 
-    fontSize: 14, 
-    color: '#fff', 
-    fontWeight: 'bold' 
+  dayText: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+
+  personnelText: {
+    fontSize: 16,
+    color: '#666'
+  },
+
+  assignButton: {
+    backgroundColor: '#E21A1A',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
+  assignButtonText: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: 'bold'
   },
 });
 

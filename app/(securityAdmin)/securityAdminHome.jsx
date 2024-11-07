@@ -23,36 +23,36 @@ const securityPersonnel = [
 ];
 
 
-  // Dummy payment data for different clubs
-  const paymentData = {
-    'Neon Night Club': {
-      payments: {
-        Thursday: 750.00,
-        Friday: 950.00,
-        Saturday: 500.00,
-        Sunday: 1250.00,
-      },
-      total: 3450.00,
+// Dummy payment data for different clubs
+const paymentData = {
+  'Neon Night Club': {
+    payments: {
+      Thursday: 750.00,
+      Friday: 950.00,
+      Saturday: 500.00,
+      Sunday: 1250.00,
     },
-    'Jail Night Club': {
-      payments: {
-        Thursday: 650.00,
-        Friday: 800.00,
-        Saturday: 700.00,
-        Sunday: 1100.00,
-      },
-      total: 3250.00,
+    total: 3450.00,
+  },
+  'Jail Night Club': {
+    payments: {
+      Thursday: 650.00,
+      Friday: 800.00,
+      Saturday: 700.00,
+      Sunday: 1100.00,
     },
-    'Omnia': {
-      payments: {
-        Thursday: 550.00,
-        Friday: 1050.00,
-        Saturday: 900.00,
-        Sunday: 1300.00,
-      },
-      total: 3800.00,
+    total: 3250.00,
+  },
+  'Omnia': {
+    payments: {
+      Thursday: 550.00,
+      Friday: 1050.00,
+      Saturday: 900.00,
+      Sunday: 1300.00,
     },
-  };
+    total: 3800.00,
+  },
+};
 
 // Dummy data for club managers
 const clubManagers = [
@@ -66,21 +66,21 @@ const clubManagers = [
 const SecurityAdmin = () => {
   const navigation = useNavigation();
   const route = useRoute();
-    const { adminName } = route.params;
+  const { adminName } = route.params;
 
   // Handle the navigation when a club, security personnel, or club manager is selected
   const handleNavigation = (type, item) => {
-   
+
     if (type == 'clubs') {
       // Navigate to ClubDetails and pass the entire club object to the page
       navigation.navigate('clubDetails', { club: item, paymentData: paymentData[item.name] });
-    } 
-    
+    }
+
     else if (type == 'securityPersonnel') {
       // Navigate to securityPersonnelProfile and pass the entire personnel object to the page
       navigation.navigate('securityPersonnelProfile', { securityPersonnel: item });
-    } 
-    
+    }
+
     else if (type == 'clubManagers') {
       navigation.navigate('clubManagerDetails', { managerName: item.name });
     }
@@ -103,7 +103,7 @@ const SecurityAdmin = () => {
           {/* Semi-transparent Header */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Security Admin Home</Text>
-             <Text style={styles.headerText}>{adminName}</Text>
+            <Text style={styles.headerText}>{adminName}</Text>
           </View>
 
           {/* Clubs Section */}
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 14,
   },
-    documentContainer: {
+  documentContainer: {
     backgroundColor: '#FFF',
     padding: 20,
     borderRadius: 10,

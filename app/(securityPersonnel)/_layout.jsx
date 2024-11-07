@@ -38,7 +38,7 @@ const SecurityPersonnelLayout = () => {
                     height: 90,
                 },
 
-                header: () => <CustomHeader username={username} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"}  />, // Use the custom header component
+                header: () => <CustomHeader username={username} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
             }}
         >
             <Tabs.Screen
@@ -81,6 +81,14 @@ const SecurityPersonnelLayout = () => {
             />
             <Tabs.Screen
                 name="settingsPage"
+                options={{
+                    title: '',
+                    headerShown: true,
+                    tabBarButton: () => null, // This hides the tab
+                }}
+            />
+            <Tabs.Screen
+                name="changePassword"
                 options={{
                     title: '',
                     headerShown: true,

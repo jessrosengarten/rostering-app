@@ -11,65 +11,65 @@ const SecurityPersonnelPayments = () => {
   const paymentData = {
     personnelName: 'Bart',
     payments: {
-        Thursday: 750.00,
-        Friday: 950.00,
-        Saturday: 500.00,
-        Sunday: 1250.00,
+      Thursday: 750.00,
+      Friday: 950.00,
+      Saturday: 500.00,
+      Sunday: 1250.00,
     },
     total: 3450.00
-};
+  };
 
-// Temporary payment status
-    //REPLACE WITH ACTUAL DATA IN THE FUTURE
+  // Temporary payment status
+  //REPLACE WITH ACTUAL DATA IN THE FUTURE
   const paymentStatus = paymentData.isPaid ? "Paid" : "Not Paid";
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
-      <View style={styles.header}>
-            <Text style={styles.headerText}>Security Personnel Payments</Text>
-          </View>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Security Personnel Payments</Text>
+        </View>
 
 
         <ScrollView contentContainerStyle={{ height: '100%' }}>
 
-        
+
           <ScrollView contentContainerStyle={styles.scrollContainer}>
 
-                    <View style={styles.paymentDetails}>
-                        <Text style={styles.sectionTitle}>To Pay ...</Text>
-                        {Object.keys(paymentData.payments).map((day, index) => (
-                            <View key={index} style={styles.paymentRow}>
-                                <Text style={styles.dayText}>{day}:</Text>
-                                <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
-                            </View>
-                            ))}
+            <View style={styles.paymentDetails}>
+              <Text style={styles.sectionTitle}>To Pay ...</Text>
+              {Object.keys(paymentData.payments).map((day, index) => (
+                <View key={index} style={styles.paymentRow}>
+                  <Text style={styles.dayText}>{day}:</Text>
+                  <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
+                </View>
+              ))}
 
-                            {/* Total */}
-                            <View style={styles.paymentRow}>
-                                <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
-                                <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
-                                    R {paymentData.total.toFixed(2)}
-                                </Text>
-                            </View>
-                        </View>
+              {/* Total */}
+              <View style={styles.paymentRow}>
+                <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
+                <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
+                  R {paymentData.total.toFixed(2)}
+                </Text>
+              </View>
+            </View>
 
-                        {/* Payment Button */}
-                        <TouchableOpacity style={styles.paymentButton}>
-                            <Text style={styles.paymentButtonText}>Make Payment</Text>
-                        </TouchableOpacity>
+            {/* Payment Button */}
+            <TouchableOpacity style={styles.paymentButton}>
+              <Text style={styles.paymentButtonText}>Make Payment</Text>
+            </TouchableOpacity>
 
-                                  {/* Payment Status */}
-          <View style={styles.statusContainer}>
-            <Text style={styles.statusText}>
-              Payment Status: 
-              <Text style={paymentStatus === "Paid" ? styles.paidText : styles.notPaidText}>
-                {` ${paymentStatus}`}
+            {/* Payment Status */}
+            <View style={styles.statusContainer}>
+              <Text style={styles.statusText}>
+                Payment Status:
+                <Text style={paymentStatus === "Paid" ? styles.paidText : styles.notPaidText}>
+                  {` ${paymentStatus}`}
+                </Text>
               </Text>
-            </Text>
-          </View>
-                    </ScrollView>
-          
+            </View>
+          </ScrollView>
+
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -80,39 +80,39 @@ export default SecurityPersonnelPayments
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
+    flex: 1,
   },
   background: {
-      height: '100%',
-      width: '100%',
+    height: '100%',
+    width: '100%',
   },
   header: {
-      width: '100%',
-      padding: 15,
-      backgroundColor: 'rgba(255, 255, 255, 0.7)',
-      alignItems: 'left',
-      borderBottomWidth: 1,
-      borderBottomColor: '#d3d3d3',
+    width: '100%',
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
   },
   headerText: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: '#000',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
   },
   scrollContainer: {
-      padding: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   clubInfo: {
-      alignItems: 'center',
-      marginBottom: 20,
+    alignItems: 'center',
+    marginBottom: 20,
   },
   clubName: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      color: 'red',
-      marginBottom: 10,
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: 'red',
+    marginBottom: 10,
   },
 
   statusContainer: {
@@ -144,46 +144,46 @@ const styles = StyleSheet.create({
   },
 
   paymentDetails: {
-      width: '100%',
-      backgroundColor: '#FFF',
-      borderRadius: 10,
-      padding: 20,
-      marginBottom: 20,
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowOffset: { width: 0, height: 2 },
-      elevation: 3,
+    width: '100%',
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   sectionTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#333',
-      marginBottom: 15,
-      textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+    textAlign: 'center',
   },
   paymentRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingVertical: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 5,
   },
   dayText: {
-      fontSize: 16,
-      color: '#333',
+    fontSize: 16,
+    color: '#333',
   },
   amountText: {
-      fontSize: 16,
-      color: '#333',
+    fontSize: 16,
+    color: '#333',
   },
   paymentButton: {
-      backgroundColor: '#E21A1A',
-      paddingVertical: 15,
-      paddingHorizontal: 50,
-      borderRadius: 5,
-      marginTop: 20,
+    backgroundColor: '#E21A1A',
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 5,
+    marginTop: 20,
   },
   paymentButtonText: {
-      color: '#FFF',
-      fontSize: 18,
-      fontWeight: 'bold',
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
