@@ -46,13 +46,13 @@ const SignIn = () => {
             if (userRole) {
                 switch (userRole) {
                     case 'securityAdmin':
-                        router.push('/securityAdminHome');
+                        router.push(`/securityAdminHome?adminName=${encodeURIComponent(userData.fullName)}`);
                         break;
                     case 'securityPersonnel':
-                        router.push('/securityPersonnelHome');
+                        router.push(`/securityPersonnelHome?personnelName=${encodeURIComponent(userData.fullName)}`);
                         break;
                     case 'clubManager':
-                        router.push(`/clubManagerHome?managerName=${userData.fullName}`);
+                        router.push(`/clubManagerHome?managerName=${encodeURIComponent(userData.fullName)}`);
                         break;
                     default:
                         console.log('Unknown user role');

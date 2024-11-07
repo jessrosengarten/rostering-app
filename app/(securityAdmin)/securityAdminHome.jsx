@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, FlatList, 
 import { icons, images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
+import { useRoute } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
 // Dummy data for clubs
@@ -64,6 +65,8 @@ const clubManagers = [
 
 const SecurityAdmin = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+    const { adminName } = route.params;
 
   // Handle the navigation when a club, security personnel, or club manager is selected
   const handleNavigation = (type, item) => {
@@ -100,6 +103,7 @@ const SecurityAdmin = () => {
           {/* Semi-transparent Header */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Security Admin Home</Text>
+             <Text style={styles.headerText}>{adminName}</Text>
           </View>
 
           {/* Clubs Section */}
