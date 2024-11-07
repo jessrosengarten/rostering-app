@@ -9,6 +9,7 @@ import { Card } from 'react-native-paper';
 import { login } from '../../Backend/loginAndRegister';
 import { db } from '../../Backend/firebaseConfig'
 import { ref, set, get } from 'firebase/database'
+import { useNavigation } from '@react-navigation/native';
 
 const SignIn = () => {
     const [form, setform] = useState({
@@ -18,6 +19,7 @@ const SignIn = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const router = useRouter()
+    const navigation = useNavigation(); 
 
     const handleLogin = async () => {
         const { email, password } = form;
@@ -29,12 +31,14 @@ const SignIn = () => {
             // Fetch user role from Realtime Database
             const roles = ['securityAdmin', 'securityPersonnel', 'clubManager'];
             let userRole = null;
+            let userData=null;
 
             for (const role of roles) {
                 const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
                 const snapshot = await get(userRef);
                 if (snapshot.exists()) {
                     userRole = role;
+                    userData = snapshot.val();
                     break;
                 }
             }
@@ -48,7 +52,7 @@ const SignIn = () => {
                         router.push('/securityPersonnelHome');
                         break;
                     case 'clubManager':
-                        router.push('/clubManagerHome');
+                        router.push(`/clubManagerHome?managerName=${userData.fullName}`);
                         break;
                     default:
                         console.log('Unknown user role');
