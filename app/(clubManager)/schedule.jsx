@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Switch, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Schedule = () => {
   const [attendance, setAttendance] = useState({});
   const navigation = useNavigation();
+  const route = useRoute();
+  const { club } = route.params;
+
 
   const toggleAttendance = (week, day, bouncer) => {
     setAttendance((prevAttendance) => ({
@@ -56,7 +59,7 @@ const Schedule = () => {
              {week === 'futureWeek' && (
   <TouchableOpacity
     style={styles.assignButton}
-    onPress={() => navigation.navigate('assignSecurityPersonnel', { clubName: 'Club XYZ' })} // UPDATE THIS
+    onPress={() => navigation.navigate('assignSecurityPersonnel', { club})} // UPDATE THIS
   >
     <Text style={styles.assignButtonText}>Assign</Text>
   </TouchableOpacity>

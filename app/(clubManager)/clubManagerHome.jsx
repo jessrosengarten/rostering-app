@@ -54,27 +54,6 @@ const clubManagerHome = () => {
                                     <Text style={styles.clubName}>{club.name}</Text>
                                 </TouchableOpacity>
 
-                                <View style={styles.buttonsContainer}>
-
-                                    <TouchableOpacity
-                                        onPress={() => router.push(`assignSecurityPersonnel?clubName=${encodeURIComponent(club.name)}`)}
-                                        style={styles.button}>
-                                        <Text style={styles.buttonText}>Select number of Personnel</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                    onPress={() => navigation.navigate('ClubManagerPayments', { clubName: club.name })}
-                                    style={styles.button}
-                                    >
-                                        <Text style={styles.buttonText}>Payments</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => router.push('/schedule')}
-                                        style={styles.button}
-                                    >
-                                        <Text style={styles.buttonText}>Schedule</Text>
-                                    </TouchableOpacity>
-
-                                </View>
                             </View>
                         ))}
                     </View>

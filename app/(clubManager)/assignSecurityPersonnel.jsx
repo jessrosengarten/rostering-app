@@ -7,7 +7,7 @@ import { addPersonnelNeeded } from '../../Backend/clubManager';
 
 const AssignSecurityPersonnel = () => {
     const route = useRoute();
-    const { clubName } = route.params;
+    const { club } = route.params;
 
     // Function to get the date range for the next week
       function getWeekRange(date = new Date()) {
@@ -85,7 +85,7 @@ const AssignSecurityPersonnel = () => {
         try {
             for (const day of Object.keys(isClubOpen)) {
                 if (isClubOpen[day] && personnelCount[day]) {
-                    await addPersonnelNeeded(clubName, weekDates, day, parseInt(personnelCount[day]));
+                    await addPersonnelNeeded(club.name, weekDates, day, parseInt(personnelCount[day]));
                 }
             }
             alert("Personnel requirements assigned successfully!");

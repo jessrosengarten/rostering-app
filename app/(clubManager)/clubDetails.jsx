@@ -4,10 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 const clubDetails = () => {
+  const navigation = useNavigation();
   const route = useRoute();
   const { club } = route.params;
 
@@ -58,6 +61,27 @@ const clubDetails = () => {
             </View>
             <Text style={styles.detailText}>{club.rate}</Text>
           </View>
+          
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+            onPress={() => navigation.navigate('clubManagerPayments', { club })}
+            style={styles.button}>
+              <Text style={styles.buttonText}>Payments</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+              onPress={() => navigation.navigate('schedule',{ club })}
+              style={styles.button}>
+                <Text style={styles.buttonText}>Schedule</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+              onPress={() => navigation.navigate('assignSecurityPersonnel',{ club })}
+              style={styles.button}>
+                <Text style={styles.buttonText}>Book schedule</Text>
+                </TouchableOpacity>
+                </View>
+
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -77,6 +101,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  button: {
+        backgroundColor: '#E21A1A',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        width: '48%', // Take half the width of the container
+        alignItems: 'center',
+        marginBottom: 10,
+    },
 
   detailsContainer: {
     backgroundColor: '#fff',
