@@ -63,26 +63,15 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  header: {
-    width: '100%',
-    padding: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderBottomWidth: 1,
-    borderBottomColor: '#d3d3d3',
-    alignItems: 'flex-start',
-  },
+  header: { padding: 15, backgroundColor: 'rgba(255, 255, 255, 0.7)' },
+  headerText: { fontSize: 20, fontWeight: 'bold', color: '#000' },
   scrollContainer: {
     padding: 20,
     flexGrow: 1,
     justifyContent: 'center',
   },
 
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
-    textAlign: 'center',
-  },
+
   detailsContainer: {
     backgroundColor: '#fff',
     borderRadius: 10,
