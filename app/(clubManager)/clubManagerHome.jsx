@@ -40,12 +40,7 @@ const Home = () => {
                                 </TouchableOpacity>
 
                                 <View style={styles.buttonsContainer}>
-                                    <TouchableOpacity
-                                        onPress={() => router.push('/assignSecurityPersonnel')}
-                                        style={styles.button}
-                                    >
-                                        <Text style={styles.buttonText}>Select number of Personnel</Text>
-                                    </TouchableOpacity>
+
                                     <TouchableOpacity
                                         onPress={() => router.push('/clubManagerPayments')}
                                         style={styles.button}
