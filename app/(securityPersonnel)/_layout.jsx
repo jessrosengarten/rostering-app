@@ -3,6 +3,8 @@ import { View, Text, Image } from 'react-native';
 import { Tabs } from 'expo-router';
 import { icons, images } from '../../constants';
 import CustomHeader from '../../components/CustomHeader'
+import { useRoute } from '@react-navigation/native';
+
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
@@ -21,7 +23,10 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const SecurityPersonnelLayout = () => {
-    const username = "Jason"; // Replace with the actual username
+    //const username = "Jason"; // Replace with the actual username
+    const route = useRoute();
+    //Sets personnelName when user logs in
+    const { personnelName } = route.params || {}; 
     const userPhoto = images.naraLogo; // Replace with the actual user photo URL
     return (
         <Tabs
@@ -38,7 +43,7 @@ const SecurityPersonnelLayout = () => {
                     height: 90,
                 },
 
-                header: () => <CustomHeader username={username} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
+                header: () => <CustomHeader username={personnelName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
             }}
         >
             <Tabs.Screen

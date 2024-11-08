@@ -2,6 +2,8 @@ import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-nati
 import { Tabs, Redirect, useNavigation } from 'expo-router'
 import { icons, images } from '../../constants'
 import CustomHeader from '../../components/CustomHeader'
+import { useRoute } from '@react-navigation/native';
+
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
@@ -21,7 +23,10 @@ const TabIcon = ({ icon, color, name, focused }) => {
 }
 
 const ClubManagerLayout = () => {
-    const username = "Jason"; // Replace with the actual username
+    //const username = "Jason"; // Replace with the actual username
+    const route = useRoute();
+    //Sets managerName when user logs in
+    const { managerName } = route.params || {};
     const userPhoto = images.naraLogo; // Replace with the actual user photo URL
 
     return (
@@ -39,7 +44,7 @@ const ClubManagerLayout = () => {
                         borderBottomColor: '#d3d3d3',
                         height: 90,
                     },
-                    header: () => <CustomHeader username={username} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"}  />, // Use the custom header component
+                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"}  />, // Use the custom header component
                 }}
             >
                 <Tabs.Screen

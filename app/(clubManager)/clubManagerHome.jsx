@@ -1,24 +1,38 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
-import { router } from 'expo-router';
-import React from 'react'
+import { router, useRouter } from 'expo-router';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
+import { fetchClubsByManager } from '../../Backend/clubManager'
+import { useRoute } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window')
 
-// Dummy data
-const clubs = [
-    { name: 'Omnia', logo: (images.omnia) },
-    { name: 'Jail Night Club', logo: (images.jail) },
-    { name: 'Oasis Disco Bar', logo: (images.oasis) },
-    { name: 'Neon Night Club', logo: (images.neon) },
-  ];
+const clubManagerHome = () => {
 
-  const home = () => {
+    const [clubs, setClubs] = useState([]);
     const navigation = useNavigation();
+    const route = useRoute();
+
+    // Extract managerName from router's query parameters
+    const { managerName } = route.params;
+    useEffect(() => {
+        const loadClubs = async () => {
+            try {
+                const fetchedClubs = await fetchClubsByManager(managerName);
+                setClubs(Object.keys(fetchedClubs).map(clubName => ({
+                    name: clubName,
+                    logo: images.neon // we have to change...
+                })));
+            } catch (error) {
+                console.error("Error fetching clubs:", error);
+            }
+        };
+        loadClubs();
+    }, [managerName]);
 
     return (
         <SafeAreaView edges={[]}>
@@ -40,30 +54,30 @@ const clubs = [
 
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity
-                                        onPress={() => { router.push('/assignSecurityPersonnel'); }} 
+                                        onPress={() => router.push(`assignSecurityPersonnel?clubName=${encodeURIComponent(club.name)}`)}
                                         style={styles.button}
                                     >
                                         <Text style={styles.buttonText}>Select number of Personnel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                         onPress={() => { router.push('/clubManagerPayments'); }} 
+                                        onPress={() => { router.push('/clubManagerPayments'); }}
                                         style={styles.button}
                                     >
                                         <Text style={styles.buttonText}>Payments</Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
-                                         onPress={() => { router.push('/schedule'); }} 
+                                        onPress={() => { router.push('/schedule'); }}
                                         style={styles.button}
                                     >
                                         <Text style={styles.buttonText}>Schedule</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-  onPress={() => navigation.navigate('clubDetails', { club })} // Pass club data here
-  style={styles.button}
->
-  <Text style={styles.buttonText}>Club Info</Text>
-</TouchableOpacity>
+                                        onPress={() => navigation.navigate('clubDetails', { club })} // Pass club data here
+                                        style={styles.button}
+                                    >
+                                        <Text style={styles.buttonText}>Club Info</Text>
+                                    </TouchableOpacity>
 
                                 </View>
                             </View>
@@ -124,7 +138,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 
-     buttonsContainer: {
+    buttonsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap', // Enable wrapping to create two rows
         justifyContent: 'space-between',
@@ -144,7 +158,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: 'center',
     },
-     button: {
+    button: {
         backgroundColor: '#E21A1A',
         paddingVertical: 12,
         paddingHorizontal: 20,
@@ -160,5 +174,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default home;
+export default clubManagerHome;
 
