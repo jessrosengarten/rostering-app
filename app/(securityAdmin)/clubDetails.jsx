@@ -5,6 +5,7 @@ import { images } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import commonStyles from '../../components/Styles';
+import { router, useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
@@ -72,7 +73,7 @@ const ClubDetails = () => {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('assignPersonnelManagement')}
+              onPress={() => router.push(`assignPersonnelManagement?clubName=${encodeURIComponent(club.name)}`)}
             >
               <Text style={styles.buttonText}>Assign Personnel</Text>
             </TouchableOpacity>

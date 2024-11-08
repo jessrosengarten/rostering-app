@@ -1,43 +1,43 @@
 import React, { useState, useEffect } from 'react'; // Ensure useState and useEffect are imported from React
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { images } from "../../constants";
+import { fetchPersonnelNeeded } from '../../Backend/securityAdmin';
 
 const AssignPersonnelManagement = () => {
+  const [schedule, setSchedule] = useState([]);
+  const route = useRoute();
+  const { clubName } = route.params || {};
   const navigation = useNavigation();
 
-  // Dynamic state for clubs and schedules
-  const [clubs, setClubs] = useState([]); // Initialize clubs state
-  const [schedule, setSchedule] = useState([]); // Initialize schedule state
-
-  // Dummy club data
-  const club = { name: 'Neon Night Club', address: '123 Main St', manager: 'John Doe', contact: '0123456789' };
-
-  // Populate schedule data
   useEffect(() => {
-    // Simulate fetching data by setting schedule state with sample data
-    const dummySchedule = [
-      { day: 'Thursday', personnel: 5 },
-      { day: 'Friday', personnel: 8 },
-      { day: 'Saturday', personnel: 12 },
-      { day: 'Sunday', personnel: 3 },
-    ];
-    setSchedule(dummySchedule);
-  }, []); // Run only once when the component mounts
+    const fetchSchedule = async () => {
+      try {
+        const fetchedSchedule = await fetchPersonnelNeeded(clubName);
+        setSchedule(fetchedSchedule);
+      } catch (error) {
+        console.error('Error fetching schedule:', error);
+      }
+    };
 
-  const handleAssignPress = (day, personnelCount) => {
-    navigation.navigate('assignSpecificPersonnel', { day, personnelCount, club });
+    fetchSchedule();
+  }, [clubName]);
+
+  const handleAssignPress = (week, day, personnelCount, openingTime) => {
+    navigation.navigate('assignSpecificPersonnel', { week, day, personnelCount, clubName, startTime: openingTime });
   };
 
   const renderScheduleItem = (item) => (
-    <View style={styles.scheduleItem}>
+    <View style={styles.scheduleItem} key={`${item.week}-${item.day}`}>
       <View style={styles.shiftBox}>
         <View style={styles.textContainer}>
           <Text style={styles.dayText}>{item.day}:</Text>
-          <Text style={styles.personnelText}>{item.personnel} Security Personnel</Text>
+          <Text style={styles.personnelText}>{item.personnelNum} Security Personnel</Text>
+          <Text>Week: {item.week}</Text>
+          <Text>Opening Time: {item.openingTime}</Text>
         </View>
-        <TouchableOpacity style={styles.assignButton} onPress={() => handleAssignPress(item.day, item.personnel)}>
+        <TouchableOpacity style={styles.assignButton} onPress={() => handleAssignPress(item.week, item.day, item.personnelNum, item.openingTime)}>
           <Text style={styles.assignButtonText}>Assign</Text>
         </TouchableOpacity>
       </View>
@@ -48,7 +48,7 @@ const AssignPersonnelManagement = () => {
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className="h-full w-full">
         <View style={styles.header}>
-          <Text style={styles.headerText}>Assign Personnel: {club.name}</Text>
+          <Text style={styles.headerText}>Assign Personnel: {clubName}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.scheduleContainer}>

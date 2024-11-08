@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import { images } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
+import { fetchSecurityPersonnelFullNames, assignPersonnelToShift } from '../../Backend/securityAdmin';
 
 const Assign = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { day, personnelCount, club } = route.params;
+  const { day, personnelCount, clubName, week, startTime } = route.params;
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
   const [assignedPersonnel, setAssignedPersonnel] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [clubSchedule, setClubSchedule] = useState({});
+  const [personnelOptions, setPersonnelOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchPersonnel = async () => {
+      try {
+        const fullNames = await fetchSecurityPersonnelFullNames();
+        setPersonnelOptions(fullNames.map(name => ({ label: name, value: name })));
+      } catch (error) {
+        console.error('Error fetching security personnel:', error);
+      }
+    };
+
+    fetchPersonnel();
+  }, []);
 
   const handlePersonnelChange = (value, index) => {
     if (value) {
@@ -31,15 +46,23 @@ const Assign = () => {
     }
   };
 
-  const handleAssign = () => {
+  const handleAssign = async () => {
     if (selectedPersonnel.includes('')) {
       Alert.alert("Incomplete Assignment", "Please assign a person for each spot before proceeding.", [{ text: "OK" }]);
     } else {
-      setClubSchedule((prev) => ({
-        ...prev,
-        [day]: selectedPersonnel,
-      }));
-      setModalVisible(true);
+      try {
+        for (const fullName of selectedPersonnel) {
+          await assignPersonnelToShift(fullName, clubName, week, day, startTime);
+        }
+        setClubSchedule((prev) => ({
+          ...prev,
+          [day]: selectedPersonnel,
+        }));
+        setModalVisible(true);
+      } catch (error) {
+        console.error('Error assigning personnel to shift:', error);
+        Alert.alert("Error", "There was an error assigning personnel to the shift. Please try again.", [{ text: "OK" }]);
+      }
     }
   };
 
@@ -68,16 +91,7 @@ const Assign = () => {
                 <View style={styles.pickerWrapper}>
                   <RNPickerSelect
                     onValueChange={(value) => handlePersonnelChange(value, index)}
-                    items={[
-                      { label: 'Shan', value: 'Shan' },
-                      { label: 'Rudolf', value: 'Rudolf' },
-                      { label: 'Dagan', value: 'Dagan' },
-                      { label: 'Jess', value: 'Jess' },
-                      { label: 'Shan 2', value: 'Shan 2' },
-                      { label: 'Rudolf 2', value: 'Rudolf 2' },
-                      { label: 'Dagan 2', value: 'Dagan 2' },
-                      { label: 'Jess 2', value: 'Jess 2' },
-                    ].filter((person) => !assignedPersonnel.includes(person.value))}
+                    items={personnelOptions.filter((person) => !assignedPersonnel.includes(person.value))}
                     placeholder={{ label: 'Select a person...', value: null }}
                     style={pickerSelectStyles}
                   />
@@ -97,7 +111,7 @@ const Assign = () => {
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.modalText}>
-                Personnel successfully assigned for {day} at {club.name}.
+                Personnel successfully assigned for {day} at {clubName}.
               </Text>
               <View style={styles.modalButtonsContainer}>
                 <TouchableOpacity style={styles.modalButton} onPress={handleViewSchedule}>
@@ -114,8 +128,6 @@ const Assign = () => {
     </SafeAreaView>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
