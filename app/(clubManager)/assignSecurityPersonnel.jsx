@@ -10,21 +10,30 @@ const AssignSecurityPersonnel = () => {
     const { clubName } = route.params;
 
     // Function to get the date range for the next week
-    const getWeekRange = (date = new Date()) => {
+      function getWeekRange(date = new Date()) {
+        const currentDate = new Date(date);
+    
         const startOfWeekDay = 1; // Monday
-        const startOfNextWeek = new Date(date);
-        startOfNextWeek.setDate(date.getDate() - ((date.getDay() + 6) % 7 - startOfWeekDay) + 7);
+        const currentDay = currentDate.getDay();
+    
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+    
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+    
+       const formatDate = (date) => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+        };
 
-        return Array.from({ length: 7 }, (_, i) => {
-            const day = new Date(startOfNextWeek);
-            day.setDate(day.getDate() + i);
-            return day.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-            });
-        });
-    };
+        const startFormatted = formatDate(startOfWeek);
+        const endFormatted = formatDate(endOfWeek);
+    
+        return `${startFormatted} to ${endFormatted}`;
+    }
 
     const weekDates = getWeekRange();
 
@@ -50,10 +59,10 @@ const AssignSecurityPersonnel = () => {
 
     const [assignedDays, setAssignedDays] = useState({
         Monday: false,
-        Tuesday: true,  // Example: Tuesday is pre-assigned
+        Tuesday: false, 
         Wednesday: false,
         Thursday: false,
-        Friday: true,   // Example: Friday is pre-assigned
+        Friday: false,  
         Saturday: false,
         Sunday: false,
     });
