@@ -9,23 +9,21 @@ import CustomButton from '../../components/CustomButton';
 import { fetchClubsByManager } from '../../Backend/clubManager'
 import { useRoute } from '@react-navigation/native';
 
-
 const { width, height } = Dimensions.get('window');
-
 
 const clubManagerHome = () => {
     const [clubs, setClubs] = useState([]);
     const navigation = useNavigation();
     const route = useRoute();
-
-    // Extract managerName from router's query parameters
     const { managerName } = route.params;
+
     useEffect(() => {
         const loadClubs = async () => {
             try {
                 const fetchedClubs = await fetchClubsByManager(managerName);
                 setClubs(Object.keys(fetchedClubs).map(clubName => ({
                     name: clubName,
+                    ...fetchedClubs[clubName],
                     logo: images.neon // we have to change...
                 })));
             } catch (error) {
@@ -40,6 +38,7 @@ const clubManagerHome = () => {
             <ImageBackground source={images.background} style={styles.background}>
                 {/* List of clubs header */}
                 <View style={styles.header}>
+                    <Text>Welcome, Manager: {managerName}</Text>
                     <Text style={styles.headerText}>List of Clubs</Text>
                 </View>
 
@@ -50,8 +49,7 @@ const clubManagerHome = () => {
                             <View key={index} style={styles.clubItem}>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('clubDetails', { club })} 
-                                    style={styles.clubInfo}
-                                >
+                                    style={styles.clubInfo}>
                                     <Image source={club.logo} style={styles.clubLogo} />
                                     <Text style={styles.clubName}>{club.name}</Text>
                                 </TouchableOpacity>
@@ -60,14 +58,12 @@ const clubManagerHome = () => {
 
                                     <TouchableOpacity
                                         onPress={() => router.push(`assignSecurityPersonnel?clubName=${encodeURIComponent(club.name)}`)}
-                                        style={styles.button}
-                                    >
+                                        style={styles.button}>
                                         <Text style={styles.buttonText}>Select number of Personnel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-
-                                        onPress={() => router.push('/clubManagerPayments')}
-                                        style={styles.button}
+                                    onPress={() => navigation.navigate('ClubManagerPayments', { clubName: club.name })}
+                                    style={styles.button}
                                     >
                                         <Text style={styles.buttonText}>Payments</Text>
                                     </TouchableOpacity>
@@ -76,13 +72,6 @@ const clubManagerHome = () => {
                                         style={styles.button}
                                     >
                                         <Text style={styles.buttonText}>Schedule</Text>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        onPress={() => navigation.navigate('clubDetails', { club })} // Pass club data here
-                                        style={styles.button}
-                                    >
-                                        <Text style={styles.buttonText}>Club Info</Text>
                                     </TouchableOpacity>
 
                                 </View>
