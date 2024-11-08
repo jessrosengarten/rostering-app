@@ -1,22 +1,39 @@
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { images } from '../../constants';
+import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
+import { router, useRouter } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { images } from '../../constants'
+import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CustomButton from '../../components/CustomButton';
+import { fetchClubsByManager } from '../../Backend/clubManager'
+import { useRoute } from '@react-navigation/native';
+
 
 const { width, height } = Dimensions.get('window');
 
-// Dummy data
-const clubs = [
-    { name: 'Omnia', logo: images.omnia },
-    { name: 'Jail Night Club', logo: images.jail },
-    { name: 'Oasis Disco Bar', logo: images.oasis },
-    { name: 'Neon Night Club', logo: images.neon },
-];
 
-const Home = () => {
+const clubManagerHome = () => {
+    const [clubs, setClubs] = useState([]);
     const navigation = useNavigation();
+    const route = useRoute();
+
+    // Extract managerName from router's query parameters
+    const { managerName } = route.params;
+    useEffect(() => {
+        const loadClubs = async () => {
+            try {
+                const fetchedClubs = await fetchClubsByManager(managerName);
+                setClubs(Object.keys(fetchedClubs).map(clubName => ({
+                    name: clubName,
+                    logo: images.neon // we have to change...
+                })));
+            } catch (error) {
+                console.error("Error fetching clubs:", error);
+            }
+        };
+        loadClubs();
+    }, [managerName]);
 
     return (
         <SafeAreaView edges={[]}>
@@ -42,6 +59,13 @@ const Home = () => {
                                 <View style={styles.buttonsContainer}>
 
                                     <TouchableOpacity
+                                        onPress={() => router.push(`assignSecurityPersonnel?clubName=${encodeURIComponent(club.name)}`)}
+                                        style={styles.button}
+                                    >
+                                        <Text style={styles.buttonText}>Select number of Personnel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+
                                         onPress={() => router.push('/clubManagerPayments')}
                                         style={styles.button}
                                     >
@@ -52,6 +76,13 @@ const Home = () => {
                                         style={styles.button}
                                     >
                                         <Text style={styles.buttonText}>Schedule</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('clubDetails', { club })} // Pass club data here
+                                        style={styles.button}
+                                    >
+                                        <Text style={styles.buttonText}>Club Info</Text>
                                     </TouchableOpacity>
 
                                 </View>
@@ -122,7 +153,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 5,
-        width: '48%',
+        width: '48%', // Take half the width of the container
         alignItems: 'center',
         marginBottom: 10,
     },
@@ -133,4 +164,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Home;
+export default clubManagerHome;
+
