@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Switch, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
 
 const Schedule = () => {
   const [attendance, setAttendance] = useState({});
+  const navigation = useNavigation();
 
   const toggleAttendance = (week, day, bouncer) => {
     setAttendance((prevAttendance) => ({
@@ -26,7 +28,6 @@ const Schedule = () => {
         Monday: ['Shan', 'Rudolf', 'Dagan'],
         Tuesday: ['Jess', 'Shan'],
         Wednesday: ['Dagan', 'Rudolf'],
-        // Add other days here...
       },
     },
     futureWeek: {
@@ -35,7 +36,6 @@ const Schedule = () => {
         Monday: ['Jess', 'Shan'],
         Tuesday: ['Rudolf', 'Dagan'],
         Wednesday: ['Jess'],
-        // Add other days here...
       },
     },
   };
@@ -49,8 +49,19 @@ const Schedule = () => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {Object.entries(weekData).map(([week, data]) => (
             <View key={week} style={styles.weekContainer}>
-              <Text style={styles.weekHeading}>{week === 'currentWeek' ? 'Current Week' : 'Future Week'}</Text>
+              <Text style={styles.weekHeading}>{week === 'currentWeek' ? 'Current Week' : 'Next Week'}</Text>
               <Text style={styles.dateRange}>{data.dates}</Text>
+
+              {/* Conditional "Assign" button for "Next Week" */}
+             {week === 'futureWeek' && (
+  <TouchableOpacity
+    style={styles.assignButton}
+    onPress={() => navigation.navigate('assignSecurityPersonnel', { clubName: 'Club XYZ' })} // UPDATE THIS
+  >
+    <Text style={styles.assignButtonText}>Assign</Text>
+  </TouchableOpacity>
+)}
+
               {Object.entries(data.shifts).map(([day, bouncers]) => (
                 <View key={day} style={styles.dayContainer}>
                   <Text style={styles.dayHeading}>{day}</Text>
@@ -94,6 +105,19 @@ const styles = StyleSheet.create({
   },
   weekHeading: { fontSize: 20, fontWeight: 'bold', color: '#E21A1A', marginBottom: 5 },
   dateRange: { fontSize: 16, color: '#555', marginBottom: 15 },
+
+  assignButton: {
+    backgroundColor: '#E21A1A',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  assignButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 
   dayContainer: {
     backgroundColor: '#f7f7f7',

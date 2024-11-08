@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
@@ -7,35 +7,26 @@ import { addPersonnelNeeded } from '../../Backend/clubManager';
 
 const AssignSecurityPersonnel = () => {
     const route = useRoute();
-    const { clubName } = route.params; 
-    const weekRange = getWeekRange();
+    const { clubName } = route.params;
 
-    console.log("Selected Club:", clubName);
-
-    function getWeekRange(date = new Date()) {
-        const currentDate = new Date(date);
-    
+    // Function to get the date range for the next week
+    const getWeekRange = (date = new Date()) => {
         const startOfWeekDay = 1; // Monday
-        const currentDay = currentDate.getDay();
-    
-        const startOfWeek = new Date(currentDate);
-        startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
-    
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-    
-       const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-        };
+        const startOfNextWeek = new Date(date);
+        startOfNextWeek.setDate(date.getDate() - ((date.getDay() + 6) % 7 - startOfWeekDay) + 7);
 
-        const startFormatted = formatDate(startOfWeek);
-        const endFormatted = formatDate(endOfWeek);
-    
-        return `${startFormatted} to ${endFormatted}`;
-    }
+        return Array.from({ length: 7 }, (_, i) => {
+            const day = new Date(startOfNextWeek);
+            day.setDate(day.getDate() + i);
+            return day.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            });
+        });
+    };
+
+    const weekDates = getWeekRange();
 
     const [isClubOpen, setIsClubOpen] = useState({
         Monday: false,
@@ -44,7 +35,7 @@ const AssignSecurityPersonnel = () => {
         Thursday: false,
         Friday: false,
         Saturday: false,
-        Sunday: false
+        Sunday: false,
     });
 
     const [personnelCount, setPersonnelCount] = useState({
@@ -57,33 +48,38 @@ const AssignSecurityPersonnel = () => {
         Sunday: ''
     });
 
+    const [assignedDays, setAssignedDays] = useState({
+        Monday: false,
+        Tuesday: true,  // Example: Tuesday is pre-assigned
+        Wednesday: false,
+        Thursday: false,
+        Friday: true,   // Example: Friday is pre-assigned
+        Saturday: false,
+        Sunday: false,
+    });
+
     const toggleSwitch = (day) => {
-        setIsClubOpen(prevState => ({
+        setIsClubOpen((prevState) => ({
             ...prevState,
             [day]: !prevState[day]
         }));
     };
 
     const handlePersonnelChange = (day, value) => {
-        setPersonnelCount(prevState => ({
+        setPersonnelCount((prevState) => ({
             ...prevState,
             [day]: value
         }));
     };
 
     const handleAssign = async () => {
-        const week = weekRange; 
-
         try {
             for (const day of Object.keys(isClubOpen)) {
                 if (isClubOpen[day] && personnelCount[day]) {
-                    await addPersonnelNeeded(clubName, week, day, parseInt(personnelCount[day]));
+                    await addPersonnelNeeded(clubName, weekDates, day, parseInt(personnelCount[day]));
                 }
             }
-            const Success= addPersonnelNeeded
-                if(Success!=null){
-                    alert("Personnel requirements assigned successfully!");
-                }
+            alert("Personnel requirements assigned successfully!");
         } catch (error) {
             console.error("Error assigning personnel:", error);
             alert("Failed to assign personnel requirements.");
@@ -93,40 +89,42 @@ const AssignSecurityPersonnel = () => {
     return (
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
-                {/* Semi-transparent header */}
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Personnel Needed</Text>
                 </View>
 
                 <ScrollView contentContainerStyle={{ padding: 20 }}>
-                  <View style={styles.daysContainer}> 
-                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
-                        <View key={index} style={styles.dayContainer}>
-                            <Text style={styles.dayText}>{day}</Text>
-                            <View style={styles.switchContainer}>
+                    <View style={styles.daysContainer}>
+                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
+                            <View key={index} style={[
+                                styles.dayContainer, 
+                                assignedDays[day] && styles.disabledDayContainer
+                            ]}>
+                                <View style={styles.dayLabelContainer}>
+                                    <Text style={styles.dayText}>{day}</Text>
+                                    <Text style={styles.dateText}>{weekDates[index]}</Text>
+                                </View>
                                 <Switch
                                     value={isClubOpen[day]}
                                     onValueChange={() => toggleSwitch(day)}
+                                    style={styles.switch}
+                                    disabled={assignedDays[day]}
                                 />
-                            </View>
-                            <View style={styles.inputContainer}>
                                 <TextInput
-                                style={styles.input}
-                                placeholder="No. of Personnel"
-                                editable={isClubOpen[day]} // Only editable if the switch is on
-                                keyboardType="numeric"
-                                value={personnelCount[day]} // Bind the input value to the state
-                                onChangeText={(value) => handlePersonnelChange(day, value)} // Handle input change
+                                    style={[styles.input, assignedDays[day] && styles.disabledInput]}
+                                    placeholder="No. of Personnel"
+                                    editable={isClubOpen[day] && !assignedDays[day]}
+                                    keyboardType="numeric"
+                                    value={personnelCount[day]}
+                                    onChangeText={(value) => handlePersonnelChange(day, value)}
                                 />
                             </View>
-                        </View>
-                    ))}
+                        ))}
 
-                    {/* Assign Button */}
-                    <TouchableOpacity style={styles.assignButton} onPress={handleAssign}>
-                        <Text style={styles.assignButtonText}>Assign</Text>
+                        <TouchableOpacity style={styles.assignButton} onPress={handleAssign}>
+                            <Text style={styles.assignButtonText}>Assign</Text>
                         </TouchableOpacity>
-                  </View>
+                    </View>
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
@@ -134,20 +132,6 @@ const AssignSecurityPersonnel = () => {
 };
 
 const styles = StyleSheet.create({
-    daysContainer: {
-        padding: 20, 
-        backgroundColor: 'rgba(255, 255, 255, 255)', 
-        borderRadius: 10, 
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3, 
-        marginBottom: 20,
-    },
-    container: {
-        flex: 1,
-    },
     background: {
         height: '100%',
         width: '100%',
@@ -156,7 +140,6 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        alignItems: 'left',
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
     },
@@ -165,53 +148,62 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
     },
-
-    clubName: {
-        textAlign: 'center',
-        fontSize: 22,
-        color: '#E21A1A',
-        marginVertical: 20,
+    daysContainer: {
+        padding: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     dayContainer: {
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        marginBottom: 20, 
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    dayLabelContainer: {
+        width: 90,
+        alignItems: 'center',
     },
     dayText: {
-        fontSize: 18,
-        color: 'black',
-        fontWeight: 'bold',
-        width: 105, 
-    },
-    switchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: 80, 
-    },
-    label: {
-        marginRight: 10,
         fontSize: 16,
+        color: '#000',
+        fontWeight: 'bold',
     },
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1, 
+    dateText: {
+        fontSize: 14,
+        color: '#666',
+    },
+    switch: {
+        marginHorizontal: 10,
     },
     input: {
+        flex: 1,
         borderWidth: 1,
         borderColor: '#d3d3d3',
         padding: 10,
-        width: 150,
         textAlign: 'center',
         borderRadius: 5,
+        backgroundColor: '#fff',
     },
-    
+    disabledDayContainer: {
+        backgroundColor: '#f0f0f0',
+        opacity: 0.6,
+        borderRadius: 5,
+        padding: 10,
+    },
+    disabledInput: {
+        backgroundColor: '#e0e0e0',
+        color: '#888',
+    },
     assignButton: {
         backgroundColor: '#E21A1A',
         padding: 15,
-        margin: 20,
         alignItems: 'center',
         borderRadius: 5,
+        marginTop: 20,
     },
     assignButtonText: {
         color: 'white',
