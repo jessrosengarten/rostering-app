@@ -35,9 +35,7 @@ export const getSchedule= async(clubName, week) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, `Clubs/${clubName}/Shifts/${week}`));
   if (snapshot.exists()) {
-    const schedule = snapshot.val();
-    const scheduleList = Object.keys(schedule);
-    return scheduleList;
+    return snapshot.val();
   } else {
     return [];
   }
