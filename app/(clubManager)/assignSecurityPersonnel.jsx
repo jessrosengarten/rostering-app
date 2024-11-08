@@ -9,33 +9,32 @@ const AssignSecurityPersonnel = () => {
     const route = useRoute();
     const { club } = route.params;
 
-    // Function to get the date range for the next week
-      function getWeekRange(date = new Date()) {
-        const currentDate = new Date(date);
-    
-        const startOfWeekDay = 1; // Monday
-        const currentDay = currentDate.getDay();
-    
-        const startOfWeek = new Date(currentDate);
-        startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
-    
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-    
-       const formatDate = (date) => {
+    // fucntion to get the next weeks range
+    function getNextWeekRange(date = new Date()) {
+    const currentDate = new Date(date);
+
+    const startOfWeekDay = 1; // Monday
+    const currentDay = currentDate.getDay();
+
+    const startOfNextWeek = new Date(currentDate);
+    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+
+    const endOfNextWeek = new Date(startOfNextWeek);
+    endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+
+    const formatDate = (date) => {
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
-        };
+    };
 
-        const startFormatted = formatDate(startOfWeek);
-        const endFormatted = formatDate(endOfWeek);
-    
-        return `${startFormatted} to ${endFormatted}`;
-    }
+    const startFormatted = formatDate(startOfNextWeek);
+    const endFormatted = formatDate(endOfNextWeek);
 
-    const weekDates = getWeekRange();
+    return `${startFormatted} to ${endFormatted}`;
+}
+    const weekDates = getNextWeekRange();
 
     const [isClubOpen, setIsClubOpen] = useState({
         Monday: false,
@@ -88,7 +87,39 @@ const AssignSecurityPersonnel = () => {
                     await addPersonnelNeeded(club.name, weekDates, day, parseInt(personnelCount[day]));
                 }
             }
+
             alert("Personnel requirements assigned successfully!");
+
+            // clearing fields:
+            setIsClubOpen({
+            Monday: false,
+            Tuesday: false,
+            Wednesday: false,
+            Thursday: false,
+            Friday: false,
+            Saturday: false,
+            Sunday: false,
+        });
+
+        setPersonnelCount({
+            Monday: '',
+            Tuesday: '',
+            Wednesday: '',
+            Thursday: '',
+            Friday: '',
+            Saturday: '',
+            Sunday: ''
+        });
+
+        setAssignedDays({
+            Monday: false,
+            Tuesday: false, 
+            Wednesday: false,
+            Thursday: false,
+            Friday: false,  
+            Saturday: false,
+            Sunday: false,
+        });
         } catch (error) {
             console.error("Error assigning personnel:", error);
             alert("Failed to assign personnel requirements.");
