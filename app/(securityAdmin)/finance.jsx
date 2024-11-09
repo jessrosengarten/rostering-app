@@ -43,10 +43,6 @@ const Finance = () => {
 
             {showSection === 'clubPayments' && (
               <View style={styles.extraInfo}>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
-                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
                 <View style={styles.row}>
@@ -60,6 +56,10 @@ const Finance = () => {
                 <View style={styles.row}>
                   <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
                   <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
                 </View>
               </View>
             )}
@@ -81,10 +81,6 @@ const Finance = () => {
 
             {showSection === 'allClubsPayments' && (
               <View style={styles.extraInfo}>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
-                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
                 <View style={styles.row}>
@@ -98,6 +94,10 @@ const Finance = () => {
                 <View style={styles.row}>
                   <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
                   <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
                 </View>
               </View>
             )}
@@ -119,10 +119,6 @@ const Finance = () => {
 
             {showSection === 'bouncersPayments' && (
               <View style={styles.extraInfo}>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Payments:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
-                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
                 <View style={styles.row}>
@@ -136,6 +132,10 @@ const Finance = () => {
                 <View style={styles.row}>
                   <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
                   <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Payments:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
                 </View>
               </View>
             )}
@@ -157,10 +157,6 @@ const Finance = () => {
 
             {showSection === 'profit' && (
               <View style={styles.extraInfo}>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Profit:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
-                </View>
                 {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
                 <View style={styles.row}>
@@ -174,6 +170,10 @@ const Finance = () => {
                 <View style={styles.row}>
                   <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
                   <Text style={styles.summaryTextData}>200</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Profit:</Text>
+                  <Text style={styles.summaryTextData}>600</Text>
                 </View>
               </View>
             )}
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     marginTop: 30,
-    marginHorizontal: 15,
+    marginHorizontal: 40,
   },
   button: {
     marginVertical: 10,

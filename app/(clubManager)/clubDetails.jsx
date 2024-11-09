@@ -101,6 +101,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  buttonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  }, 
+
   button: {
         backgroundColor: '#E21A1A',
         paddingVertical: 12,

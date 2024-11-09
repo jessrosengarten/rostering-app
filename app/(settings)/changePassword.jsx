@@ -83,7 +83,7 @@ const Styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 0,
+        padding: 30,
         marginTop: 0
     },
     card: {
@@ -93,7 +93,8 @@ const Styles = StyleSheet.create({
         elevation: 5,
         marginVertical: 20,
         marginTop: 80,
-        marginBottom: 250
+        marginBottom: 250,
+        backgroundColor: '#fff'
     },
     topTextContainer: {
         position: 'absolute',
@@ -105,8 +106,7 @@ const Styles = StyleSheet.create({
     topText: {
         fontSize: 24, // Adjust the font size as needed
         fontWeight: 'bold',
-        color: 'black', // Adjust the color as needed
-        marginLeft: 20, // Adjust the left margin as needed
+        color: 'black'
     },
     horizontalLine: {
         width: '90%',

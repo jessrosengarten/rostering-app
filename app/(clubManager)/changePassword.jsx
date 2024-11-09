@@ -82,8 +82,11 @@ export default ChangePassword
 const Styles = StyleSheet.create({
 
     scrollContainer: {
-        paddingHorizontal: 20,
-        paddingBottom: 30
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 30,
+        marginTop: 0
     },
 
     card: {
@@ -93,7 +96,8 @@ const Styles = StyleSheet.create({
         elevation: 5,
         marginVertical: 20,
         marginTop: 80,
-        marginBottom: 250
+        marginBottom: 250,
+        backgroundColor: '#fff'
     },
     header: {
         padding: 15,
@@ -110,11 +114,9 @@ const Styles = StyleSheet.create({
         width: '100%'
     },
 
-
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
         color: 'black',
-        marginLeft: 20,
     },
 });
