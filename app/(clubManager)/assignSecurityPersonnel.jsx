@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { useRoute } from '@react-navigation/native';
 import { addPersonnelNeeded } from '../../Backend/clubManager';
 
+const screenWidth = Dimensions.get('window').width;
 const AssignSecurityPersonnel = () => {
     const route = useRoute();
     const { club } = route.params;
@@ -145,6 +146,8 @@ const AssignSecurityPersonnel = () => {
                                     <Text style={styles.dateText}>{weekDates[index]}</Text>
                                 </View>
                                 <Switch
+                                    trackColor={{ false: "#767577", true: "#767577" }}
+                                    thumbColor={isClubOpen[day] ? "#E21A1A" : "#f4f3f4"}
                                     value={isClubOpen[day]}
                                     onValueChange={() => toggleSwitch(day)}
                                     style={styles.switch}
@@ -189,8 +192,8 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     daysContainer: {
-        padding: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        padding: 10,
+        backgroundColor: 'rgba(255, 255, 255, 255)',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -202,9 +205,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        paddingHorizontal: screenWidth < 350 ? 5 : 5,
     },
     dayLabelContainer: {
-        width: 90,
+        width: screenWidth < 350 ? 70 : 90,
         alignItems: 'center',
     },
     dayText: {
@@ -227,6 +231,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         borderRadius: 5,
         backgroundColor: '#fff',
+        padding: screenWidth < 350 ? 8 : 10,
+        fontSize: screenWidth < 350 ? 14 : 16,
     },
     disabledDayContainer: {
         backgroundColor: '#f0f0f0',
@@ -243,7 +249,7 @@ const styles = StyleSheet.create({
         padding: 15,
         alignItems: 'center',
         borderRadius: 5,
-        marginTop: 20,
+        marginTop: 10,
     },
     assignButtonText: {
         color: 'white',
