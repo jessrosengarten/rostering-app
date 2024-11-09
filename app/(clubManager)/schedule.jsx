@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, Switch, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, Alert, TouchableOpacity, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { getSchedule } from '../../Backend/clubManager';
+import { getSchedule,getSecurityPersonnelShifts, addingAttendance } from '../../Backend/clubManager';
 
 const Schedule = () => {
-  const [attendance, setAttendance] = useState({});
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [nextWeekSchedule, setNextWeekSchedule] = useState([]);
+  const [thisWeekPersonnelList, setThisWeekPersonnelList] = useState([]);
+  const [nextWeekPersonnelList, setNextWeekPersonnelList] = useState([]);
   const navigation = useNavigation();
   const route = useRoute();
   const { club } = route.params;
@@ -18,7 +19,12 @@ const Schedule = () => {
 
 
   useEffect(() => {
-    const loadSchedule = async () => {
+    loadPersonnelListNextWeek();
+    loadPersonnelListThisWeek();
+    loadSchedule();
+}, [club.name, thisWeekDates, nextWeekDates]); 
+
+const loadSchedule = async () => {
         try {
             const thisWeekSchedule = await getSchedule(club.name, thisWeekDates);
             const nextWeekSchedule = await getSchedule(club.name, nextWeekDates);
@@ -43,8 +49,27 @@ const Schedule = () => {
         }
     };
 
-    loadSchedule();
-}, [club.name, thisWeekDates, nextWeekDates]); 
+// Function to load personnel data
+const loadPersonnelListThisWeek = async () => {
+  try {
+    const personnelDetails = await getSecurityPersonnelShifts(club.name, thisWeekDates); // Fetch personnel for the club
+    const groupedShifts = groupShiftsByDay(personnelDetails);
+      setThisWeekPersonnelList(groupedShifts);
+  } catch (error) {
+    console.error("Error fetching personnel list:", error);
+  }
+};
+
+// Function to load personnel data
+const loadPersonnelListNextWeek = async () => {
+  try {
+    const personnelDetails = await getSecurityPersonnelShifts(club.name, nextWeekDates); // Fetch personnel for the club
+    const groupedShifts = groupShiftsByDay(personnelDetails);
+      setNextWeekPersonnelList(groupedShifts);
+  } catch (error) {
+    console.error("Error fetching personnel list:", error);
+  }
+};
 
   // Function to get the date range for the week
       function getWeekRange(date = new Date()) {
@@ -72,6 +97,25 @@ const Schedule = () => {
         return `${startFormatted} to ${endFormatted}`;
     }
 
+    // Function to group personnel shifts by day
+  const groupShiftsByDay = (shifts) => {
+    const grouped = {};
+
+    shifts.forEach((person) => {
+      const { day, email, shiftDetails } = person;
+      
+      // If the day is not in the grouped object, initialize it
+      if (!grouped[day]) {
+        grouped[day] = [];
+      }
+      
+      // Add the person to the correct day group
+      grouped[day].push({ email, ...shiftDetails, fullName: person.fullName });
+    });
+
+    return grouped;
+  };
+
     // fucntion to get the next weeks range
     function getNextWeekRange(date = new Date()) {
     const currentDate = new Date(date);
@@ -98,18 +142,48 @@ const Schedule = () => {
     return `${startFormatted} to ${endFormatted}`;
 }
 
-  const toggleAttendance = (week, day, bouncer) => {
-    setAttendance((prevAttendance) => ({
-      ...prevAttendance,
-      [week]: {
-        ...prevAttendance[week],
-        [day]: {
-          ...prevAttendance[week][day],
-          [bouncer]: !prevAttendance[week]?.[day]?.[bouncer],
+const handleAttendanceSubmit = async (name, dateRange, day) => {
+  Alert.alert(
+    'Confirm Attendance',
+    `Are you sure you want to mark ${name.fullName} for ${day}?`,
+    [
+      {
+        text: 'Cancel', 
+        style: 'cancel',
+      },
+      {
+        text: 'Mark as Attended',
+        onPress: async () => {
+          try {
+            const personnelName = name.email.replace(/\./g, ',');
+
+            const status = await addingAttendance(personnelName, dateRange, day, 'Attended');
+            await loadPersonnelListThisWeek(); 
+            console.log("Attendance updated:", status);
+          } catch (error) {
+            console.error("Error updating attendance:", error);
+          }
         },
       },
-    }));
-  };
+      {
+        text: 'Mark as Not Attended',
+        onPress: async () => {
+          try {
+            const personnelName = name.email.replace(/\./g, ',');
+
+            const status = await addingAttendance(personnelName, dateRange, day, 'Not Attended');
+            await loadPersonnelListThisWeek(); 
+            console.log("Attendance updated:", status);
+          } catch (error) {
+            console.error("Error updating attendance:", error);
+          }
+        },
+      },
+    ],
+    { cancelable: false } 
+  );
+};
+
 
   return (
     <SafeAreaView edges={[]}>
@@ -126,13 +200,29 @@ const Schedule = () => {
 
     {/* Display schedule for each day this week */}
     <View style={styles.scrollContainer}>
-      {thisWeekSchedule.map(({ day, shift }) => (
-        <View key={day} style={styles.dayContainer}>
-          <Text style={styles.dayHeading}>{day}</Text>
-          <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
+            {thisWeekSchedule.map(({ day, shift }) => (
+                <View key={day} style={styles.dayContainer}>
+                    <Text style={styles.dayHeading}>{day}</Text>
+                    <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
+                    <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
+
+                    {thisWeekPersonnelList[day] && thisWeekPersonnelList[day].length > 0 ? (
+                        thisWeekPersonnelList[day].map((person) => (
+                            <View key={person.email} style={styles.personContainer}>
+                                <Text style={styles.personName}>{person.fullName}</Text>
+                                <Button
+                                title={person.attendance ? person.attendance === "Attended" ? "Attended" : "Not Attended" : "Mark Attendance" }
+                                disabled={person.attendance === "Attended" || person.attendance === "Not Attended"}
+                                onPress={() => handleAttendanceSubmit(person, thisWeekDates, day)}
+                                />
+                                </View>
+                        ))
+                    ) : (
+                        <Text>No personnel assigned for this day.</Text>
+                    )}
+                </View>
+            ))}
         </View>
-      ))}
-    </View>
   </View>
 
   {/* Display "Next Week" Schedule */}
@@ -146,6 +236,17 @@ const Schedule = () => {
         <View key={day} style={styles.dayContainer}>
           <Text style={styles.dayHeading}>{day}</Text>
           <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
+          <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
+
+                    {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
+                        nextWeekPersonnelList[day].map((person) => (
+                            <View key={person.email} style={styles.personContainer}>
+                                <Text style={styles.personName}>{person.fullName}</Text>
+                            </View>
+                        ))
+                    ) : (
+                        <Text>No personnel assigned for this day.</Text>
+                    )}
         </View>
       ))}
     </View>
@@ -172,6 +273,26 @@ const styles = StyleSheet.create({
   headerText: { fontSize: 20, fontWeight: 'bold', color: '#000' },
 
   scrollContainer: { paddingHorizontal: 20, paddingBottom: 20 },
+
+  personContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center',  
+    marginBottom: 10,      
+  },
+  personName: {
+    flex: 1,               
+    fontSize: 16,          
+  },
+
+  shiftText: {
+    fontSize: 12,  
+    marginBottom: 10,  
+  },
+  sectionHeading: {
+    fontSize: 16, 
+    fontWeight: 'bold',
+    marginBottom: 10,  
+  },
 
   weekContainer: {
     backgroundColor: '#fff',
@@ -206,7 +327,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 5,
   },
-  dayHeading: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+  dayHeading: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
 
   bouncerContainer: {
     flexDirection: 'row',
@@ -218,3 +339,4 @@ const styles = StyleSheet.create({
 });
 
 export default Schedule;
+
