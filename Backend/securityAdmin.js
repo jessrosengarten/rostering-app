@@ -131,3 +131,46 @@ export const assignPersonnelToShift = async (personnelName, clubName, week, day,
     throw error;
   }
 };
+
+export const getSchedule= async(clubName, week) => {
+  const dbRef = ref(db);
+  const snapshot = await get(child(dbRef, `Clubs/${clubName}/Shifts/${week}`));
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return [];
+  }
+};
+
+export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
+  const dbRef = ref(db);
+  const snapshot = await get(child(dbRef, 'securityPersonnel'));
+  const result = [];
+
+  if (snapshot.exists()) {
+    const personnel = snapshot.val();
+    for (const email in personnel) {
+      const shifts = personnel[email].Shifts;
+      if (shifts) {
+        for (const range in shifts) {
+          // Check if the current shift range matches the given dateRange
+          if (range === dateRange) {
+            for (const day in shifts[range]) {
+              const shift = shifts[range][day];
+              if (shift.clubName === clubName) {
+                result.push({
+                  email,
+                  day,
+                  attendance: shift.attendance || '',
+                  ...personnel[email],
+                  shiftDetails: shift
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return result;
+};
