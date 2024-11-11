@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "profile": "Profiel",
+    "language_preferences": "Taalvoorkeure",
+    "notifications": "Kennisgewings",
+    "select_light_dark_mode": "Kies Lig/Donker Modus",
+    "change_password": "Verander Wagwoord",
+    "logout": "Teken uit"
+  }
+}

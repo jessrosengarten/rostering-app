@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "profile": "Profile",
+    "language_preferences": "Language Preferences",
+    "notifications": "Notifications",
+    "select_light_dark_mode": "Select Light/Dark Mode",
+    "change_password": "Change Password",
+    "logout": "Logout"
+  }
+}

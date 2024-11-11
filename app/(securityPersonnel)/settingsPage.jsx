@@ -3,25 +3,26 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
 import { useNavigation } from '@react-navigation/native';
+import { translate, setLocale } from '../../components/i18n';
 
 const Settings = () => {
     const navigation = useNavigation(); // For navigating
 
     // State for toggling switches
-    const [isDarkMode, setIsDarkMode] = useState(false); // Light/Dark mode state
-    const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false); // Notifications switch state
-    const [languageVisible, setLanguageVisible] = useState(false); // State for dropdown visibility
-    const [selectedLanguage, setSelectedLanguage] = useState('English'); // State for selected language
+    const [isDarkMode, setIsDarkMode] = useState(false); 
+    const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
+    const [languageVisible, setLanguageVisible] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState('en');
 
-    const toggleDarkMode = () => setIsDarkMode((prev) => !prev); // Toggle dark mode state
-    const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev); // Toggle notifications state
-
+    const toggleDarkMode = () => setIsDarkMode((prev) => !prev); 
+    const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev); 
     const toggleLanguageDropdown = () => {
-        setLanguageVisible(!languageVisible); // Toggle dropdown visibility
+        setLanguageVisible(!languageVisible); 
     };
 
     const handleLanguageSelect = (language) => {
         setSelectedLanguage(language); // Update selected language
+        setLocale(language); // Set the new locale
         setLanguageVisible(!languageVisible); // Hide dropdown
     };
 
