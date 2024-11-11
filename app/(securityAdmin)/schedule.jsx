@@ -1,41 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
 import { images } from '../../constants';
-import { fetchAllClubs, getSchedule, getSecurityPersonnelShifts, fetchSecurityPersonnelFullNames } from '../../Backend/securityAdmin';
+import { fetchAllClubs, getSchedule, getSecurityPersonnelShifts } from '../../Backend/securityAdmin';
 
 const Schedule = () => {
   const navigation = useNavigation();
-
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [clubs, setClubs] = useState([]);
   const [thisWeekSchedules, setThisWeekSchedules] = useState({});
   const [nextWeekSchedules, setNextWeekSchedules] = useState({});
   const [thisWeekPersonnelLists, setThisWeekPersonnelLists] = useState({});
   const [nextWeekPersonnelLists, setNextWeekPersonnelLists] = useState({});
-  const [originalThisWeekPersonnelLists, setOriginalThisWeekPersonnelLists] = useState({});
-  const [originalNextWeekPersonnelLists, setOriginalNextWeekPersonnelLists] = useState({});
-  const [personnelNames, setPersonnelNames] = useState([]);
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   useEffect(() => {
     loadClubsAndSchedules();
-    fetchPersonnelNames();
   }, [thisWeekDates, nextWeekDates]);
-
-  const fetchPersonnelNames = async () => {
-    try {
-      const names = await fetchSecurityPersonnelFullNames();
-      const items = names.map(name => ({ label: name, value: name }));
-      setPersonnelNames(items);
-    } catch (error) {
-      console.error('Error fetching personnel names:', error);
-    }
-  };
 
   const loadClubsAndSchedules = async () => {
     try {
@@ -75,10 +59,10 @@ const Schedule = () => {
       setNextWeekSchedules(nextWeekSchedules);
       setThisWeekPersonnelLists(thisWeekPersonnelLists);
       setNextWeekPersonnelLists(nextWeekPersonnelLists);
-      setOriginalThisWeekPersonnelLists(thisWeekPersonnelLists);
-      setOriginalNextWeekPersonnelLists(nextWeekPersonnelLists);
     } catch (error) {
       console.error("Error fetching clubs and schedules:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,38 +116,17 @@ const Schedule = () => {
     return `${startFormatted} to ${endFormatted}`;
   };
 
-  // Toggle edit mode
-  const toggleEditMode = () => {
-    if (isEditMode) {
-      setThisWeekPersonnelLists(originalThisWeekPersonnelLists);
-      setNextWeekPersonnelLists(originalNextWeekPersonnelLists);
-    } else {
-      setOriginalThisWeekPersonnelLists(thisWeekPersonnelLists);
-      setOriginalNextWeekPersonnelLists(nextWeekPersonnelLists);
-    }
-    setIsEditMode(!isEditMode);
-  };
 
-  // Handle personnel change
-  const handlePersonnelChange = (clubName, week, day, index, value) => {
-    if (week === 'thisWeek') {
-      setThisWeekPersonnelLists((prevList) => ({
-        ...prevList,
-        [clubName]: {
-          ...prevList[clubName],
-          [day]: prevList[clubName][day].map((person, i) => (i === index ? { ...person, fullName: value } : person)),
-        },
-      }));
-    } else {
-      setNextWeekPersonnelLists((prevList) => ({
-        ...prevList,
-        [clubName]: {
-          ...prevList[clubName],
-          [day]: prevList[clubName][day].map((person, i) => (i === index ? { ...person, fullName: value } : person)),
-        },
-      }));
-    }
-  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <View style={styles.loadingIndicator}>
+          <ActivityIndicator size="large" color="#E21A1A" />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView edges={[]}>
@@ -186,19 +149,9 @@ const Schedule = () => {
                       <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
                       <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
                       {thisWeekPersonnelLists[clubName] && thisWeekPersonnelLists[clubName][day] && thisWeekPersonnelLists[clubName][day].length > 0 ? (
-                        thisWeekPersonnelLists[clubName][day].map((person, i) => (
+                        thisWeekPersonnelLists[clubName][day].map((person) => (
                           <View key={person.email} style={styles.personContainer}>
-                            {isEditMode ? (
-                              <RNPickerSelect
-                                onValueChange={(value) => handlePersonnelChange(clubName, 'thisWeek', day, i, value)}
-                                items={personnelNames}
-                                value={person.fullName}
-                                placeholder={{ label: 'Select a person...', value: null }}
-                                style={pickerSelectStyles}
-                              />
-                            ) : (
-                              <Text style={styles.personName}>{person.fullName}</Text>
-                            )}
+                            <Text style={styles.personName}>{person.fullName}</Text>
                           </View>
                         ))
                       ) : (
@@ -220,19 +173,9 @@ const Schedule = () => {
                       <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
                       <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
                       {nextWeekPersonnelLists[clubName] && nextWeekPersonnelLists[clubName][day] && nextWeekPersonnelLists[clubName][day].length > 0 ? (
-                        nextWeekPersonnelLists[clubName][day].map((person, i) => (
+                        nextWeekPersonnelLists[clubName][day].map((person) => (
                           <View key={person.email} style={styles.personContainer}>
-                            {isEditMode ? (
-                              <RNPickerSelect
-                                onValueChange={(value) => handlePersonnelChange(clubName, 'nextWeek', day, i, value)}
-                                items={personnelNames}
-                                value={person.fullName}
-                                placeholder={{ label: 'Select a person...', value: null }}
-                                style={pickerSelectStyles}
-                              />
-                            ) : (
-                              <Text style={styles.personName}>{person.fullName}</Text>
-                            )}
+                            <Text style={styles.personName}>{person.fullName}</Text>
                           </View>
                         ))
                       ) : (
@@ -255,6 +198,8 @@ const styles = StyleSheet.create({
   header: { padding: 15, backgroundColor: 'rgba(255, 255, 255, 0.7)' },
   headerText: { fontSize: 20, fontWeight: 'bold', color: '#000' },
   scrollContainer: { paddingHorizontal: 20, paddingBottom: 20 },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingIndicator: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 
   clubContainer: {
     marginBottom: 20,
@@ -294,11 +239,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   personName: { fontSize: 14, color: '#333' },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: { fontSize: 16, paddingVertical: 12, paddingHorizontal: 10, borderRadius: 8, color: '#333', backgroundColor: '#F2F2F2' },
-  inputAndroid: { fontSize: 16, paddingVertical: 8, paddingHorizontal: 10, borderRadius: 8, color: '#333', backgroundColor: '#F2F2F2' },
 });
 
 export default Schedule;
