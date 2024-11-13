@@ -44,7 +44,7 @@ const ClubManagerLayout = () => {
                         borderBottomColor: '#d3d3d3',
                         height: 90,
                     },
-                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"}  />, // Use the custom header component
+                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
                 }}
             >
                 <Tabs.Screen
@@ -92,8 +92,24 @@ const ClubManagerLayout = () => {
                         tabBarButton: () => null, // This hides the tab
                     }}
                 />
-                                <Tabs.Screen
+                <Tabs.Screen
                     name="changePassword"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        tabBarButton: () => null, // This hides the tab
+                    }}
+                />
+                <Tabs.Screen
+                    name="clubDetails"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        tabBarButton: () => null, // This hides the tab
+                    }}
+                />
+                <Tabs.Screen
+                    name="schedule"
                     options={{
                         title: '',
                         headerShown: true,
