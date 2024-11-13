@@ -44,7 +44,7 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Select Light/Dark Mode</Text>
                     <View style={styles.switchContainer}>
                         <Switch
-                            trackColor={{ false: "#767577", true: "#767577" }}
+                            trackColor={{ false: "#D3D3D3", true: "#D3D3D3" }}
                             thumbColor={isDarkMode ? "#E21A1A" : "#f4f3f4"}
                             onValueChange={toggleDarkMode} // Toggle switch handler
                             value={isDarkMode} // Bind switch to state
@@ -74,7 +74,7 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Notifications</Text>
                     <View style={styles.switchContainer}>
                         <Switch
-                            trackColor={{ false: "#767577", true: "#767577" }}
+                            trackColor={{ false: "#D3D3D3", true: "#D3D3D3" }}
                             thumbColor={isNotificationsEnabled ? "#E21A1A" : "#f4f3f4"}
                             onValueChange={toggleNotifications} // Toggle handler for Notifications
                             value={isNotificationsEnabled} // Bind value to state

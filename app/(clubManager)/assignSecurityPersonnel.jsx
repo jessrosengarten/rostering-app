@@ -146,7 +146,7 @@ const AssignSecurityPersonnel = () => {
                                     <Text style={styles.dateText}>{weekDates[index]}</Text>
                                 </View>
                                 <Switch
-                                    trackColor={{ false: "#767577", true: "#767577" }}
+                                    trackColor={{ false: "#D3D3D3", true: "#D3D3D3" }}
                                     thumbColor={isClubOpen[day] ? "#E21A1A" : "#f4f3f4"}
                                     value={isClubOpen[day]}
                                     onValueChange={() => toggleSwitch(day)}
@@ -202,9 +202,10 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     dayContainer: {
+        paddingTop: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 12,
         paddingHorizontal: screenWidth < 350 ? 5 : 5,
     },
     dayLabelContainer: {
