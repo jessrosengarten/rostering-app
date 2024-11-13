@@ -55,12 +55,12 @@ const ClubDetails = () => {
             </View>
             <Text style={styles.detailText}>{club.closingTime}</Text>
 
-          <View style={styles.detailRow}>
+            <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" /> 
               <Text style={styles.detailTitle}>Rate:</Text>
             </View>
             <Text style={styles.detailText}>R{club.rate}</Text>
-         </View>
+          </View>
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
   },
-
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
