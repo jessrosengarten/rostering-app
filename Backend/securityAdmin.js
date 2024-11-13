@@ -50,25 +50,37 @@ export const fetchPersonnelNeeded = async (clubName) => {
       console.log('No shifts data available');
       return [];
     }
-    const weeks = shiftsSnapshot.val();
-    const personnelData = [];
+    const shiftsData = shiftsSnapshot.val();
 
-    Object.keys(weeks).forEach(week => {
-      const days = weeks[week];
-      Object.keys(days).forEach(day => {
-        personnelData.push({
+    // Fetch all personnel data once
+    const personnelRef = ref(db, 'securityPersonnel');
+    const personnelSnapshot = await get(personnelRef);
+    if (!personnelSnapshot.exists()) {
+      console.log('No personnel data available');
+      return [];
+    }
+    const personnelData = personnelSnapshot.val();
+
+    // Add the assigned property to each shift
+    const schedule = [];
+    for (const week in shiftsData) {
+      for (const day in shiftsData[week]) {
+        const personnelNum = shiftsData[week][day];
+        const assigned = checkIfAssigned(personnelData, clubName, week, day);
+        schedule.push({
           week,
           day,
-          personnelNum: days[day],
-          openingTime 
+          personnelNum,
+          openingTime,
+          assigned
         });
-      });
-    });
+      }
+    }
 
-    return personnelData;
+    return schedule;
   } catch (error) {
-    console.error('Fetching personnel number error:', error);
-    throw error;
+    console.error('Error fetching personnel needed:', error);
+    return [];
   }
 };
 
@@ -173,4 +185,14 @@ export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
     }
   }
   return result;
+};
+
+export const checkIfAssigned = (personnelData, clubName, week, day) => {
+  for (const userId in personnelData) {
+    const shifts = personnelData[userId].Shifts;
+    if (shifts && shifts[week] && shifts[week][day] && shifts[week][day].clubName === clubName) {
+      return true;
+    }
+  }
+  return false;
 };

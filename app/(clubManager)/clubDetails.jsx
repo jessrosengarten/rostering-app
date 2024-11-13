@@ -54,33 +54,33 @@ const clubDetails = () => {
               <Text style={styles.detailTitle}>Closing Time:</Text>
             </View>
             <Text style={styles.detailText}>{club.closingTime}</Text>
-            
-          <View style={styles.detailRow}>
+
+            <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Club Rate:</Text>
             </View>
             <Text style={styles.detailText}>{club.rate}</Text>
           </View>
-          
+
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
-            onPress={() => navigation.navigate('clubManagerPayments', { club })}
-            style={styles.button}>
+              onPress={() => navigation.navigate('clubManagerPayments', { club })}
+              style={styles.button}>
               <Text style={styles.buttonText}>Payments</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity
-              onPress={() => navigation.navigate('schedule',{ club })}
-              style={styles.button}>
-                <Text style={styles.buttonText}>Schedule</Text>
-                </TouchableOpacity>
+            </TouchableOpacity>
 
-                <TouchableOpacity
-              onPress={() => navigation.navigate('assignSecurityPersonnel',{ club })}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('schedule', { club })}
               style={styles.button}>
-                <Text style={styles.buttonText}>Book schedule</Text>
-                </TouchableOpacity>
-                </View>
+              <Text style={styles.buttonText}>Schedule</Text>
+            </TouchableOpacity>
+
+            {/* <TouchableOpacity
+              onPress={() => navigation.navigate('assignSecurityPersonnel', { club })}
+              style={styles.button}>
+              <Text style={styles.buttonText}>Book schedule</Text>
+            </TouchableOpacity> */}
+          </View>
 
         </ScrollView>
       </ImageBackground>
@@ -106,17 +106,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginTop: 20,
-  }, 
+  },
 
   button: {
-        backgroundColor: '#E21A1A',
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-        width: '48%', // Take half the width of the container
-        alignItems: 'center',
-        marginBottom: 10,
-    },
+    backgroundColor: '#E21A1A',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width: '48%', // Take half the width of the container
+    alignItems: 'center',
+    marginBottom: 10,
+  },
 
     buttonText: {
       color: '#FFF',
