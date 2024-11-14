@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { images } from '../../constants';
 import { fetchAllClubs, getSchedule, getSecurityPersonnelShifts } from '../../Backend/securityAdmin';
 
 const Schedule = () => {
-  const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [clubs, setClubs] = useState([]);
   const [thisWeekSchedules, setThisWeekSchedules] = useState({});

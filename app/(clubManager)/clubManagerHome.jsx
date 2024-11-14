@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '../../constants'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { images } from '../../constants';
 import { TouchableOpacity } from 'react-native';
-import { fetchClubsByManager } from '../../Backend/clubManager'
+import { fetchClubsByManager } from '../../Backend/clubManager';
 
 const { width, height } = Dimensions.get('window');
 
@@ -48,7 +48,6 @@ const clubManagerHome = () => {
                                     <Image source={club.logo} style={styles.clubLogo} />
                                     <Text style={styles.clubName}>{club.name}</Text>
                                 </TouchableOpacity>
-
                             </View>
                         ))}
                     </View>
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     clubItem: {
-        width: '95%', 
+        width: '95%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 1)',
         marginVertical: 10,
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 5,
-        width: '48%', 
+        width: '48%',
         alignItems: 'center',
         marginBottom: 10,
     },
@@ -128,4 +127,3 @@ const styles = StyleSheet.create({
 });
 
 export default clubManagerHome;
-

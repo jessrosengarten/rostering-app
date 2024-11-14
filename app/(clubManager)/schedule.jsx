@@ -7,11 +7,12 @@ import { getSchedule,getSecurityPersonnelShifts, addingAttendance } from '../../
 
 
 const Schedule = () => {
+  const { club: clubParam } = useLocalSearchParams();
+  const club = JSON.parse(decodeURIComponent(clubParam));
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [nextWeekSchedule, setNextWeekSchedule] = useState([]);
   const [thisWeekPersonnelList, setThisWeekPersonnelList] = useState([]);
   const [nextWeekPersonnelList, setNextWeekPersonnelList] = useState([]);
-  const { club } = useLocalSearchParams();
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];

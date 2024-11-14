@@ -11,29 +11,29 @@ const AssignSecurityPersonnel = () => {
 
     // fucntion to get the next weeks range
     function getNextWeekRange(date = new Date()) {
-    const currentDate = new Date(date);
+        const currentDate = new Date(date);
 
-    const startOfWeekDay = 1; // Monday
-    const currentDay = currentDate.getDay();
+        const startOfWeekDay = 1; // Monday
+        const currentDay = currentDate.getDay();
 
-    const startOfNextWeek = new Date(currentDate);
-    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+        const startOfNextWeek = new Date(currentDate);
+        startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
 
-    const endOfNextWeek = new Date(startOfNextWeek);
-    endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+        const endOfNextWeek = new Date(startOfNextWeek);
+        endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
 
-    const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-    };
+        const formatDate = (date) => {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
 
-    const startFormatted = formatDate(startOfNextWeek);
-    const endFormatted = formatDate(endOfNextWeek);
+        const startFormatted = formatDate(startOfNextWeek);
+        const endFormatted = formatDate(endOfNextWeek);
 
-    return `${startFormatted} to ${endFormatted}`;
-}
+        return `${startFormatted} to ${endFormatted}`;
+    }
     const weekDates = getNextWeekRange();
 
     const [isClubOpen, setIsClubOpen] = useState({
@@ -58,10 +58,10 @@ const AssignSecurityPersonnel = () => {
 
     const [assignedDays, setAssignedDays] = useState({
         Monday: false,
-        Tuesday: false, 
+        Tuesday: false,
         Wednesday: false,
         Thursday: false,
-        Friday: false,  
+        Friday: false,
         Saturday: false,
         Sunday: false,
     });
@@ -92,34 +92,34 @@ const AssignSecurityPersonnel = () => {
 
             // clearing fields:
             setIsClubOpen({
-            Monday: false,
-            Tuesday: false,
-            Wednesday: false,
-            Thursday: false,
-            Friday: false,
-            Saturday: false,
-            Sunday: false,
-        });
+                Monday: false,
+                Tuesday: false,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+            });
 
-        setPersonnelCount({
-            Monday: '',
-            Tuesday: '',
-            Wednesday: '',
-            Thursday: '',
-            Friday: '',
-            Saturday: '',
-            Sunday: ''
-        });
+            setPersonnelCount({
+                Monday: '',
+                Tuesday: '',
+                Wednesday: '',
+                Thursday: '',
+                Friday: '',
+                Saturday: '',
+                Sunday: ''
+            });
 
-        setAssignedDays({
-            Monday: false,
-            Tuesday: false, 
-            Wednesday: false,
-            Thursday: false,
-            Friday: false,  
-            Saturday: false,
-            Sunday: false,
-        });
+            setAssignedDays({
+                Monday: false,
+                Tuesday: false,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+            });
         } catch (error) {
             console.error("Error assigning personnel:", error);
             alert("Failed to assign personnel requirements.");
@@ -137,7 +137,7 @@ const AssignSecurityPersonnel = () => {
                     <View style={styles.daysContainer}>
                         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
                             <View key={index} style={[
-                                styles.dayContainer, 
+                                styles.dayContainer,
                                 assignedDays[day] && styles.disabledDayContainer
                             ]}>
                                 <View style={styles.dayLabelContainer}>

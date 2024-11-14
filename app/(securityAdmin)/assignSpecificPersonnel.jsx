@@ -3,14 +3,13 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOp
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import { images } from '../../constants';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
 import { fetchSecurityPersonnelFullNames, assignPersonnelToShift } from '../../Backend/securityAdmin';
 
 const Assign = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { day, personnelCount, clubName, week, startTime } = route.params;
+  const { day, personnelCount, clubName, week, startTime } = useLocalSearchParams();
+  const router = useRouter();
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
   const [assignedPersonnel, setAssignedPersonnel] = useState([]);
@@ -23,6 +22,7 @@ const Assign = () => {
       try {
         const fullNames = await fetchSecurityPersonnelFullNames();
         setPersonnelOptions(fullNames.map(name => ({ label: name, value: name })));
+        console.log('Personnel Options:', fullNames);
       } catch (error) {
         console.error('Error fetching security personnel:', error);
       }
@@ -32,6 +32,7 @@ const Assign = () => {
   }, []);
 
   const handlePersonnelChange = (value, index) => {
+    console.log('Selected Value:', value, 'Index:', index);
     if (value) {
       const newSelectedPersonnel = [...selectedPersonnel];
       const previousValue = newSelectedPersonnel[index];
@@ -68,12 +69,15 @@ const Assign = () => {
 
   const handleViewSchedule = () => {
     setModalVisible(false);
-    navigation.navigate('clubSpecificSchedule', { club, clubSchedule });
+    router.push({
+      pathname: 'clubSpecificSchedule',
+      params: { clubName, clubSchedule }
+    });
   };
 
   const handleReturn = () => {
     setModalVisible(false);
-    navigation.navigate('assignPersonnelManagement');
+    router.push('assignPersonnelManagement');
   };
 
   return (

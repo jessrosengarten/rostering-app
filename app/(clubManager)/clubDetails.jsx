@@ -4,13 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
-import { router, useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const clubDetails = () => {
-  const route = useRouter();
-  const { club } = useLocalSearchParams();
+const ClubDetails = () => {
+  const router = useRouter();
+  const { club: clubParam } = useLocalSearchParams();
+  const club = JSON.parse(decodeURIComponent(clubParam));
 
   return (
     <SafeAreaView edges={[]}>
@@ -62,25 +63,23 @@ const clubDetails = () => {
 
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
-
-            onPress={() => router.push(`/clubManagerPayments?club=${encodeURIComponent(JSON.stringify(club))}`)}
-            style={styles.button}>
+              onPress={() => router.push(`/clubManagerPayments?club=${encodeURIComponent(JSON.stringify(club))}`)}
+              style={styles.button}>
               <Text style={styles.buttonText}>Payments</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity
+            </TouchableOpacity>
+
+            <TouchableOpacity
               onPress={() => router.push(`/schedule?club=${encodeURIComponent(JSON.stringify(club))}`)}
               style={styles.button}>
               <Text style={styles.buttonText}>Schedule</Text>
             </TouchableOpacity>
 
-                <TouchableOpacity
-                onPress={() => router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
+            <TouchableOpacity
+              onPress={() => router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
               style={styles.button}>
               <Text style={styles.buttonText}>Book schedule</Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>
           </View>
-
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -99,14 +98,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
   },
-
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginTop: 20,
   },
-
   button: {
     backgroundColor: '#E21A1A',
     paddingVertical: 12,
@@ -116,12 +113,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-
-    buttonText: {
-      color: '#FFF',
-      fontWeight: 'bold',
-    },
-
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
   detailsContainer: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -153,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default clubDetails;
+export default ClubDetails;

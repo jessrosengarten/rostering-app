@@ -3,20 +3,21 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter,useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const SecurityPersonnelProfile = () => {
-  const router = useRouter();
   const { securityPersonnel } = useLocalSearchParams();
+  const router = useRouter();
+  const parsedPersonnel = JSON.parse(securityPersonnel);
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>{securityPersonnel}</Text>
+          <Text style={styles.headerText}>{parsedPersonnel.fullName}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Personnel Info */}
@@ -25,40 +26,40 @@ const SecurityPersonnelProfile = () => {
               <Ionicons name="cash-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Rate per Shift:</Text>
             </View>
-            <Text style={styles.detailText}>{securityPersonnel.rate}</Text>
+            <Text style={styles.detailText}>{parsedPersonnel.rate}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="location-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Email:</Text>
             </View>
-            <Text style={styles.detailText}>{securityPersonnel.email}</Text>
+            <Text style={styles.detailText}>{parsedPersonnel.email}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Contact Details:</Text>
             </View>
-            <Text style={styles.detailText}>{securityPersonnel.contactNumber}</Text>
+            <Text style={styles.detailText}>{parsedPersonnel.contactNumber}</Text>
           </View>
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push({pathname: '/securityPersonnelDocuments'})}
+              onPress={() => router.push('securityPersonnelDocuments')}
             >
               <Text style={styles.buttonText}>View Documents</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push({pathname: '/securityPersonnelPayments'})}
+              onPress={() => router.push('securityPersonnelPayments')}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push({pathname: '/securityAdminHome'})}
+              onPress={() => router.push('securityAdminHome')}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
