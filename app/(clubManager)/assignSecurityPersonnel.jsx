@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useRoute } from '@react-navigation/native';
 import { addPersonnelNeeded } from '../../Backend/clubManager';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const screenWidth = Dimensions.get('window').width;
 const AssignSecurityPersonnel = () => {
-    const route = useRoute();
-    const { club } = route.params;
+    const { club } = useLocalSearchParams();
 
     // fucntion to get the next weeks range
     function getNextWeekRange(date = new Date()) {

@@ -1,9 +1,8 @@
 // App/SecurityPersonnel/Layout.jsx
 import { View, Text, Image } from 'react-native';
-import { Tabs } from 'expo-router';
+import { Tabs, useLocalSearchParams } from 'expo-router'
 import { icons, images } from '../../constants';
 import CustomHeader from '../../components/CustomHeader'
-import { useRoute } from '@react-navigation/native';
 
 
 const TabIcon = ({ icon, color, name, focused }) => {
@@ -23,10 +22,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const SecurityPersonnelLayout = () => {
-    //const username = "Jason"; // Replace with the actual username
-    const route = useRoute();
-    //Sets personnelName when user logs in
-    const { personnelName } = route.params || {}; 
+    const { personnelName } = useLocalSearchParams(); //Sets personnelName when user logs in
     const userPhoto = images.naraLogo; // Replace with the actual user photo URL
     return (
         <Tabs

@@ -8,8 +8,7 @@ import { Link, useRouter } from 'expo-router';
 import { Card } from 'react-native-paper';
 import { login } from '../../Backend/loginAndRegister';
 import { db } from '../../Backend/firebaseConfig'
-import { ref, set, get } from 'firebase/database'
-import { useNavigation } from '@react-navigation/native';
+import { ref, get } from 'firebase/database'
 
 const SignIn = () => {
     const [form, setform] = useState({
@@ -19,7 +18,6 @@ const SignIn = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const router = useRouter()
-    const navigation = useNavigation();
 
     const handleLogin = async () => {
         const { email, password } = form;

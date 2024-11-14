@@ -2,23 +2,27 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity, 
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useRoute } from '@react-navigation/native';
-import { fetchPersonnelShifts } from '../../Backend/securityPersonnel';
+import { fetchPersonnelShifts, cancelShift } from '../../Backend/securityPersonnel';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 
 const SecurityHome = () => {
-  const [shifts, setShifts] = useState([]);
+  const [thisWeekShifts, setThisWeekShifts] = useState([]);
+  const [nextWeekShifts, setNextWeekShifts] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedShift, setSelectedShift] = useState(null);
-  const route = useRoute();
-  const { personnelName } = route.params;
+  const thisWeekDates = getWeekRange();
+  const nextWeekDates = getNextWeekRange();
+  const { personnelName } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchShifts = async () => {
       try {
-        const fetchedShifts = await fetchPersonnelShifts(personnelName);
-        setShifts(fetchedShifts);
+        const fetchedShifts = await fetchPersonnelShifts(personnelName, thisWeekDates);
+        const nextWeekShifts= await fetchPersonnelShifts(personnelName, nextWeekDates);
+        setNextWeekShifts(nextWeekShifts);
+        setThisWeekShifts(fetchedShifts);
       } catch (error) {
         Alert.alert('Error', error.message);
       }
@@ -27,12 +31,65 @@ const SecurityHome = () => {
     fetchShifts();
   }, [personnelName]);
 
+  // Function to get the date range for the week
+      function getWeekRange(date = new Date()) {
+        const currentDate = new Date(date);
+    
+        const startOfWeekDay = 1; // Monday
+        const currentDay = currentDate.getDay();
+    
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+    
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+    
+       const formatDate = (date) => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+        };
+
+        const startFormatted = formatDate(startOfWeek);
+        const endFormatted = formatDate(endOfWeek);
+    
+        return `${startFormatted} to ${endFormatted}`;
+    }
+
+    // fucntion to get the next weeks range
+    function getNextWeekRange(date = new Date()) {
+    const currentDate = new Date(date);
+
+    const startOfWeekDay = 1; // Monday
+    const currentDay = currentDate.getDay();
+
+    const startOfNextWeek = new Date(currentDate);
+    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+
+    const endOfNextWeek = new Date(startOfNextWeek);
+    endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+
+    const formatDate = (date) => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
+    const startFormatted = formatDate(startOfNextWeek);
+    const endFormatted = formatDate(endOfNextWeek);
+
+    return `${startFormatted} to ${endFormatted}`;
+}
+
   const handleCancelPress = (shift) => {
     setSelectedShift(shift);
     setModalVisible(true);
   };
 
-  const confirmCancelShift = () => {
+  const confirmCancelShift = async() => {
+    await cancelShift(personnelName, selectedShift.date);
     console.log("Shift canceled:", selectedShift);
     setModalVisible(false);
   };
@@ -46,7 +103,40 @@ const SecurityHome = () => {
         </View>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.container}>
-            {shifts.map((shift, index) => (
+            <Text style={styles.headerText}>This Week Shifts</Text>
+            {thisWeekShifts.map((shift, index) => (
+              <View key={index} style={styles.shiftBox}>
+                <View style={styles.shiftDetails}>
+                  <Text>
+                    <Text style={styles.labelText}>Day: </Text>
+                    <Text style={styles.normalText}>{shift.day}/{shift.date}</Text>
+                  </Text>
+                  <View style={{ height: 10 }} />
+                  <Text>
+                    <Text style={styles.labelText}>Club: </Text>
+                    <Text style={styles.normalText}>{shift.clubName}</Text>
+                  </Text>
+                  <Text>
+                    <Text style={styles.labelText}>Start Time: </Text>
+                    <Text style={styles.normalText}>
+                      {shift.startTime}
+                    </Text>
+                  </Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={() => handleCancelPress(shift)}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.container}>
+            <Text style={styles.headerText}>Next Week Shifts</Text>
+            {nextWeekShifts.map((shift, index) => (
               <View key={index} style={styles.shiftBox}>
                 <View style={styles.shiftDetails}>
                   <Text>
@@ -94,15 +184,14 @@ const SecurityHome = () => {
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   style={styles.backButton}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.buttonText}>Back</Text>
+                  onPress={() => setModalVisible(false)}>
+                    <Text style={styles.buttonText}>Back</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   style={styles.confirmButton}
-                  onPress={confirmCancelShift}
-                >
-                  <Text style={styles.buttonText}>Confirm Cancel</Text>
+                  onPress={confirmCancelShift()}>
+                  <Text style={styles.buttonText}>Confirm</Text>
                 </TouchableOpacity>
               </View>
             </View>

@@ -1,8 +1,7 @@
-import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native'
-import { Tabs, Redirect, useNavigation } from 'expo-router'
+import { View, Text, Image } from 'react-native'
+import { Tabs, useLocalSearchParams } from 'expo-router'
 import { icons, images } from '../../constants'
 import CustomHeader from '../../components/CustomHeader'
-import { useRoute } from '@react-navigation/native';
 
 
 const TabIcon = ({ icon, color, name, focused }) => {
@@ -24,9 +23,9 @@ const TabIcon = ({ icon, color, name, focused }) => {
 
 const ClubManagerLayout = () => {
     //const username = "Jason"; // Replace with the actual username
-    const route = useRoute();
+    //const route = useRoute();
     //Sets managerName when user logs in
-    const { managerName } = route.params || {};
+    const { managerName } = useLocalSearchParams();
     const userPhoto = images.naraLogo; // Replace with the actual user photo URL
 
     return (

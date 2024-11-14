@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Alert, TouchableOpacity, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { router, useLocalSearchParams } from 'expo-router';
 import { getSchedule,getSecurityPersonnelShifts, addingAttendance } from '../../Backend/clubManager';
 
 const Schedule = () => {
@@ -10,9 +10,7 @@ const Schedule = () => {
   const [nextWeekSchedule, setNextWeekSchedule] = useState([]);
   const [thisWeekPersonnelList, setThisWeekPersonnelList] = useState([]);
   const [nextWeekPersonnelList, setNextWeekPersonnelList] = useState([]);
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { club } = route.params;
+  const { club } = useLocalSearchParams();
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -254,7 +252,7 @@ const handleAttendanceSubmit = async (name, dateRange, day) => {
     {/* Conditional "Assign" button for "Next Week" */}
     <TouchableOpacity
       style={[styles.assignButton, nextWeekSchedule.length > 0 && styles.disabledButton]}
-      onPress={() => nextWeekSchedule.length === 0 && navigation.navigate('assignSecurityPersonnel', { club })}
+      onPress={() => nextWeekSchedule.length === 0 && router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
       disabled={nextWeekSchedule.length > 0}
     >
       <Text style={styles.assignButtonText}>Assign</Text>

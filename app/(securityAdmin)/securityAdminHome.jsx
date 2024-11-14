@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, FlatList, ImageBackground } from 'react-native';
-import { icons, images } from "../../constants";
+import {  images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from 'expo-router';
-import { useRoute } from '@react-navigation/native';
-import CustomButton from '../../components/CustomButton';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { fetchAllClubs, fetchAllSecurityPersonnel, fetchAllClubManagers } from '../../Backend/securityAdmin';
+
+
 
 // Dummy payment data for different clubs
 const paymentData = {
@@ -39,12 +39,11 @@ const paymentData = {
 };
 
 const SecurityAdmin = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { adminName } = route.params;
+  const { adminName } = useLocalSearchParams();
   const [clubs, setClubs] = useState([]);
   const [securityPersonnel, setSecurityPersonnel] = useState([]);
   const [clubManagers, setClubManagers] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const loadClubs = async () => {
@@ -82,19 +81,18 @@ const SecurityAdmin = () => {
   const handleNavigation = (type, item) => {
 
     if (type == 'clubs') {
+      console.log(item);
       // Navigate to ClubDetails and pass the entire club object to the page
-      navigation.navigate('clubDetails', { club: item, paymentData: paymentData[item.name] });
+      router.push({pathname: '/clubDetails', params: { club: item.name, paymentData: paymentData[item.name],},});
     }
 
     else if (type == 'securityPersonnel') {
       // Navigate to securityPersonnelProfile and pass the entire personnel object to the page
-      navigation.navigate('securityPersonnelProfile', { securityPersonnel: item });
-      console.log({securityPersonnel: item})
+      router.push({pathname: '/securityPersonnelProfile', params: { securityPersonnel: item.name},});
     }
 
     else if (type == 'clubManagers') {
-      navigation.navigate('clubManagerDetails', { clubmanager: item });
-      console.log({clubManager: item})
+      router.push({pathname: '/clubManagerDetails',params: { clubmanager: item.name},});
     }
   };
 

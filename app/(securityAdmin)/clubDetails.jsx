@@ -2,24 +2,25 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import commonStyles from '../../components/Styles';
-import { router, useRouter } from 'expo-router';
+import { useRouter,useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const ClubDetails = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { club, paymentData } = route.params;
+  const router = useRouter();
+  const { club, paymentData } = useLocalSearchParams();
+  if (!club || !paymentData) {
+    console.log("Query is null")
+    return(<Text style={styles.headerText}>loading</Text>)
+  }
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>{club.name}</Text>
+          <Text style={styles.headerText}>{parsedClub.name}</Text>
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -29,65 +30,65 @@ const ClubDetails = () => {
               <Ionicons name="location-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Address:</Text>
             </View>
-            <Text style={styles.detailText}>{club.address}</Text>
+            <Text style={styles.detailText}>{parsedClub.address}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="person-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Manager:</Text>
             </View>
-            <Text style={styles.detailText}>{club.manager}</Text>
+            <Text style={styles.detailText}>{parsedClub.manager}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Contact:</Text>
             </View>
-            <Text style={styles.detailText}>{club.contactNum}</Text>
+            <Text style={styles.detailText}>{parsedClub.contactNum}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Opening Time:</Text>
             </View>
-            <Text style={styles.detailText}>{club.openingTime}</Text>
+            <Text style={styles.detailText}>{parsedClub.openingTime}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Closing Time:</Text>
             </View>
-            <Text style={styles.detailText}>{club.closingTime}</Text>
+            <Text style={styles.detailText}>{parsedClub.closingTime}</Text>
 
             <View style={styles.detailRow}>
               <Ionicons name="time-outline" size={18} color="#E21A1A" /> 
               <Text style={styles.detailTitle}>Rate:</Text>
             </View>
-            <Text style={styles.detailText}>R{club.rate}</Text>
+            <Text style={styles.detailText}>R{parsedClub.rate}</Text>
           </View>
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('clubPayments', { club, paymentData })}
+              onPress={() => router.push('clubPayments', { parsedClub, parsedPaymentData })}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push(`assignPersonnelManagement?clubName=${encodeURIComponent(club.name)}`)}
+              onPress={() => router.push(`assignPersonnelManagement?clubName=${encodeURIComponent(parsedClub.name)}`)}
             >
               <Text style={styles.buttonText}>Assign Personnel</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('clubSpecificSchedule', { club })}
+              onPress={() => router.push(`clubSpecificSchedule?club=${encodeURIComponent(parsedClub)}`)}
             >
               <Text style={styles.buttonText}>View Schedule</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('securityAdminHome', { club })}
+              onPress={() => router.push(`securityAdminHome?club=${encodeURIComponent(parsedClub)}`)}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
