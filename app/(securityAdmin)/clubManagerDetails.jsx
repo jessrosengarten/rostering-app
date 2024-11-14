@@ -3,15 +3,13 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
-import { useRoute } from '@react-navigation/native';
+import { useRouter, useLocalSearchParams} from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const ClubManagerDetails = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { clubmanager } = route.params;
+  const router = useRouter();
+  const { clubmanager } = useLocalSearchParams();
   console.log(clubmanager);
 
   return (
@@ -47,14 +45,14 @@ const ClubManagerDetails = () => {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('clubDetails', { club: item })}
+              onPress={() => router.push({pathname: '/clubDetails',params: { club: "Jail"},})}
             >
               <Text style={styles.buttonText}>View Club</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('securityAdminHome')}
+              onPress={() => router.push({pathname: '/securityAdminHome'})}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>

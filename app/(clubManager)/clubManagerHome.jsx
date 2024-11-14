@@ -1,21 +1,16 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions } from 'react-native'
-import { router, useRouter } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import { TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import CustomButton from '../../components/CustomButton';
 import { fetchClubsByManager } from '../../Backend/clubManager'
-import { useRoute } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const clubManagerHome = () => {
     const [clubs, setClubs] = useState([]);
-    const navigation = useNavigation();
-    const route = useRoute();
-    const { managerName } = route.params;
+    const { managerName } = useLocalSearchParams();
 
     useEffect(() => {
         const loadClubs = async () => {
@@ -48,7 +43,7 @@ const clubManagerHome = () => {
                         {clubs.map((club, index) => (
                             <View key={index} style={styles.clubItem}>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('clubDetails', { club })} 
+                                    onPress={() => router.push(`/clubDetails?club=${encodeURIComponent(JSON.stringify(club))}`)}
                                     style={styles.clubInfo}>
                                     <Image source={club.logo} style={styles.clubLogo} />
                                     <Text style={styles.clubName}>{club.name}</Text>

@@ -3,22 +3,20 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
-import { useRoute } from '@react-navigation/native';
-import { useNavigation } from 'expo-router';
+import { useRouter,useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const SecurityPersonnelProfile = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { securityPersonnel } = route.params;
+  const router = useRouter();
+  const { securityPersonnel } = useLocalSearchParams();
 
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>{securityPersonnel.fullName}</Text>
+          <Text style={styles.headerText}>{securityPersonnel}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Personnel Info */}
@@ -46,21 +44,21 @@ const SecurityPersonnelProfile = () => {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('securityPersonnelDocuments')}
+              onPress={() => router.push({pathname: '/securityPersonnelDocuments'})}
             >
               <Text style={styles.buttonText}>View Documents</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('securityPersonnelPayments')}
+              onPress={() => router.push({pathname: '/securityPersonnelPayments'})}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('securityAdminHome')}
+              onPress={() => router.push({pathname: '/securityAdminHome'})}
             >
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>

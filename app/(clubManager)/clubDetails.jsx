@@ -2,17 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { router, useRouter, useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 const clubDetails = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { club } = route.params;
+  const route = useRouter();
+  const { club } = useLocalSearchParams();
 
   return (
     <SafeAreaView edges={[]}>
@@ -64,22 +62,23 @@ const clubDetails = () => {
 
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('clubManagerPayments', { club })}
-              style={styles.button}>
-              <Text style={styles.buttonText}>Payments</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => navigation.navigate('schedule', { club })}
+            onPress={() => router.push(`/clubManagerPayments?club=${encodeURIComponent(JSON.stringify(club))}`)}
+            style={styles.button}>
+              <Text style={styles.buttonText}>Payments</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+              onPress={() => router.push(`/schedule?club=${encodeURIComponent(JSON.stringify(club))}`)}
               style={styles.button}>
               <Text style={styles.buttonText}>Schedule</Text>
             </TouchableOpacity>
 
-            {/* <TouchableOpacity
-              onPress={() => navigation.navigate('assignSecurityPersonnel', { club })}
+                <TouchableOpacity
+                onPress={() => router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
               style={styles.button}>
               <Text style={styles.buttonText}>Book schedule</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity> 
           </View>
 
         </ScrollView>

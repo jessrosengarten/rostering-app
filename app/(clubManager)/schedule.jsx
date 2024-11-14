@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Alert, TouchableOpacity, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { getSchedule, getSecurityPersonnelShifts, addingAttendance } from '../../Backend/clubManager';
+import { router, useLocalSearchParams } from 'expo-router';
+import { getSchedule,getSecurityPersonnelShifts, addingAttendance } from '../../Backend/clubManager';
+
 
 const Schedule = () => {
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [nextWeekSchedule, setNextWeekSchedule] = useState([]);
   const [thisWeekPersonnelList, setThisWeekPersonnelList] = useState([]);
   const [nextWeekPersonnelList, setNextWeekPersonnelList] = useState([]);
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { club } = route.params;
+  const { club } = useLocalSearchParams();
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -221,50 +220,48 @@ const Schedule = () => {
                     <Text>No personnel assigned for this day.</Text>
                   )}
                 </View>
-              ))}
-            </View>
-          </View>
+            ))}
+        </View>
+  </View>
 
-          {/* Display "Next Week" Schedule */}
-          <View style={styles.weekContainer}>
-            <Text style={styles.weekHeading}>Next Week</Text>
-            <Text style={styles.dateRange}>{nextWeekDates}</Text>
+  {/* Display "Next Week" Schedule */}
+  <View style={styles.weekContainer}>
+    <Text style={styles.weekHeading}>Next Week</Text>
+    <Text style={styles.dateRange}>{nextWeekDates}</Text>
 
-            {/* Display schedule for each day next week */}
-            <View style={styles.scrollContainer}>
-              {nextWeekSchedule.map(({ day, shift }) => (
-                <View key={day} style={styles.dayContainer}>
-                  <Text style={styles.dayHeading}>{day}</Text>
-                  <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
-                  <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
+    {/* Display schedule for each day next week */}
+    <View style={styles.scrollContainer}>
+      {nextWeekSchedule.map(({ day, shift }) => (
+        <View key={day} style={styles.dayContainer}>
+          <Text style={styles.dayHeading}>{day}</Text>
+          <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
+          <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
 
-                  {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
-                    nextWeekPersonnelList[day].map((person) => (
-                      <View key={person.email} style={styles.personContainer}>
-                        <Text style={styles.personName}>{person.fullName}</Text>
-                      </View>
-                    ))
-                  ) : (
-                    <Text>No personnel assigned for this day.</Text>
-                  )}
-                </View>
-              ))}
-            </View>
+                    {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
+                        nextWeekPersonnelList[day].map((person) => (
+                            <View key={person.email} style={styles.personContainer}>
+                                <Text style={styles.personName}>{person.fullName}</Text>
+                            </View>
+                        ))
+                    ) : (
+                        <Text>No personnel assigned for this day.</Text>
+                    )}
+        </View>
+      ))}
+    </View>
 
-            {/* Conditional "Assign" button for "Next Week" */}
-            <TouchableOpacity
-              style={[styles.assignButton, nextWeekSchedule.length > 0 && styles.disabledButton]}
-              onPress={() => nextWeekSchedule.length === 0 && navigation.navigate('assignSecurityPersonnel', { club })}
-              disabled={nextWeekSchedule.length > 0}
-            >
-              <Text style={[styles.assignButtonText, nextWeekSchedule.length > 0 && styles.disabledButtonText]}>
-                {nextWeekSchedule.length > 0 ? 'Assigned' : 'Assign'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </ImageBackground>
-    </SafeAreaView>
+    {/* Conditional "Assign" button for "Next Week" */}
+    <TouchableOpacity
+      style={[styles.assignButton, nextWeekSchedule.length > 0 && styles.disabledButton]}
+      onPress={() => nextWeekSchedule.length === 0 && router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
+      disabled={nextWeekSchedule.length > 0}
+    >
+      <Text style={styles.assignButtonText}>Assign</Text>
+    </TouchableOpacity>
+  </View>
+</ScrollView>
+</ImageBackground>
+</SafeAreaView>
   );
 };
 

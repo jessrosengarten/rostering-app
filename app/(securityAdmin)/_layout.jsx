@@ -1,9 +1,7 @@
 import { Image, View, Text } from 'react-native';
-import { Tabs, } from 'expo-router';
+import { Tabs, useLocalSearchParams } from 'expo-router'
 import { icons, images } from "../../constants";
 import CustomHeader from '../../components/CustomHeader'
-import { useRoute } from '@react-navigation/native';
-
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -22,10 +20,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const SecurityAdminLayout = () => {
-  //const username = "Clarence"; // Replace with the actual username
-  const route = useRoute();
-  //Sets adminName when user logs in
-  const { adminName } = route.params || {};
+  const { adminName } = useLocalSearchParams(); //Sets adminName when user logs in
   const userPhoto = images.naraLogo; // Replace with the actual user photo URL
 
   return (

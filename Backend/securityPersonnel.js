@@ -1,7 +1,7 @@
 import { ref, get } from 'firebase/database';
 import { db } from './firebaseConfig'; // Adjust the import according to your project structure
 
-export const fetchPersonnelShifts = async (personnelName) => {
+export const fetchPersonnelShifts = async (personnelName, weekDates) => {
   try {
     // Fetch all security personnel to find the user with the matching fullName
     const personnelRef = ref(db, 'securityPersonnel');
@@ -35,6 +35,7 @@ export const fetchPersonnelShifts = async (personnelName) => {
     const personnelShifts = [];
 
     Object.keys(shifts).forEach(week => {
+      if(week==weekDates){
       const days = shifts[week];
       const [startDateStr] = week.split(' to ');
       const startDate = new Date(startDateStr.split('-').reverse().join('-'));
@@ -58,10 +59,31 @@ export const fetchPersonnelShifts = async (personnelName) => {
           ...days[day]
         });
       });
-    });
+    }});
 
     return personnelShifts;
   } catch (error) {
     throw new Error(`Fetching personnel shifts error: ${error.message}`);
+  }
+};
+
+export const cancelShift = async (personnelName, date) => {
+  try {
+    let userId = null;
+
+    // Find the user with the matching fullName
+    Object.keys(personnel).forEach(key => {
+      if (personnel[key].fullName === personnelName) {
+        userId = key;
+      }
+    });
+
+    if (!userId) {
+      throw new Error(`No user found with the name ${personnelName}`);
+    }
+    const shiftsRef = ref(db, `securityPersonnel/${userId}/Shifts`);
+    await remove(shiftsRef);
+  } catch (error) {
+    console.error('Error deleting club:', error);
   }
 };
