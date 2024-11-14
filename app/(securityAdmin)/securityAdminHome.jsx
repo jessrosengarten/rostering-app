@@ -5,8 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { fetchAllClubs, fetchAllSecurityPersonnel, fetchAllClubManagers } from '../../Backend/securityAdmin';
 
-
-
 // Dummy payment data for different clubs
 const paymentData = {
   'Neon Night Club': {
@@ -81,18 +79,34 @@ const SecurityAdmin = () => {
   const handleNavigation = (type, item) => {
 
     if (type == 'clubs') {
-      console.log(item);
       // Navigate to ClubDetails and pass the entire club object to the page
-      router.push({pathname: '/clubDetails', params: { club: item.name, paymentData: paymentData[item.name],},});
+      router.push({
+        pathname: '/clubDetails',
+        params: {
+          club: JSON.stringify(item),
+          // paymentData: JSON.stringify(paymentData[item.name]),
+        },
+      });
     }
 
     else if (type == 'securityPersonnel') {
       // Navigate to securityPersonnelProfile and pass the entire personnel object to the page
-      router.push({pathname: '/securityPersonnelProfile', params: { securityPersonnel: item.name},});
+      router.push({
+        pathname: 'securityPersonnelProfile',
+        params: {
+          securityPersonnel: JSON.stringify(item),
+        },
+      });
     }
 
     else if (type == 'clubManagers') {
-      router.push({pathname: '/clubManagerDetails',params: { clubmanager: item.name},});
+      // Navigate to clubManagerDetails and pass the entire club manager object to the page
+      router.push({
+        pathname: 'clubManagerDetails',
+        params: {
+          clubmanager: JSON.stringify(item),
+        },
+      });
     }
   };
 

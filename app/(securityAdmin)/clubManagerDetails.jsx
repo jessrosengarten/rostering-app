@@ -10,6 +10,7 @@ const { width } = Dimensions.get('window');
 const ClubManagerDetails = () => {
   const router = useRouter();
   const { clubmanager } = useLocalSearchParams();
+  const parsedClubManager = JSON.parse(clubmanager);
   console.log(clubmanager);
 
   return (
@@ -17,7 +18,7 @@ const ClubManagerDetails = () => {
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>{clubmanager.fullName}</Text>
+          <Text style={styles.headerText}>{parsedClubManager.fullName}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Manager Details */}
@@ -32,13 +33,13 @@ const ClubManagerDetails = () => {
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Contact:</Text>
             </View>
-            <Text style={styles.detailText}>{clubmanager.contactNumber}</Text>
+            <Text style={styles.detailText}>{parsedClubManager.contactNumber}</Text>
 
           <View style={styles.detailRow}>
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Email:</Text>
             </View>
-            <Text style={styles.detailText}>{clubmanager.email}</Text>
+            <Text style={styles.detailText}>{parsedClubManager.email}</Text>
           </View>
 
           {/* Buttons */}

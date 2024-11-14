@@ -10,10 +10,9 @@ const { width } = Dimensions.get('window');
 const ClubDetails = () => {
   const router = useRouter();
   const { club, paymentData } = useLocalSearchParams();
-  if (!club || !paymentData) {
-    console.log("Query is null")
-    return(<Text style={styles.headerText}>loading</Text>)
-  }
+
+  const parsedClub = JSON.parse(club);
+  //const parsedPaymentData = JSON.parse(paymentData);
 
   return (
     <SafeAreaView edges={[]}>
@@ -67,21 +66,29 @@ const ClubDetails = () => {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push('clubPayments', { parsedClub, parsedPaymentData })}
+              onPress={() => router.push('clubPayments', { parsedClub})}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push(`assignPersonnelManagement?clubName=${encodeURIComponent(parsedClub.name)}`)}
+              onPress={() => router.push({
+                pathname: 'assignPersonnelManagement',
+                params: { clubName: parsedClub.name }
+              })}
             >
               <Text style={styles.buttonText}>Assign Personnel</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push(`clubSpecificSchedule?club=${encodeURIComponent(parsedClub)}`)}
+              onPress={() => router.push({
+                pathname: 'clubSpecificSchedule',
+                params: {
+                  club: JSON.stringify(parsedClub),
+                },
+              })}
             >
               <Text style={styles.buttonText}>View Schedule</Text>
             </TouchableOpacity>

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { images } from "../../constants";
 import { fetchPersonnelNeeded } from '../../Backend/securityAdmin';
 
 const AssignPersonnelManagement = () => {
+  const { clubName } = useLocalSearchParams();
   const [schedule, setSchedule] = useState([]);
-  const route = useRoute();
-  const { clubName } = route.params || {};
-  const navigation = useNavigation();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -25,7 +24,10 @@ const AssignPersonnelManagement = () => {
   }, [clubName]);
 
   const handleAssignPress = (week, day, personnelCount, openingTime) => {
-    navigation.navigate('assignSpecificPersonnel', { week, day, personnelCount, clubName, startTime: openingTime });
+    router.push({
+      pathname: 'assignSpecificPersonnel',
+      params: { week, day, personnelCount, clubName, startTime: openingTime }
+    });
   };
 
   const renderScheduleItem = (item) => (

@@ -4,12 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { images } from '../../constants';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getSchedule, getSecurityPersonnelShifts } from '../../Backend/securityAdmin';
 
 const ClubSpecificSchedule = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { club } = route.params;
+  const { club } = useLocalSearchParams();
+  const router = useRouter();
+  const parsedClub = JSON.parse(club);
 
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [nextWeekSchedule, setNextWeekSchedule] = useState([]);
@@ -23,13 +24,13 @@ const ClubSpecificSchedule = () => {
     loadPersonnelListNextWeek();
     loadPersonnelListThisWeek();
     loadSchedule();
-  }, [club.name, thisWeekDates, nextWeekDates]);
+  }, [parsedClub.name, thisWeekDates, nextWeekDates]);
 
 
   const loadSchedule = async () => {
     try {
-      const thisWeekSchedule = await getSchedule(club.name, thisWeekDates);
-      const nextWeekSchedule = await getSchedule(club.name, nextWeekDates);
+      const thisWeekSchedule = await getSchedule(parsedClub.name, thisWeekDates);
+      const nextWeekSchedule = await getSchedule(parsedClub.name, nextWeekDates);
 
       const formattedThisWeekSchedule = Object.entries(thisWeekSchedule).map(([day, shift]) => ({
         day,
@@ -52,7 +53,7 @@ const ClubSpecificSchedule = () => {
 
   const loadPersonnelListThisWeek = async () => {
     try {
-      const personnelDetails = await getSecurityPersonnelShifts(club.name, thisWeekDates);
+      const personnelDetails = await getSecurityPersonnelShifts(parsedClub.name, thisWeekDates);
       const groupedShifts = groupShiftsByDay(personnelDetails);
       setThisWeekPersonnelList(groupedShifts);
     } catch (error) {
@@ -62,7 +63,7 @@ const ClubSpecificSchedule = () => {
 
   const loadPersonnelListNextWeek = async () => {
     try {
-      const personnelDetails = await getSecurityPersonnelShifts(club.name, nextWeekDates);
+      const personnelDetails = await getSecurityPersonnelShifts(parsedClub.name, nextWeekDates);
       const groupedShifts = groupShiftsByDay(personnelDetails);
       setNextWeekPersonnelList(groupedShifts);
     } catch (error) {
@@ -124,7 +125,7 @@ const ClubSpecificSchedule = () => {
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Schedule for {club.name}</Text>
+          <Text style={styles.headerText}>Schedule for {parsedClub.name}</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -142,7 +143,7 @@ const ClubSpecificSchedule = () => {
                     {thisWeekPersonnelList[day] && thisWeekPersonnelList[day].length > 0 ? (
                       thisWeekPersonnelList[day].map((person, i) => (
                         <View key={person.email} style={styles.personContainer}>
-                            <Text style={styles.personName}>{person.fullName}</Text>
+                          <Text style={styles.personName}>{person.fullName}</Text>
                         </View>
                       ))
                     ) : (
@@ -168,7 +169,7 @@ const ClubSpecificSchedule = () => {
                     {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
                       nextWeekPersonnelList[day].map((person, i) => (
                         <View key={person.email} style={styles.personContainer}>
-                            <Text style={styles.personName}>{person.fullName}</Text>
+                          <Text style={styles.personName}>{person.fullName}</Text>
                         </View>
                       ))
                     ) : (

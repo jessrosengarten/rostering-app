@@ -2,10 +2,8 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch } from 're
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
-import { useNavigation } from '@react-navigation/native';
 
 const Settings = () => {
-    const navigation = useNavigation(); // For navigating
 
     // State for toggling switches
     const [isDarkMode, setIsDarkMode] = useState(false); // Light/Dark mode state

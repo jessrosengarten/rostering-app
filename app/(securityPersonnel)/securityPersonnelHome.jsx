@@ -20,7 +20,7 @@ const SecurityHome = () => {
     const fetchShifts = async () => {
       try {
         const fetchedShifts = await fetchPersonnelShifts(personnelName, thisWeekDates);
-        const nextWeekShifts= await fetchPersonnelShifts(personnelName, nextWeekDates);
+        const nextWeekShifts = await fetchPersonnelShifts(personnelName, nextWeekDates);
         setNextWeekShifts(nextWeekShifts);
         setThisWeekShifts(fetchedShifts);
       } catch (error) {
@@ -32,33 +32,33 @@ const SecurityHome = () => {
   }, [personnelName]);
 
   // Function to get the date range for the week
-      function getWeekRange(date = new Date()) {
-        const currentDate = new Date(date);
-    
-        const startOfWeekDay = 1; // Monday
-        const currentDay = currentDate.getDay();
-    
-        const startOfWeek = new Date(currentDate);
-        startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
-    
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-    
-       const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-        };
+  function getWeekRange(date = new Date()) {
+    const currentDate = new Date(date);
 
-        const startFormatted = formatDate(startOfWeek);
-        const endFormatted = formatDate(endOfWeek);
-    
-        return `${startFormatted} to ${endFormatted}`;
-    }
+    const startOfWeekDay = 1; // Monday
+    const currentDay = currentDate.getDay();
 
-    // fucntion to get the next weeks range
-    function getNextWeekRange(date = new Date()) {
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const formatDate = (date) => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    const startFormatted = formatDate(startOfWeek);
+    const endFormatted = formatDate(endOfWeek);
+
+    return `${startFormatted} to ${endFormatted}`;
+  }
+
+  // fucntion to get the next weeks range
+  function getNextWeekRange(date = new Date()) {
     const currentDate = new Date(date);
 
     const startOfWeekDay = 1; // Monday
@@ -71,24 +71,24 @@ const SecurityHome = () => {
     endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
 
     const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
     };
 
     const startFormatted = formatDate(startOfNextWeek);
     const endFormatted = formatDate(endOfNextWeek);
 
     return `${startFormatted} to ${endFormatted}`;
-}
+  }
 
   const handleCancelPress = (shift) => {
     setSelectedShift(shift);
     setModalVisible(true);
   };
 
-  const confirmCancelShift = async() => {
+  const confirmCancelShift = async () => {
     await cancelShift(personnelName, selectedShift.date);
     console.log("Shift canceled:", selectedShift);
     setModalVisible(false);
@@ -185,7 +185,7 @@ const SecurityHome = () => {
                 <TouchableOpacity
                   style={styles.backButton}
                   onPress={() => setModalVisible(false)}>
-                    <Text style={styles.buttonText}>Back</Text>
+                  <Text style={styles.buttonText}>Back</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity

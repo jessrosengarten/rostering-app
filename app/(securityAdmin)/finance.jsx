@@ -3,14 +3,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import React, { useState } from 'react';
 import CustomButton from '../../components/CustomButton';
-import { useRoute } from '@react-navigation/native';
-import { useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const Finance = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-
+  const router = useRouter();
   // State for dropdown visibility
   const [showSection, setShowSection] = useState(null);
 
@@ -182,13 +179,13 @@ const Finance = () => {
           <View style={styles.buttonsContainer}>
             <CustomButton
               title="View Data Analytics"
-              handlePress={() => navigation.navigate('dataAnalytics')}
+              handlePress={() => router.push('dataAnalytics')}
               customStyle={styles.button}
               textStyle={styles.buttonText}
             />
             <CustomButton
               title="Back"
-              handlePress={() => navigation.navigate('securityAdminHome')}
+              handlePress={() => router.push('securityAdminHome')}
               customStyle={styles.button}
               textStyle={styles.buttonText}
             />

@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { useRoute } from '@react-navigation/native';
-import { useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../../components/CustomButton';
 
 const Finance = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
   const [showSection, setShowSection] = useState(null);
 
   const toggleSection = (section) => {
