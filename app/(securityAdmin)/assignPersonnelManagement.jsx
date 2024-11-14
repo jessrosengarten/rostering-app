@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Ensure useState and useEffect are imported from React
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -37,8 +37,14 @@ const AssignPersonnelManagement = () => {
           <Text>Week: {item.week}</Text>
           <Text>Opening Time: {item.openingTime}</Text>
         </View>
-        <TouchableOpacity style={styles.assignButton} onPress={() => handleAssignPress(item.week, item.day, item.personnelNum, item.openingTime)}>
-          <Text style={styles.assignButtonText}>Assign</Text>
+        <TouchableOpacity
+          style={[styles.assignButton, item.assigned && styles.assignedButton]}
+          onPress={() => !item.assigned && handleAssignPress(item.week, item.day, item.personnelNum, item.openingTime)}
+          disabled={item.assigned}
+        >
+          <Text style={[styles.assignButtonText, item.assigned && styles.assignedButtonText]}>
+            {item.assigned ? 'Assigned' : 'Assign'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -116,10 +122,18 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 
+  assignedButton: {
+    backgroundColor: '#A9A9A9',
+  },
+
   assignButtonText: {
     fontSize: 14,
     color: '#fff',
     fontWeight: 'bold'
+  },
+
+  assignedButtonText: {
+    color: '#D3D3D3',
   },
 });
 

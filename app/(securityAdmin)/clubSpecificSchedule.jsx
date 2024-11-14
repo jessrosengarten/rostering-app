@@ -4,23 +4,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { images } from '../../constants';
-import { getSchedule, getSecurityPersonnelShifts, fetchSecurityPersonnelFullNames } from '../../Backend/securityAdmin';
+import { getSchedule, getSecurityPersonnelShifts } from '../../Backend/securityAdmin';
 
 const ClubSpecificSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { club, clubSchedule = {} } = route.params;
+  const { club } = route.params;
 
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editableSchedule, setEditableSchedule] = useState(clubSchedule);
-  const [originalSchedule, setOriginalSchedule] = useState(clubSchedule);
   const [thisWeekSchedule, setThisWeekSchedule] = useState([]);
   const [nextWeekSchedule, setNextWeekSchedule] = useState([]);
   const [thisWeekPersonnelList, setThisWeekPersonnelList] = useState([]);
   const [nextWeekPersonnelList, setNextWeekPersonnelList] = useState([]);
-  const [originalThisWeekPersonnelList, setOriginalThisWeekPersonnelList] = useState([]);
-  const [originalNextWeekPersonnelList, setOriginalNextWeekPersonnelList] = useState([]);
-  const [personnelNames, setPersonnelNames] = useState([]);
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -29,18 +23,8 @@ const ClubSpecificSchedule = () => {
     loadPersonnelListNextWeek();
     loadPersonnelListThisWeek();
     loadSchedule();
-    fetchPersonnelNames();
   }, [club.name, thisWeekDates, nextWeekDates]);
 
-  const fetchPersonnelNames = async () => {
-    try {
-      const names = await fetchSecurityPersonnelFullNames();
-      const items = names.map(name => ({ label: name, value: name }));
-      setPersonnelNames(items);
-    } catch (error) {
-      console.error('Error fetching personnel names:', error);
-    }
-  };
 
   const loadSchedule = async () => {
     try {
@@ -71,7 +55,6 @@ const ClubSpecificSchedule = () => {
       const personnelDetails = await getSecurityPersonnelShifts(club.name, thisWeekDates);
       const groupedShifts = groupShiftsByDay(personnelDetails);
       setThisWeekPersonnelList(groupedShifts);
-      setOriginalThisWeekPersonnelList(groupedShifts);
     } catch (error) {
       console.error("Error fetching personnel list:", error);
     }
@@ -82,7 +65,6 @@ const ClubSpecificSchedule = () => {
       const personnelDetails = await getSecurityPersonnelShifts(club.name, nextWeekDates);
       const groupedShifts = groupShiftsByDay(personnelDetails);
       setNextWeekPersonnelList(groupedShifts);
-      setOriginalNextWeekPersonnelList(groupedShifts);
     } catch (error) {
       console.error("Error fetching personnel list:", error);
     }
@@ -138,35 +120,6 @@ const ClubSpecificSchedule = () => {
     return `${startFormatted} to ${endFormatted}`;
   };
 
-  // Toggle edit mode
-  const toggleEditMode = () => {
-    if (isEditMode) {
-      setEditableSchedule(originalSchedule);
-      setThisWeekPersonnelList(originalThisWeekPersonnelList);
-      setNextWeekPersonnelList(originalNextWeekPersonnelList);
-    } else {
-      setOriginalSchedule(editableSchedule);
-      setOriginalThisWeekPersonnelList(thisWeekPersonnelList);
-      setOriginalNextWeekPersonnelList(nextWeekPersonnelList);
-    }
-    setIsEditMode(!isEditMode);
-  };
-
-  // Handle personnel change
-  const handlePersonnelChange = (week, day, index, value) => {
-    if (week === 'thisWeek') {
-      setThisWeekPersonnelList((prevList) => ({
-        ...prevList,
-        [day]: prevList[day].map((person, i) => (i === index ? { ...person, fullName: value } : person)),
-      }));
-    } else {
-      setNextWeekPersonnelList((prevList) => ({
-        ...prevList,
-        [day]: prevList[day].map((person, i) => (i === index ? { ...person, fullName: value } : person)),
-      }));
-    }
-  };
-
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
@@ -189,17 +142,7 @@ const ClubSpecificSchedule = () => {
                     {thisWeekPersonnelList[day] && thisWeekPersonnelList[day].length > 0 ? (
                       thisWeekPersonnelList[day].map((person, i) => (
                         <View key={person.email} style={styles.personContainer}>
-                          {isEditMode ? (
-                            <RNPickerSelect
-                              onValueChange={(value) => handlePersonnelChange('thisWeek', day, i, value)}
-                              items={personnelNames}
-                              value={person.fullName}
-                              placeholder={{ label: 'Select a person...', value: null }}
-                              style={pickerSelectStyles}
-                            />
-                          ) : (
                             <Text style={styles.personName}>{person.fullName}</Text>
-                          )}
                         </View>
                       ))
                     ) : (
@@ -225,17 +168,7 @@ const ClubSpecificSchedule = () => {
                     {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
                       nextWeekPersonnelList[day].map((person, i) => (
                         <View key={person.email} style={styles.personContainer}>
-                          {isEditMode ? (
-                            <RNPickerSelect
-                              onValueChange={(value) => handlePersonnelChange('nextWeek', day, i, value)}
-                              items={personnelNames}
-                              value={person.fullName}
-                              placeholder={{ label: 'Select a person...', value: null }}
-                              style={pickerSelectStyles}
-                            />
-                          ) : (
                             <Text style={styles.personName}>{person.fullName}</Text>
-                          )}
                         </View>
                       ))
                     ) : (
@@ -246,29 +179,6 @@ const ClubSpecificSchedule = () => {
               ))}
             </View>
           </View>
-
-          {/* Toggle Edit Mode Button */}
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={toggleEditMode}
-          >
-            <Text style={styles.editButtonText}>{isEditMode ? 'Save Changes' : 'Edit Schedule'}</Text>
-          </TouchableOpacity>
-
-          {/* Cancel Edit Mode Button */}
-          {isEditMode && (
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={() => {
-                setEditableSchedule(originalSchedule);
-                setThisWeekPersonnelList(originalThisWeekPersonnelList);
-                setNextWeekPersonnelList(originalNextWeekPersonnelList);
-                setIsEditMode(false);
-              }}
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          )}
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>

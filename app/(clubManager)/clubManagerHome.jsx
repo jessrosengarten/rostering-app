@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     clubItem: {
-        width: '85%',
+        width: '95%', 
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 1)',
         marginVertical: 10,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 5,
-        width: '48%', // Take half the width of the container
+        width: '48%', 
         alignItems: 'center',
         marginBottom: 10,
     },
