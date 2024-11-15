@@ -7,7 +7,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 
 const screenWidth = Dimensions.get('window').width;
 const AssignSecurityPersonnel = () => {
-    const { club } = useLocalSearchParams();
+    const { club: clubParam } = useLocalSearchParams();
+  const club = JSON.parse(decodeURIComponent(clubParam));
 
     // fucntion to get the next weeks range
     function getNextWeekRange(date = new Date()) {
