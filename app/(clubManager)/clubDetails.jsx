@@ -73,12 +73,6 @@ const ClubDetails = () => {
               style={styles.button}>
               <Text style={styles.buttonText}>Schedule</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
-              style={styles.button}>
-              <Text style={styles.buttonText}>Book schedule</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </ImageBackground>

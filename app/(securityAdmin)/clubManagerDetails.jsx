@@ -1,19 +1,30 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useEffect ,useState} from 'react';
+import { StyleSheet, Text, View, ScrollView, ImageBackground, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams} from 'expo-router';
+import { fetchAllClubsByManager } from '../../Backend/securityAdmin';
 
 const { width } = Dimensions.get('window');
 
 const ClubManagerDetails = () => {
+  const [clubs, setClubs] = useState([]);
   const router = useRouter();
   const { clubmanager } = useLocalSearchParams();
   const parsedClubManager = JSON.parse(clubmanager);
-  console.log(clubmanager);
 
-  return (
+useEffect(() => {
+    const loadClubs = async () => {
+      const clubsData = await fetchAllClubsByManager(parsedClubManager.fullName);
+      const clubsArray = Object.values(clubsData);
+      setClubs(clubsArray);
+    }; 
+    
+    loadClubs();
+    }, [parsedClubManager]);
+
+    return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         {/* Header */}
@@ -27,7 +38,11 @@ const ClubManagerDetails = () => {
               <Ionicons name="business-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Club/s Managed:</Text>
             </View>
-            <Text style={styles.detailText}>Jail</Text>
+            <FlatList
+              data={clubs}
+              renderItem={({ item }) => (
+                  <Text style={styles.detailText}>{item}</Text> )}
+              keyExtractor={(item) => item} />
 
             <View style={styles.detailRow}>
               <Ionicons name="call-outline" size={18} color="#E21A1A" />
@@ -44,13 +59,6 @@ const ClubManagerDetails = () => {
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => router.push({pathname: '/clubDetails',params: { club: "Jail"},})}
-            >
-              <Text style={styles.buttonText}>View Club</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity
               style={styles.button}
               onPress={() => router.push({pathname: '/securityAdminHome'})}

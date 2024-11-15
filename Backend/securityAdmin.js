@@ -196,3 +196,27 @@ export const checkIfAssigned = (personnelData, clubName, week, day) => {
   }
   return false;
 };
+
+export const fetchAllClubsByManager = async (managerName) => {
+  const dbRef = ref(db);
+  const snapshot = await get(child(dbRef, 'Clubs'));
+  
+  const result = [];
+  
+  if (snapshot.exists()) {
+    const clubs = snapshot.val();
+    
+    for (const clubId in clubs) {
+      const club = clubs[clubId];
+      
+      if (club.manager === managerName) {
+        result.push(clubId); 
+      }
+    }
+  } else {
+    console.log("No clubs found in the database.");
+    return []; 
+  }
+  return result; 
+};
+

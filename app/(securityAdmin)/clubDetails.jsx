@@ -9,10 +9,8 @@ const { width } = Dimensions.get('window');
 
 const ClubDetails = () => {
   const router = useRouter();
-  const { club, paymentData } = useLocalSearchParams();
-
+  const { club } = useLocalSearchParams();
   const parsedClub = JSON.parse(club);
-  //const parsedPaymentData = JSON.parse(paymentData);
 
   return (
     <SafeAreaView edges={[]}>
