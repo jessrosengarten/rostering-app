@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
 import { images } from '../../constants';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
 import { fetchSecurityPersonnelFullNames, assignPersonnelToShift } from '../../Backend/securityAdmin';
 
 const Assign = () => {
-  const { day, personnelCount, clubName, week, startTime } = useLocalSearchParams();
+  const { day, personnelCount, clubName, week, startTime, club } = useLocalSearchParams();
+  const parsedClub = JSON.parse(club);
   const router = useRouter();
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
   const [assignedPersonnel, setAssignedPersonnel] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [currentPickerIndex, setCurrentPickerIndex] = useState(null);
+  const [tempSelectedValue, setTempSelectedValue] = useState(null);
   const [clubSchedule, setClubSchedule] = useState({});
   const [personnelOptions, setPersonnelOptions] = useState([]);
 
@@ -21,8 +25,7 @@ const Assign = () => {
     const fetchPersonnel = async () => {
       try {
         const fullNames = await fetchSecurityPersonnelFullNames();
-        setPersonnelOptions(fullNames.map(name => ({ label: name, value: name })));
-        console.log('Personnel Options:', fullNames);
+        setPersonnelOptions(fullNames);
       } catch (error) {
         console.error('Error fetching security personnel:', error);
       }
@@ -31,19 +34,26 @@ const Assign = () => {
     fetchPersonnel();
   }, []);
 
-  const handlePersonnelChange = (value, index) => {
-    console.log('Selected Value:', value, 'Index:', index);
-    if (value) {
-      const newSelectedPersonnel = [...selectedPersonnel];
-      const previousValue = newSelectedPersonnel[index];
+  const handlePersonnelChange = (value) => {
+    setTempSelectedValue(value);
+  };
 
-      newSelectedPersonnel[index] = value;
+  const handleConfirmSelection = () => {
+    if (tempSelectedValue && currentPickerIndex !== null) {
+      const newSelectedPersonnel = [...selectedPersonnel];
+      const previousValue = newSelectedPersonnel[currentPickerIndex];
+
+      newSelectedPersonnel[currentPickerIndex] = tempSelectedValue;
       setSelectedPersonnel(newSelectedPersonnel);
 
       setAssignedPersonnel((prev) => {
         const updatedAssignedPersonnel = prev.filter((person) => person !== previousValue);
-        return [...updatedAssignedPersonnel, value];
+        return [...updatedAssignedPersonnel, tempSelectedValue];
       });
+
+      setPickerVisible(false);
+      setCurrentPickerIndex(null);
+      setTempSelectedValue(null);
     }
   };
 
@@ -71,13 +81,15 @@ const Assign = () => {
     setModalVisible(false);
     router.push({
       pathname: 'clubSpecificSchedule',
-      params: { clubName, clubSchedule }
+      params: { club }
     });
   };
 
   const handleReturn = () => {
     setModalVisible(false);
-    router.push('assignPersonnelManagement');
+    router.push({pathname: 'assignPersonnelManagement',
+      params: { clubName: clubName } 
+    });
   };
 
   return (
@@ -92,14 +104,18 @@ const Assign = () => {
             {Array.from({ length: personnelCount }).map((_, index) => (
               <View key={index} style={styles.pickerItemContainer}>
                 <Text style={styles.pickerLabel}>Personnel {index + 1}:</Text>
-                <View style={styles.pickerWrapper}>
-                  <RNPickerSelect
-                    onValueChange={(value) => handlePersonnelChange(value, index)}
-                    items={personnelOptions.filter((person) => !assignedPersonnel.includes(person.value))}
-                    placeholder={{ label: 'Select a person...', value: null }}
-                    style={pickerSelectStyles}
-                  />
-                </View>
+                <TouchableOpacity
+                  style={styles.pickerWrapper}
+                  onPress={() => {
+                    setCurrentPickerIndex(index);
+                    setTempSelectedValue(selectedPersonnel[index]);
+                    setPickerVisible(true);
+                  }}
+                >
+                  <Text style={styles.pickerText}>
+                    {selectedPersonnel[index] || 'Select a person...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
             ))}
             <CustomButton title="Assign" handlePress={handleAssign} customStyle={styles.button} textStyle={styles.buttonText} />
@@ -125,6 +141,34 @@ const Assign = () => {
                   <Text style={styles.modalButtonText}>Return</Text>
                 </TouchableOpacity>
               </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal
+          transparent={true}
+          visible={pickerVisible}
+          onRequestClose={() => setPickerVisible(false)}
+          animationType="slide"
+        >
+          <View style={styles.pickerModalOverlay}>
+            <View style={styles.pickerModalContainer}>
+              <Picker
+                selectedValue={tempSelectedValue}
+                onValueChange={handlePersonnelChange}
+                style={pickerSelectStyles.picker}
+              >
+                <Picker.Item label="Select a person..." value="" />
+                {personnelOptions.filter((person) => !assignedPersonnel.includes(person)).map((person, idx) => (
+                  <Picker.Item key={idx} label={person} value={person} />
+                ))}
+              </Picker>
+              <TouchableOpacity
+                style={styles.pickerModalButton}
+                onPress={handleConfirmSelection}
+              >
+                <Text style={styles.pickerModalButtonText}>Done</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -172,10 +216,24 @@ const styles = StyleSheet.create({
     elevation: 3
   },
 
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: '#F2F2F2'
+  },
+
+  pickerText: {
+    fontSize: 16,
+    color: '#333'
+  },
+
   button: {
     backgroundColor: '#E21A1A',
     paddingVertical: 10,
-    borderRadius: 5
+    borderRadius: 5,
+    marginTop: 20
   },
 
   buttonText: {
@@ -229,30 +287,42 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18
   },
+
+  pickerModalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+
+  pickerModalContainer: {
+    backgroundColor: '#FFF',
+    padding: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
+  },
+
+  pickerModalButton: {
+    backgroundColor: '#E21A1A',
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center'
+  },
+
+  pickerModalButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 16
+  }
 });
 
 const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderRadius: 8,
+  picker: {
+    height: 300,
+    width: '100%',
     color: '#333',
     backgroundColor: '#F2F2F2'
-  },
-
-  inputAndroid: {
-    fontSize: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    color: '#333',
-    backgroundColor: '#F2F2F2'
-  },
-
-  placeholder: {
-    color: '#666'
-  },
+  }
 });
 
 export default Assign;

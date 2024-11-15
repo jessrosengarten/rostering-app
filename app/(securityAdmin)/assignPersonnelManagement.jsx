@@ -6,7 +6,7 @@ import { images } from "../../constants";
 import { fetchPersonnelNeeded } from '../../Backend/securityAdmin';
 
 const AssignPersonnelManagement = () => {
-  const { clubName } = useLocalSearchParams();
+  const { clubName, club } = useLocalSearchParams();
   const [schedule, setSchedule] = useState([]);
   const router = useRouter();
 
@@ -26,7 +26,7 @@ const AssignPersonnelManagement = () => {
   const handleAssignPress = (week, day, personnelCount, openingTime) => {
     router.push({
       pathname: 'assignSpecificPersonnel',
-      params: { week, day, personnelCount, clubName, startTime: openingTime }
+      params: { week, day, personnelCount, clubName, startTime: openingTime, club}
     });
   };
 

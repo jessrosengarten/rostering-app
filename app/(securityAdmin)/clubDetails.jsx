@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, Dimensions, Toucha
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter,useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
@@ -54,7 +54,7 @@ const ClubDetails = () => {
             <Text style={styles.detailText}>{parsedClub.closingTime}</Text>
 
             <View style={styles.detailRow}>
-              <Ionicons name="time-outline" size={18} color="#E21A1A" /> 
+              <Ionicons name="time-outline" size={18} color="#E21A1A" />
               <Text style={styles.detailTitle}>Rate:</Text>
             </View>
             <Text style={styles.detailText}>R{parsedClub.rate}</Text>
@@ -64,7 +64,7 @@ const ClubDetails = () => {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push('clubPayments', { parsedClub})}
+              onPress={() => router.push('clubPayments', { parsedClub })}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>
@@ -73,7 +73,7 @@ const ClubDetails = () => {
               style={styles.button}
               onPress={() => router.push({
                 pathname: 'assignPersonnelManagement',
-                params: { clubName: parsedClub.name }
+                params: { club, clubName: parsedClub.name }
               })}
             >
               <Text style={styles.buttonText}>Assign Personnel</Text>
