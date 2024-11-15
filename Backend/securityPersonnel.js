@@ -1,4 +1,4 @@
-import { ref, get } from 'firebase/database';
+import { ref, get, remove } from 'firebase/database';
 import { db } from './firebaseConfig'; // Adjust the import according to your project structure
 
 export const fetchPersonnelShifts = async (personnelName, weekDates) => {
@@ -71,6 +71,10 @@ export const cancelShift = async (personnelName, date) => {
   try {
     let userId = null;
 
+    const personnelRef = ref(db, 'securityPersonnel');
+    const snapshot = await get(personnelRef);
+    const personnel = snapshot.val();
+
     // Find the user with the matching fullName
     Object.keys(personnel).forEach(key => {
       if (personnel[key].fullName === personnelName) {
@@ -81,8 +85,9 @@ export const cancelShift = async (personnelName, date) => {
     if (!userId) {
       throw new Error(`No user found with the name ${personnelName}`);
     }
-    const shiftsRef = ref(db, `securityPersonnel/${userId}/Shifts`);
+    const shiftsRef = ref(db, `securityPersonnel/${userId}/Shifts/${date}`);
     await remove(shiftsRef);
+    console.log(`Shift canceled: ${shiftsRef}`);
   } catch (error) {
     console.error('Error deleting club:', error);
   }
