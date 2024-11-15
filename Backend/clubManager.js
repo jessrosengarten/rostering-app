@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { ref,set, get, child, remove, update } from 'firebase/database';
+import { ref, set, get, child, remove, update } from 'firebase/database';
 
 // adding security personnel needed: 
 export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
@@ -31,7 +31,7 @@ export const fetchClubsByManager = async (managerName) => {
   }
 };
 
-export const getSchedule= async(clubName, week) => {
+export const getSchedule = async (clubName, week) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, `Clubs/${clubName}/Shifts/${week}`));
   if (snapshot.exists()) {
@@ -78,7 +78,7 @@ export const addingAttendance = async (personnelName, dateRange, day, attendance
   try {
     const clubRef = ref(db, `securityPersonnel/${personnelName}/Shifts/${dateRange}/${day}`);
     await update(clubRef, {
-      attendance: attendance,  
+      attendance: attendance,
     });
     return attendance;
   } catch (error) {

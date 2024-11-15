@@ -35,31 +35,32 @@ export const fetchPersonnelShifts = async (personnelName, weekDates) => {
     const personnelShifts = [];
 
     Object.keys(shifts).forEach(week => {
-      if(week==weekDates){
-      const days = shifts[week];
-      const [startDateStr] = week.split(' to ');
-      const startDate = new Date(startDateStr.split('-').reverse().join('-'));
-      Object.keys(days).forEach(day => {
-        const dayOffset = {
-          Monday: 0,
-          Tuesday: 1,
-          Wednesday: 2,
-          Thursday: 3,
-          Friday: 4,
-          Saturday: 5,
-          Sunday: 6
-        }[day];
-        const shiftDate = new Date(startDate);
-        shiftDate.setDate(startDate.getDate() + dayOffset);
-        const formattedDate = shiftDate.toLocaleDateString('en-GB').split('/').join('-'); // Format date as dd-MM-yyyy
-        personnelShifts.push({
-          week,
-          day,
-          date: formattedDate,
-          ...days[day]
+      if (week == weekDates) {
+        const days = shifts[week];
+        const [startDateStr] = week.split(' to ');
+        const startDate = new Date(startDateStr.split('-').reverse().join('-'));
+        Object.keys(days).forEach(day => {
+          const dayOffset = {
+            Monday: 0,
+            Tuesday: 1,
+            Wednesday: 2,
+            Thursday: 3,
+            Friday: 4,
+            Saturday: 5,
+            Sunday: 6
+          }[day];
+          const shiftDate = new Date(startDate);
+          shiftDate.setDate(startDate.getDate() + dayOffset);
+          const formattedDate = shiftDate.toLocaleDateString('en-GB').split('/').join('-'); // Format date as dd-MM-yyyy
+          personnelShifts.push({
+            week,
+            day,
+            date: formattedDate,
+            ...days[day]
+          });
         });
-      });
-    }});
+      }
+    });
 
     return personnelShifts;
   } catch (error) {

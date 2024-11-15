@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, FlatList, ImageBackground } from 'react-native';
-import {  images } from "../../constants";
+import { images } from "../../constants";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { fetchAllClubs, fetchAllSecurityPersonnel, fetchAllClubManagers } from '../../Backend/securityAdmin';
@@ -53,8 +53,8 @@ const SecurityAdmin = () => {
       setClubs(clubsArray);
     };
 
-    const loadPersonnel =async() => {
-      const personnelData =await fetchAllSecurityPersonnel();
+    const loadPersonnel = async () => {
+      const personnelData = await fetchAllSecurityPersonnel();
       const personnelArray = Object.keys(personnelData).map(key => ({
         name: key,
         ...personnelData[key],
@@ -62,8 +62,8 @@ const SecurityAdmin = () => {
       setSecurityPersonnel(personnelArray);
     };
 
-    const loadManagers =async() => {
-      const managersData =await fetchAllClubManagers();
+    const loadManagers = async () => {
+      const managersData = await fetchAllClubManagers();
       const managersArray = Object.keys(managersData).map(key => ({
         name: key,
         ...managersData[key],
@@ -111,27 +111,27 @@ const SecurityAdmin = () => {
   };
 
   // Display the list items
- const displayItems = ({ item }, type) => {
-  let logoSource = null;
-  let displayName = "";
+  const displayItems = ({ item }, type) => {
+    let logoSource = null;
+    let displayName = "";
 
-  if (type === 'clubs') {
-    displayName = item.name; 
-    logoSource = item.logo || images.clubDefaultLogo; 
-  } else if (type === 'securityPersonnel'|| type === 'clubManagers') {
-    displayName = item.fullName; 
-    logoSource = images.profileMale;
-  } 
+    if (type === 'clubs') {
+      displayName = item.name;
+      logoSource = item.logo || images.clubDefaultLogo;
+    } else if (type === 'securityPersonnel' || type === 'clubManagers') {
+      displayName = item.fullName;
+      logoSource = images.profileMale;
+    }
 
-  return (
-    <TouchableOpacity onPress={() => handleNavigation(type, item)}>
-      <View style={styles.personnelItem}>
-        <Image source={logoSource} style={styles.personIcon} />
-        <Text style={styles.personName}>{displayName}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+    return (
+      <TouchableOpacity onPress={() => handleNavigation(type, item)}>
+        <View style={styles.personnelItem}>
+          <Image source={logoSource} style={styles.personIcon} />
+          <Text style={styles.personName}>{displayName}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView edges={[]}>

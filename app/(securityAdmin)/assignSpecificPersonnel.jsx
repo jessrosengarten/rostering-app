@@ -87,8 +87,9 @@ const Assign = () => {
 
   const handleReturn = () => {
     setModalVisible(false);
-    router.push({pathname: 'assignPersonnelManagement',
-      params: { clubName: clubName } 
+    router.push({
+      pathname: 'assignPersonnelManagement',
+      params: { clubName: clubName }
     });
   };
 

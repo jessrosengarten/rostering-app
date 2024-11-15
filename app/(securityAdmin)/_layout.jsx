@@ -12,7 +12,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
         tintColor={color}
         className="w-6 h-6"
       />
-      <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs`}>
+      <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs w-16 text-center`}>
         {name}
       </Text>
     </View>
@@ -36,6 +36,7 @@ const SecurityAdminLayout = () => {
           borderBottomWidth: 1,
           borderBottomColor: '#d3d3d3',
           height: 90,
+          paddingTop: 15,
         },
         header: () => <CustomHeader username={adminName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
       }}
@@ -93,7 +94,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -101,7 +102,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -109,15 +110,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
-        }}
-      />
-      <Tabs.Screen
-        name="clubManagerUser"
-        options={{
-          title: '',
-          headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -125,7 +118,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -133,7 +126,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -141,7 +134,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -149,7 +142,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -157,7 +150,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -165,7 +158,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -173,7 +166,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -181,7 +174,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -189,7 +182,7 @@ const SecurityAdminLayout = () => {
         options={{
           title: '',
           headerShown: true,
-          tabBarButton: () => null, // This hides the tab
+          href: null,
         }}
       />
     </Tabs>

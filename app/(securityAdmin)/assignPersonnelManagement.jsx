@@ -26,7 +26,7 @@ const AssignPersonnelManagement = () => {
   const handleAssignPress = (week, day, personnelCount, openingTime) => {
     router.push({
       pathname: 'assignSpecificPersonnel',
-      params: { week, day, personnelCount, clubName, startTime: openingTime, club}
+      params: { week, day, personnelCount, clubName, startTime: openingTime, club }
     });
   };
 
@@ -60,9 +60,13 @@ const AssignPersonnelManagement = () => {
         </View>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.scheduleContainer}>
-            {schedule.map((item, index) => (
-              <View key={index}>{renderScheduleItem(item)}</View>
-            ))}
+            {schedule.length === 0 ? (
+              <Text style={styles.noShiftsText}>No shifts have been assigned for next week yet.</Text>
+            ) : (
+              schedule.map((item, index) => (
+                <View key={index}>{renderScheduleItem(item)}</View>
+              ))
+            )}
           </View>
         </ScrollView>
       </ImageBackground>
@@ -136,6 +140,17 @@ const styles = StyleSheet.create({
 
   assignedButtonText: {
     color: '#D3D3D3',
+  },
+
+  noShiftsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
+    marginTop: 20,
+    backgroundColor: '#F0F0F0', // Add white background
+    padding: 10, // Add padding for better appearance
+    borderRadius: 10,
   },
 });
 
