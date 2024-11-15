@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity, Modal, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
@@ -10,8 +10,6 @@ const { width, height } = Dimensions.get('window');
 const SecurityHome = () => {
   const [thisWeekShifts, setThisWeekShifts] = useState([]);
   const [nextWeekShifts, setNextWeekShifts] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedShift, setSelectedShift] = useState(null);
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const { personnelName } = useLocalSearchParams();
@@ -30,6 +28,16 @@ const SecurityHome = () => {
 
     fetchShifts();
   }, [personnelName]);
+
+
+  const hasDatePassed = (dateString) => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    const inputDate = new Date(year, month - 1, day);
+    const currentDate = new Date();
+
+    currentDate.setHours(0, 0, 0, 0); // setting time to midnight
+    return inputDate <= currentDate;
+  };
 
   // Function to get the date range for the week
   function getWeekRange(date = new Date()) {
@@ -83,15 +91,28 @@ const SecurityHome = () => {
     return `${startFormatted} to ${endFormatted}`;
   }
 
-  const handleCancelPress = (shift) => {
-    setSelectedShift(shift);
-    setModalVisible(true);
-  };
-
-  const confirmCancelShift = async () => {
-    await cancelShift(personnelName, selectedShift.date);
-    console.log("Shift canceled:", selectedShift);
-    setModalVisible(false);
+  const handleCancelShift = async (selectedShift, weekDate) => {
+    Alert.alert(
+      'Confirm Cancellation',
+      `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ?selectedShift.clubName : ''}?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Cancel Shift',
+          onPress: async () => {
+            try {
+              await cancelShift(personnelName, weekDate);
+            } catch (error) {
+              console.error("Error cancelling shift:", error);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -125,9 +146,12 @@ const SecurityHome = () => {
                 </View>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
-                    style={styles.cancelButton}
-                    onPress={() => handleCancelPress(shift)}>
-                    <Text style={styles.buttonText}>Cancel</Text>
+                    style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
+                    onPress={() => handleCancelShift(shift, nextWeekDates)}
+                    disabled={hasDatePassed(shift.date)}>
+                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+            {'Cancel Shift'}
+          </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -157,46 +181,18 @@ const SecurityHome = () => {
                 </View>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
-                    style={styles.cancelButton}
-                    onPress={() => handleCancelPress(shift)}>
-                    <Text style={styles.buttonText}>Cancel</Text>
+                    style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
+                    onPress={() => handleCancelShift(shift, nextWeekDates)}
+                    disabled={hasDatePassed(shift.date)}>
+                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+            {'Cancel Shift'}
+          </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             ))}
           </View>
         </ScrollView>
-
-        {/* Confirmation Modal */}
-        <Modal
-          transparent={true}
-          animationType="slide"
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>
-                Are you sure you want to cancel your shift on{' '}
-                {selectedShift ? selectedShift.day : ''} at{' '}
-                {selectedShift ? selectedShift.clubName : ''}?
-              </Text>
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => setModalVisible(false)}>
-                  <Text style={styles.buttonText}>Back</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.confirmButton}
-                  onPress={confirmCancelShift()}>
-                  <Text style={styles.buttonText}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -305,6 +301,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
+  },
+  assignedButtonText: {
+    color: '#D3D3D3',
+  },
+  assignedButton: {
+    backgroundColor: '#A9A9A9',
   },
 });
 
