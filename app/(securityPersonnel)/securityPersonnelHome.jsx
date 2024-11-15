@@ -94,7 +94,7 @@ const SecurityHome = () => {
   const handleCancelShift = async (selectedShift, weekDate) => {
     Alert.alert(
       'Confirm Cancellation',
-      `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ?selectedShift.clubName : ''}?`,
+      `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ? selectedShift.clubName : ''}?`,
       [
         {
           text: 'Cancel',
@@ -149,9 +149,9 @@ const SecurityHome = () => {
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
                     onPress={() => handleCancelShift(shift, nextWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
-                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
-            {'Cancel Shift'}
-          </Text>
+                    <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+                      {'Cancel Shift'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -184,9 +184,9 @@ const SecurityHome = () => {
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
                     onPress={() => handleCancelShift(shift, nextWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
-                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
-            {'Cancel Shift'}
-          </Text>
+                    <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+                      {'Cancel Shift'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>

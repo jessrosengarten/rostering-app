@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { ref,set, get, child, remove, update } from 'firebase/database';
+import { ref, set, get, child, remove, update } from 'firebase/database';
 
 export const fetchAllClubs = async () => {
   const dbRef = ref(db);
@@ -31,6 +31,32 @@ export const fetchAllClubManagers = async () => {
   }
 };
 
+// Function to get the next week's range
+function getNextWeekRange(date = new Date()) {
+  const currentDate = new Date(date);
+
+  const startOfWeekDay = 1; // Monday
+  const currentDay = currentDate.getDay();
+
+  const startOfNextWeek = new Date(currentDate);
+  startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+
+  const endOfNextWeek = new Date(startOfNextWeek);
+  endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const startFormatted = formatDate(startOfNextWeek);
+  const endFormatted = formatDate(endOfNextWeek);
+
+  return { startFormatted, endFormatted };
+}
+
 export const fetchPersonnelNeeded = async (clubName) => {
   try {
     // Fetch the club's data to get the opening time
@@ -61,19 +87,24 @@ export const fetchPersonnelNeeded = async (clubName) => {
     }
     const personnelData = personnelSnapshot.val();
 
-    // Add the assigned property to each shift
+    // Get the next week's date range
+    const { startFormatted, endFormatted } = getNextWeekRange();
+
+    // Add the assigned property to each shift for the next week
     const schedule = [];
     for (const week in shiftsData) {
-      for (const day in shiftsData[week]) {
-        const personnelNum = shiftsData[week][day];
-        const assigned = checkIfAssigned(personnelData, clubName, week, day);
-        schedule.push({
-          week,
-          day,
-          personnelNum,
-          openingTime,
-          assigned
-        });
+      if (week >= startFormatted && week <= endFormatted) {
+        for (const day in shiftsData[week]) {
+          const personnelNum = shiftsData[week][day];
+          const assigned = checkIfAssigned(personnelData, clubName, week, day);
+          schedule.push({
+            week,
+            day,
+            personnelNum,
+            openingTime,
+            assigned
+          });
+        }
       }
     }
 
@@ -144,7 +175,7 @@ export const assignPersonnelToShift = async (personnelName, clubName, week, day,
   }
 };
 
-export const getSchedule= async(clubName, week) => {
+export const getSchedule = async (clubName, week) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, `Clubs/${clubName}/Shifts/${week}`));
   if (snapshot.exists()) {
@@ -200,23 +231,23 @@ export const checkIfAssigned = (personnelData, clubName, week, day) => {
 export const fetchAllClubsByManager = async (managerName) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'Clubs'));
-  
+
   const result = [];
-  
+
   if (snapshot.exists()) {
     const clubs = snapshot.val();
-    
+
     for (const clubId in clubs) {
       const club = clubs[clubId];
-      
+
       if (club.manager === managerName) {
-        result.push(clubId); 
+        result.push(clubId);
       }
     }
   } else {
     console.log("No clubs found in the database.");
-    return []; 
+    return [];
   }
-  return result; 
+  return result;
 };
 

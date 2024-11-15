@@ -1,5 +1,5 @@
 import { Link, useRouter } from 'expo-router';
-import {  View, ScrollView, ImageBackground, Image } from 'react-native';
+import { View, ScrollView, ImageBackground, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../constants'
 import CustomButton from '../components/CustomButton'

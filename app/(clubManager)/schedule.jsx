@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, ImageBackground, Alert, TouchableOp
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { router, useLocalSearchParams } from 'expo-router';
-import { getSchedule,getSecurityPersonnelShifts, addingAttendance } from '../../Backend/clubManager';
+import { getSchedule, getSecurityPersonnelShifts, addingAttendance } from '../../Backend/clubManager';
 
 
 const Schedule = () => {
@@ -221,48 +221,48 @@ const Schedule = () => {
                     <Text>No personnel assigned for this day.</Text>
                   )}
                 </View>
-            ))}
-        </View>
-  </View>
+              ))}
+            </View>
+          </View>
 
-  {/* Display "Next Week" Schedule */}
-  <View style={styles.weekContainer}>
-    <Text style={styles.weekHeading}>Next Week</Text>
-    <Text style={styles.dateRange}>{nextWeekDates}</Text>
+          {/* Display "Next Week" Schedule */}
+          <View style={styles.weekContainer}>
+            <Text style={styles.weekHeading}>Next Week</Text>
+            <Text style={styles.dateRange}>{nextWeekDates}</Text>
 
-    {/* Display schedule for each day next week */}
-    <View style={styles.scrollContainer}>
-      {nextWeekSchedule.map(({ day, shift }) => (
-        <View key={day} style={styles.dayContainer}>
-          <Text style={styles.dayHeading}>{day}</Text>
-          <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
-          <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
+            {/* Display schedule for each day next week */}
+            <View style={styles.scrollContainer}>
+              {nextWeekSchedule.map(({ day, shift }) => (
+                <View key={day} style={styles.dayContainer}>
+                  <Text style={styles.dayHeading}>{day}</Text>
+                  <Text style={styles.shiftText}>{shift !== null && shift !== undefined ? `Number of Personnel Requested: ${shift}` : 'No shift assigned'}</Text>
+                  <Text style={styles.sectionHeading}>Personnel Assigned:</Text>
 
-                    {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
-                        nextWeekPersonnelList[day].map((person) => (
-                            <View key={person.email} style={styles.personContainer}>
-                                <Text style={styles.personName}>{person.fullName}</Text>
-                            </View>
-                        ))
-                    ) : (
-                        <Text>No personnel assigned for this day.</Text>
-                    )}
-        </View>
-      ))}
-    </View>
+                  {nextWeekPersonnelList[day] && nextWeekPersonnelList[day].length > 0 ? (
+                    nextWeekPersonnelList[day].map((person) => (
+                      <View key={person.email} style={styles.personContainer}>
+                        <Text style={styles.personName}>{person.fullName}</Text>
+                      </View>
+                    ))
+                  ) : (
+                    <Text>No personnel assigned for this day.</Text>
+                  )}
+                </View>
+              ))}
+            </View>
 
-    {/* Conditional "Assign" button for "Next Week" */}
-    <TouchableOpacity
-      style={[styles.assignButton, nextWeekSchedule.length > 0 && styles.disabledButton]}
-      onPress={() => nextWeekSchedule.length === 0 && router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
-      disabled={nextWeekSchedule.length > 0}
-    >
-      <Text style={styles.assignButtonText}>Assign</Text>
-    </TouchableOpacity>
-  </View>
-</ScrollView>
-</ImageBackground>
-</SafeAreaView>
+            {/* Conditional "Assign" button for "Next Week" */}
+            <TouchableOpacity
+              style={[styles.assignButton, nextWeekSchedule.length > 0 && styles.disabledButton]}
+              onPress={() => nextWeekSchedule.length === 0 && router.push(`/assignSecurityPersonnel?club=${encodeURIComponent(JSON.stringify(club))}`)}
+              disabled={nextWeekSchedule.length > 0}
+            >
+              <Text style={styles.assignButtonText}>Assign</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 

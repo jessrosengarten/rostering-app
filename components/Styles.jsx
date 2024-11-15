@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const commonStyles = StyleSheet.create({
 
-header: {
+    header: {
         width: '100%',
         padding: 15,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
