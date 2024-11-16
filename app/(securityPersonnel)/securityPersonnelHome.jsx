@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity, 
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { fetchPersonnelShifts, cancelShift } from '../../Backend/securityPersonnel';
+import { fetchPersonnelShifts, cancelShift, checkAvailablePersonnel , reassignShiftToPersonnel} from '../../Backend/securityPersonnel';
 import { router, useLocalSearchParams } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
@@ -92,6 +92,18 @@ const SecurityHome = () => {
   }
 
   const handleCancelShift = async (selectedShift, weekDate) => {
+    // First, check for available personnel
+  try {
+    const availablePersonnel = await checkAvailablePersonnel(personnelName,selectedShift);
+    
+    if (availablePersonnel.length === 0) {
+      // No available personnel, show alert to contact the company
+      Alert.alert(
+        'No Available Personnel',
+        'You cannot cancel the shift as there is no available personnel for reassignment. Please contact the company.'
+      );
+      return;
+    }
     Alert.alert(
       'Confirm Cancellation',
       `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ?selectedShift.clubName : ''}?`,
@@ -105,14 +117,21 @@ const SecurityHome = () => {
           onPress: async () => {
             try {
               await cancelShift(personnelName, weekDate);
+              await reassignShiftToPersonnel(availablePersonnel[0], selectedShift.clubName, weekDate, selectedShift.day, selectedShift.startTime);
+              Alert.alert('Shift Cancelled', 'Your shift has been cancelled and reassigned.');
             } catch (error) {
-              console.error("Error cancelling shift:", error);
+              console.error("Error cancelling/ reassigning shift:", error);
+              Alert.alert('Error', 'There was an issue canceling or reassigning the shift.');
             }
           },
         },
       ],
       { cancelable: false }
     );
+    } catch (error) {
+    console.error('Error checking available personnel:', error);
+    Alert.alert('Error', 'There was an issue checking available personnel.');
+  }
   };
 
   return (
@@ -149,7 +168,7 @@ const SecurityHome = () => {
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
-                    onPress={() => handleCancelShift(shift, nextWeekDates)}
+                    onPress={() => handleCancelShift(shift, thisWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
                       <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
             {'Cancel Shift'}
