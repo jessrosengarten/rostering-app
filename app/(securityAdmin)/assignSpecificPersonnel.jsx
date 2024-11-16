@@ -9,7 +9,7 @@ import { fetchSecurityPersonnelFullNames, assignPersonnelToShift } from '../../B
 
 const Assign = () => {
   const { day, personnelCount, clubName, week, startTime, club } = useLocalSearchParams();
-  const parsedClub = JSON.parse(club);
+  //const parsedClub = JSON.parse(club);
   const router = useRouter();
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
@@ -63,7 +63,26 @@ const Assign = () => {
     } else {
       try {
         for (const fullName of selectedPersonnel) {
-          await assignPersonnelToShift(fullName, clubName, week, day, startTime);
+          try {
+            await assignPersonnelToShift(fullName, clubName, week, day, startTime);
+          } catch (error) {
+            if (error.message.includes('already has a shift assigned')) {
+              Alert.alert(
+                "Attention",
+                `Personnel ${fullName} already has a shift assigned for ${day}. Please choose another personnel.`,
+                [
+                  { text: "OK", onPress: () => {
+                    setCurrentPickerIndex(selectedPersonnel.indexOf(fullName));
+                    setTempSelectedValue(fullName);
+                    //setPickerVisible(true);
+                  }}
+                ]
+              );
+              return;
+            } else {
+              throw error;
+            }
+          }
         }
         setClubSchedule((prev) => ({
           ...prev,
