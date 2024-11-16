@@ -120,7 +120,7 @@ const SecurityHome = () => {
       <ImageBackground source={images.background} style={styles.background}>
         <View style={styles.header}>
           <Text style={styles.headerText}>{personnelName} - Shifts</Text>
-          <Text style={styles.noticeText}>(You can't cancel a shift on the day)</Text>
+          <Text style={styles.noticeText}>(You can't cancel a shift on the day or if it passed)</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
 
