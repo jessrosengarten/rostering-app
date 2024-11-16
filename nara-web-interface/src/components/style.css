@@ -1,3 +1,24 @@
 .generate-password-button {
     margin-left: 10px;
 }
+
+.navbar-custom {
+    background-color: #5d5d5d;
+    color: white;
+}
+
+.navbar-custom .navbar-brand {
+    color: #fe3f3f;
+    font-weight: bold;
+    font-size: 2rem;
+    position: relative;
+    left: -20px;
+}
+
+.navbar-custom .nav-link {
+    color: #ffffff;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #ff4a4a;
+}

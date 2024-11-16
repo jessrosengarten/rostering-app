@@ -5,9 +5,9 @@ import { NavLink } from 'react-router-dom';
 
 function navbar() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="navbar-custom">
       <Container>
-        <Navbar.Brand href="#home">Nara</Navbar.Brand>
+        <Navbar.Brand href="#home">NARA</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
