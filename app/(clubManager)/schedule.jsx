@@ -142,6 +142,34 @@ const Schedule = () => {
     return `${startFormatted} to ${endFormatted}`;
   }
 
+  const hasDatePassed = (weekRangeStr, dayOfWeek) => {
+  const [startDateStr, endDateStr] = weekRangeStr.split(' to ');
+  const startDate = new Date(startDateStr.split('-').reverse().join('-')); 
+
+  const dayOffset = {
+    Monday: 0,
+    Tuesday: 1,
+    Wednesday: 2,
+    Thursday: 3,
+    Friday: 4,
+    Saturday: 5,
+    Sunday: 6
+  }[dayOfWeek];
+
+  const shiftDate = new Date(startDate);
+  shiftDate.setDate(startDate.getDate() + dayOffset);
+  shiftDate.setHours(0, 0, 0, 0);
+  const dateString = shiftDate.toLocaleDateString('en-GB').split('/').join('-'); 
+
+  const [day, month, year] = dateString.split('-').map(Number);
+  const inputDate = new Date(year, month - 1, day);
+
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
+  return inputDate <= currentDate;
+};
+
   const handleAttendanceSubmit = async (name, dateRange, day) => {
     Alert.alert(
       'Confirm Attendance',
@@ -156,7 +184,6 @@ const Schedule = () => {
           onPress: async () => {
             try {
               const personnelName = name.email.replace(/\./g, ',');
-
               const status = await addingAttendance(personnelName, dateRange, day, 'Attended');
               await loadPersonnelListThisWeek();
               console.log("Attendance updated:", status);
@@ -212,7 +239,7 @@ const Schedule = () => {
                         <Text style={styles.personName}>{person.fullName}</Text>
                         <Button
                           title={person.attendance ? person.attendance === "Attended" ? "Attended" : "Not Attended" : "Mark Attendance"}
-                          disabled={person.attendance === "Attended" || person.attendance === "Not Attended"}
+                          disabled={!hasDatePassed(thisWeekDates, day) ||person.attendance === "Attended" || person.attendance === "Not Attended"}
                           onPress={() => handleAttendanceSubmit(person, thisWeekDates, day)}
                         />
                       </View>
