@@ -115,13 +115,25 @@ const AddUser = () => {
         }, 5000);
     };
 
+    React.useEffect(() => {
+        document.body.style.backgroundColor = '#bfbfbf';
+      }, []);
+
     return (
         <Container style={{ marginTop: '50px', marginBottom: '50px' }}>
             <Row className="justify-content-md-center">
                 <Col md={8}>
                     <h1 className="mt-4">Add a User</h1>
                     {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
-                    <Form onSubmit={handleSubmit} style={{ backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                    <Form onSubmit={handleSubmit} 
+                        style={{ 
+                            backgroundColor: '#4d4d4d', 
+                            padding: '20px', 
+                            borderRadius: '5px', 
+                            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', 
+                            color: 'white' 
+                        }}
+                    >
                         <Form.Group controlId="formRole" className="mt-3">
                             <Form.Label>User Type</Form.Label>
                             <Form.Control
@@ -130,6 +142,11 @@ const AddUser = () => {
                                 value={form.role}
                                 onChange={handleChange}
                                 isInvalid={!!errors.role}
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                             >
                                 <option value="">Select User Type</option>
                                 <option value="clubManager">Club Manager</option>
@@ -148,6 +165,11 @@ const AddUser = () => {
                                         value={form.fullName}
                                         onChange={handleChange}
                                         isInvalid={!!errors.fullName}
+                                        style={{
+                                            backgroundColor: '#e4e3e3',
+                                            color: '#333',
+                                            borderColor: '#e4e3e3',
+                                          }}
                                     />
                                     <Form.Control.Feedback type="invalid">{errors.fullName}</Form.Control.Feedback>
                                 </Form.Group>
@@ -159,6 +181,11 @@ const AddUser = () => {
                                         value={form.contactNumber}
                                         onChange={handleChange}
                                         isInvalid={!!errors.contactNumber}
+                                        style={{
+                                            backgroundColor: '#e4e3e3',
+                                            color: '#333',
+                                            borderColor: '#e4e3e3',
+                                          }}
                                     />
                                     <Form.Control.Feedback type="invalid">{errors.contactNumber}</Form.Control.Feedback>
                                 </Form.Group>
@@ -170,6 +197,11 @@ const AddUser = () => {
                                         value={form.email}
                                         onChange={handleChange}
                                         isInvalid={!!errors.email}
+                                        style={{
+                                            backgroundColor: '#e4e3e3',
+                                            color: '#333',
+                                            borderColor: '#e4e3e3',
+                                          }}
                                     />
                                     <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                                 </Form.Group>
@@ -182,8 +214,14 @@ const AddUser = () => {
                                             value={form.password}
                                             onChange={handleChange}
                                             isInvalid={!!errors.password}
+                                            style={{
+                                                backgroundColor: '#e4e3e3',
+                                                color: '#333',
+                                                borderColor: '#e4e3e3',
+                                              }}
                                         />
-                                        <Button variant="secondary" onClick={handleGeneratePassword} className='generate-password-button'>
+                                        <Button variant="secondary" onClick={handleGeneratePassword} className='generate-password-button'
+                                        style={{ backgroundColor: '#272727', borderColor: '#272727', color: 'white' }}>
                                             Generate Password
                                         </Button>
                                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
@@ -199,6 +237,11 @@ const AddUser = () => {
                                                 value={form.rate}
                                                 onChange={handleChange}
                                                 isInvalid={!!errors.rate}
+                                                style={{
+                                                    backgroundColor: '#e4e3e3',
+                                                    color: '#333',
+                                                    borderColor: '#e4e3e3',
+                                                  }}
                                             />
                                             <Form.Control.Feedback type="invalid">{errors.rate}</Form.Control.Feedback>
                                         </Form.Group>
@@ -210,6 +253,11 @@ const AddUser = () => {
                                                 value={form.bankDetails}
                                                 onChange={handleChange}
                                                 isInvalid={!!errors.bankDetails}
+                                                style={{
+                                                    backgroundColor: '#e4e3e3',
+                                                    color: '#333',
+                                                    borderColor: '#e4e3e3',
+                                                  }}
                                             />
                                             <Form.Control.Feedback type="invalid">{errors.bankDetails}</Form.Control.Feedback>
                                         </Form.Group>
@@ -221,6 +269,11 @@ const AddUser = () => {
                                                 value={form.gender}
                                                 onChange={handleChange}
                                                 isInvalid={!!errors.gender}
+                                                style={{
+                                                    backgroundColor: '#e4e3e3',
+                                                    color: 'black',
+                                                    borderColor: '#e4e3e3',
+                                                  }}
                                             >
                                                 <option value="">Select Gender</option>
                                                 <option value="Male">Male</option>
@@ -237,6 +290,11 @@ const AddUser = () => {
                                                 value={form.personnelType}
                                                 onChange={handleChange}
                                                 isInvalid={!!errors.personnelType}
+                                                style={{
+                                                    backgroundColor: '#e4e3e3',
+                                                    color: '#333',
+                                                    borderColor: '#e4e3e3',
+                                                  }}
                                             >
                                                 <option value="">Select Personnel Type</option>
                                                 <option value="headSecurity">Head Security</option>
@@ -246,7 +304,8 @@ const AddUser = () => {
                                         </Form.Group>
                                     </>
                                 )}
-                                <Button type="submit" variant="primary" className="mt-3">
+                                <Button type="submit" variant="#ff4a4a" className="mt-3"
+                                style={{ backgroundColor: '#fc2929', borderColor: '#fc2929', color: 'white' }}>
                                     Add User
                                 </Button>
                             </>

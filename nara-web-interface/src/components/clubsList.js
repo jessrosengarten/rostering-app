@@ -120,14 +120,32 @@ const ClubsList = () => {
 };
 
   return (
+    <>
     <Container>
+    <h1 className="mt-4">Club List</h1>
+    </Container>
+    <Container
+    style={{
+      backgroundColor: '#4d4d4d',
+      padding: '20px',
+      borderRadius: '10px',
+      marginTop: '10px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    }}>
       <Row className="justify-content-md-center">
         <Col md={15}>
-          <h1 className="mt-4">Club List</h1>
           {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form.Group controlId="filterManager" className="mt-3">
-            <Form.Label>Filter by Club Manager</Form.Label>
-            <Form.Control as="select" value={filterClubManager} onChange={handleFilterChange}>
+            <Form.Label
+            style={{
+              color: 'white',
+            }}>Filter by Club Manager</Form.Label>
+            <Form.Control as="select" value={filterClubManager} onChange={handleFilterChange}
+            style={{
+              backgroundColor: '#e4e3e3',
+              color: '#333',
+              borderColor: '#e4e3e3',
+            }}>
               <option value="">Select a Manager</option>
                         {managers.map((manager, index) => (
                             <option key={index} value={manager}>
@@ -160,12 +178,33 @@ const ClubsList = () => {
                   <td>{filteredClubs[key].manager}</td>
                   <td>{filteredClubs[key].rate}</td>
                   <td>
-                    <Button variant="primary" onClick={() => handleSelectEdit(key)} className="mr-5">
+                  <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                    <Button onClick={() => handleSelectEdit(key)} className="mr-5"
+                      style={{
+                        backgroundColor: '#272727',
+                        color: '#ffffff',
+                        borderColor: '#272727',
+                        width: '100px',
+                        height: '40px',
+                      }}>
                       Edit
                     </Button>
-                    <Button variant="danger" onClick={() => handleShowConfirmModal(key)}>
+                    <Button onClick={() => handleShowConfirmModal(key)}
+                      style={{
+                        backgroundColor: '#fc2929',
+                        color: '#ffffff',
+                        borderColor: '#fc2929',
+                        width: '100px',
+                        height: '40px',
+                      }}>
                       Delete
                     </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -188,6 +227,11 @@ const ClubsList = () => {
                   name="clubName"
                   value={currentClub.clubName}
                   disabled
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               <Form.Group controlId="formAddress">
@@ -197,6 +241,11 @@ const ClubsList = () => {
                   name="address"
                   value={currentClub.address}
                   onChange={(e) => setCurrentClub({ ...currentClub, address: e.target.value })}
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               <Form.Group controlId="formContactNumber" className="mt-3">
@@ -206,6 +255,11 @@ const ClubsList = () => {
                   name="contactNum"
                   value={currentClub.contactNum}
                   onChange={(e) => setCurrentClub({ ...currentClub, contactNum: e.target.value })}
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               <Form.Group controlId="formOpeningTime" className="mt-3">
@@ -215,6 +269,11 @@ const ClubsList = () => {
                   name="openingTime"
                   value={currentClub.openingTime}
                   onChange={(e) => setCurrentClub({ ...currentClub, openingTime: e.target.value })}
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               <Form.Group controlId="formClosingTime" className="mt-3">
@@ -224,6 +283,11 @@ const ClubsList = () => {
                   name="closingTime"
                   value={currentClub.closingTime}
                   onChange={(e) => setCurrentClub({ ...currentClub, closingTime: e.target.value })}
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               <Form.Group controlId="formManager" className="mt-3">
@@ -232,6 +296,11 @@ const ClubsList = () => {
                   as="select"
                   //value={currentClub.manager}
                   onChange={(e) => setCurrentClub({ ...currentClub, manager: e.target.value })}
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                   required>
                     <option value="manager">{currentClub.manager}</option>
                         {managers.map((manager, index) => (
@@ -248,22 +317,36 @@ const ClubsList = () => {
                   name="rate"
                   value={currentClub.rate}
                   onChange={(e) => setCurrentClub({ ...currentClub, rate: e.target.value })}
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
             </Form>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>
+          <Button variant="primary" onClick={() => handleModalSave(currentClub)}
+            style={{
+              backgroundColor: '#272727',
+              color: '#ffffff',
+              borderColor: '#272727',
+            }}>
+            Save Changes
+          </Button>
+          <Button variant="secondary" onClick={handleModalClose}
+          style={{
+            backgroundColor: '#fc2929',
+            color: '#ffffff',
+            borderColor: '#fc2929',
+          }}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleModalSave(currentClub)}>
-  Save Changes
-</Button>
 
         </Modal.Footer>
       </Modal>
-
       <Modal show={showConfirmModal} onHide={handleConfirmModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
@@ -281,6 +364,7 @@ const ClubsList = () => {
         </Modal.Footer>
       </Modal>
     </Container>
+    </>
   );
 };
 

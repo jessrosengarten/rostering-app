@@ -62,7 +62,15 @@ const AddClub = () => {
                 <Col md={8}>
                     <h1 className="mt-4">Add a Club</h1>
                     {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
-                    <Form onSubmit={handleCreateClub} style={{ backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                    <Form onSubmit={handleCreateClub} 
+                        style={{ 
+                            backgroundColor: '#4d4d4d', 
+                            padding: '20px', 
+                            borderRadius: '5px', 
+                            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', 
+                            color: 'white' 
+                        }}
+                    >
                         <Form.Group controlId="formClubName">
                             <Form.Label>Club Name</Form.Label>
                             <Form.Control
@@ -70,6 +78,11 @@ const AddClub = () => {
                                 value={form.clubName}
                                 onChange={(e) => setForm({ ...form, clubName: e.target.value })}
                                 required
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                             />
                         </Form.Group>
                         <Form.Group controlId="formAddress">
@@ -79,6 +92,11 @@ const AddClub = () => {
                                 value={form.address}
                                 onChange={(e) => setForm({ ...form, address: e.target.value })}
                                 required
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                             />
                         </Form.Group>
                         <Form.Group controlId="formContact" className="mt-3">
@@ -88,6 +106,11 @@ const AddClub = () => {
                                 value={form.contact}
                                 onChange={(e) => setForm({ ...form, contact: e.target.value })}
                                 required
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                             />
                         </Form.Group>
                         <Form.Group controlId="formOpeningTime" className="mt-3">
@@ -97,6 +120,11 @@ const AddClub = () => {
                                 value={form.openingTime}
                                 onChange={(e) => setForm({ ...form, openingTime: e.target.value })}
                                 required
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                                 />
                         </Form.Group>
                         <Form.Group controlId="formClosingTime" className="mt-3">
@@ -106,6 +134,11 @@ const AddClub = () => {
                                 value={form.closingTime}
                                 onChange={(e) => setForm({ ...form, closingTime: e.target.value })}
                                 required
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                                 />
                         </Form.Group>
 
@@ -115,7 +148,13 @@ const AddClub = () => {
                         as="select"
                         value={form.manager}
                         onChange={(e) => setForm({ ...form, manager: e.target.value })}
-                        required>
+                        required
+                        style={{
+                            backgroundColor: '#e4e3e3',
+                            color: '#333',
+                            borderColor: '#e4e3e3',
+                          }}
+                        >                            
 
                         <option value="">Select a Manager</option>
                         {managers.map((manager, index) => (
@@ -133,9 +172,15 @@ const AddClub = () => {
                                 value={form.rate}
                                 onChange={(e) => setForm({ ...form, rate: e.target.value })}
                                 required
+                                style={{
+                                    backgroundColor: '#e4e3e3',
+                                    color: '#333',
+                                    borderColor: '#e4e3e3',
+                                  }}
                                 />
                                 </Form.Group>
-                        <Button type="submit" variant="primary" className="mt-3">
+                        <Button type="submit" variant="primary" className="mt-3"
+                        style={{ backgroundColor: '#fc2929', borderColor: '#fc2929', color: 'white' }}>
                             Add Club
                         </Button>
                     </Form>

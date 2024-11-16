@@ -147,14 +147,33 @@ const UserManagement = () => {
   };
 
   return (
+    <>
     <Container>
+    <h1 className="mt-4">User List</h1>
+    </Container>
+    <Container
+    style={{
+      backgroundColor: '#4d4d4d',
+      padding: '20px',
+      borderRadius: '10px',
+      marginTop: '10px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    }}>
       <Row className="justify-content-md-center">
         <Col md={15}>
-          <h1 className="mt-4">User List</h1>
           {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
           <Form.Group controlId="filterRole" className="mt-3">
-            <Form.Label>Filter by Role</Form.Label>
-            <Form.Control as="select" value={filterRole} onChange={handleFilterChange}>
+            <Form.Label
+            style={{
+              color: 'white',
+            }}
+            >Filter by Role</Form.Label>
+            <Form.Control as="select" value={filterRole} onChange={handleFilterChange}
+            style={{
+              backgroundColor: '#e4e3e3',
+              color: '#333',
+              borderColor: '#e4e3e3',
+            }}>
               <option value="">All Roles</option>
               <option value="Club Manager">Club Manager</option>
               <option value="Security Admin">Security Admin</option>
@@ -168,7 +187,7 @@ const UserManagement = () => {
                 <th>Contact Number</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Actions</th>
+                <th style={{ width: '150px', textAlign: 'center' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -178,13 +197,38 @@ const UserManagement = () => {
                   <td>{filteredUsers[key].contactNumber}</td>
                   <td>{filteredUsers[key].email}</td>
                   <td>{filteredUsers[key].role}</td>
-                  <td>
-                    <Button variant="primary" onClick={() => handleEdit(filteredUsers[key])} className="mr-5">
+                  <td style={{ textAlign: 'center', verticalAlign: 'middle'}}>
+                  <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                    <Button
+                      onClick={() => handleEdit(filteredUsers[key])} className="mr-5"
+                      style={{
+                        backgroundColor: '#272727',
+                        color: '#ffffff',
+                        borderColor: '#272727',
+                        width: '100px',
+                        height: '40px',
+                      }}
+                    >
                       Edit
                     </Button>
-                    <Button variant="danger" onClick={() => handleShowConfirmModal(filteredUsers[key])}>
+                    <Button
+                      onClick={() => handleShowConfirmModal(filteredUsers[key])}
+                      style={{
+                        backgroundColor: '#fc2929',
+                        color: '#ffffff',
+                        borderColor: '#fc2929',
+                        width: '100px',
+                        height: '40px',
+                      }}
+                    >
                       Delete
                     </Button>
+                  </div>
                   </td>
                 </tr>
               ))}
@@ -208,6 +252,11 @@ const UserManagement = () => {
                   value={currentUser.email}
                   onChange={handleModalChange}
                   readOnly
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               <Form.Group controlId="formRole" className="mt-3">
@@ -217,6 +266,11 @@ const UserManagement = () => {
                   name="role"
                   value={currentUser.role}
                   readOnly
+                  style={{
+                    backgroundColor: '#e4e3e3',
+                    color: '#333',
+                    borderColor: '#e4e3e3',
+                  }}
                 />
               </Form.Group>
               {currentUser.role === 'Club Manager' || currentUser.role === 'Security Admin' ? (
@@ -228,6 +282,11 @@ const UserManagement = () => {
                       name="fullName"
                       value={currentUser.fullName || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                   <Form.Group controlId="formContactNumber" className="mt-3">
@@ -237,6 +296,11 @@ const UserManagement = () => {
                       name="contactNumber"
                       value={currentUser.contactNumber || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                 </>
@@ -249,6 +313,11 @@ const UserManagement = () => {
                       name="fullName"
                       value={currentUser.fullName || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                   <Form.Group controlId="formRate" className="mt-3">
@@ -258,6 +327,11 @@ const UserManagement = () => {
                       name="rate"
                       value={currentUser.rate || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                   <Form.Group controlId="formContactNumber" className="mt-3">
@@ -267,6 +341,11 @@ const UserManagement = () => {
                       name="contactNumber"
                       value={currentUser.contactNumber || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                   <Form.Group controlId="formBankDetails" className="mt-3">
@@ -276,6 +355,11 @@ const UserManagement = () => {
                       name="bankDetails"
                       value={currentUser.bankDetails || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                   <Form.Group controlId="formGender" className="mt-3">
@@ -285,6 +369,11 @@ const UserManagement = () => {
                       name="gender"
                       value={currentUser.gender || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                   <Form.Group controlId="formPersonnelType" className="mt-3">
@@ -294,6 +383,11 @@ const UserManagement = () => {
                       name="personnelType"
                       value={currentUser.personnelType || ''}
                       onChange={handleModalChange}
+                      style={{
+                        backgroundColor: '#e4e3e3',
+                        color: '#333',
+                        borderColor: '#e4e3e3',
+                      }}
                     />
                   </Form.Group>
                 </>
@@ -302,12 +396,22 @@ const UserManagement = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleModalSave}>
+        <Button variant="primary" onClick={handleModalSave}
+        style={{
+          backgroundColor: '#272727',
+          color: '#ffffff',
+          borderColor: '#272727',
+        }}>
             Save Changes
           </Button>
+          <Button variant="secondary" onClick={handleModalClose}
+          style={{
+            backgroundColor: '#fc2929',
+            color: '#ffffff',
+            borderColor: '#fc2929',
+          }}>
+            Close
+          </Button>          
         </Modal.Footer>
       </Modal>
 
@@ -319,15 +423,26 @@ const UserManagement = () => {
           Are you sure you want to delete this user?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleConfirmModalClose}>
+          <Button variant="secondary" onClick={handleConfirmModalClose}
+          style={{
+            backgroundColor: '#272727',
+            color: '#ffffff',
+            borderColor: '#272727',
+          }}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleConfirmDelete}>
+          <Button variant="danger" onClick={handleConfirmDelete}
+          style={{
+            backgroundColor: '#fc2929',
+            color: '#ffffff',
+            borderColor: '#fc2929',
+          }}>
             Delete
           </Button>
         </Modal.Footer>
       </Modal>
     </Container>
+    </>
   );
 };
 
