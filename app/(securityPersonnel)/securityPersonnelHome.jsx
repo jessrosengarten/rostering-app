@@ -120,6 +120,7 @@ const SecurityHome = () => {
       <ImageBackground source={images.background} style={styles.background}>
         <View style={styles.header}>
           <Text style={styles.headerText}>{personnelName} - Shifts</Text>
+          <Text style={styles.noticeText}>(You can't cancel a shift on the day)</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
 
@@ -222,9 +223,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
+  noticeText: {
+        fontSize: 16,
+        color: '#000',
+    },
   shiftBox: {
     padding: 15,
-    backgroundColor: 'rgba(255, 255, 255, 1)',
+    backgroundColor: '#f7f7f7',
     marginVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
