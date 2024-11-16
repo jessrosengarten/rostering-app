@@ -94,7 +94,7 @@ const SecurityHome = () => {
   const handleCancelShift = async (selectedShift, weekDate) => {
     Alert.alert(
       'Confirm Cancellation',
-      `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ? selectedShift.clubName : ''}?`,
+      `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ?selectedShift.clubName : ''}?`,
       [
         {
           text: 'Cancel',
@@ -119,12 +119,13 @@ const SecurityHome = () => {
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.background}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{personnelName}</Text>
-          <Text style={styles.headerText}>Shifts</Text>
+          <Text style={styles.headerText}>{personnelName} - Shifts</Text>
         </View>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.container}>
-            <Text style={styles.headerText}>This Week Shifts</Text>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+
+          <View style={styles.weekContainer}>
+            <Text style={styles.weekHeading}>This Week Shifts</Text>
+            <Text style={styles.dateRange}>{thisWeekDates}</Text>
             {thisWeekShifts.map((shift, index) => (
               <View key={index} style={styles.shiftBox}>
                 <View style={styles.shiftDetails}>
@@ -149,17 +150,18 @@ const SecurityHome = () => {
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
                     onPress={() => handleCancelShift(shift, nextWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
-                    <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
-                      {'Cancel Shift'}
-                    </Text>
+                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+            {'Cancel Shift'}
+          </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             ))}
           </View>
 
-          <View style={styles.container}>
-            <Text style={styles.headerText}>Next Week Shifts</Text>
+          <View style={styles.weekContainer}>
+            <Text style={styles.weekHeading}>Next Week Shifts</Text>
+            <Text style={styles.dateRange}>{nextWeekDates}</Text>
             {nextWeekShifts.map((shift, index) => (
               <View key={index} style={styles.shiftBox}>
                 <View style={styles.shiftDetails}>
@@ -184,9 +186,9 @@ const SecurityHome = () => {
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
                     onPress={() => handleCancelShift(shift, nextWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
-                    <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
-                      {'Cancel Shift'}
-                    </Text>
+                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+            {'Cancel Shift'}
+          </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -208,6 +210,10 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
+  weekHeading: { fontSize: 20, fontWeight: 'bold', color: '#E21A1A', marginBottom: 5 },
+  dateRange: { fontSize: 16, color: '#555', marginBottom: 15 },
+
+  scrollContainer: { paddingHorizontal: 20, paddingBottom: 20 },
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -228,6 +234,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
+  },
+  weekContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   shiftDetails: {
     flex: 1,
