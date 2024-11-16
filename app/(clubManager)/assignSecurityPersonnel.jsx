@@ -9,6 +9,7 @@ const screenWidth = Dimensions.get('window').width;
 const AssignSecurityPersonnel = () => {
     const { club: clubParam } = useLocalSearchParams();
     const club = JSON.parse(decodeURIComponent(clubParam));
+    const nextWeekDates = getNextWeekRange();
 
     // fucntion to get the next weeks range
     function getNextWeekRange(date = new Date()) {
@@ -131,7 +132,9 @@ const AssignSecurityPersonnel = () => {
         <SafeAreaView edges={[]}>
             <ImageBackground source={images.background} style={styles.background}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>Personnel Needed</Text>
+                    <Text style={styles.headerText}>{club.name} - Personnel Needed</Text>
+                    <Text style={styles.weekText}>For Week: {nextWeekDates}</Text>
+                    <Text style={styles.noticeText}>(Once you assign you can't re-assign again)</Text>
                 </View>
 
                 <ScrollView contentContainerStyle={{ padding: 20 }}>
@@ -143,7 +146,6 @@ const AssignSecurityPersonnel = () => {
                             ]}>
                                 <View style={styles.dayLabelContainer}>
                                     <Text style={styles.dayText}>{day}</Text>
-                                    <Text style={styles.dateText}>{weekDates[index]}</Text>
                                 </View>
                                 <Switch
                                     trackColor={{ false: "#D3D3D3", true: "#D3D3D3" }}
@@ -189,6 +191,15 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: '#000',
+    },
+    weekText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    noticeText: {
+        fontSize: 16,
         color: '#000',
     },
     daysContainer: {

@@ -189,7 +189,7 @@ const Schedule = () => {
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.backgroundImage}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Schedule</Text>
+          <Text style={styles.headerText}>{club.name} - Schedule</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
 
