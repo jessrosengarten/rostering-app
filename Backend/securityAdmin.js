@@ -32,6 +32,7 @@ export const fetchAllClubManagers = async () => {
 };
 
 // Function to get the next week's range
+// Function to get the next week's range
 function getNextWeekRange(date = new Date()) {
   const currentDate = new Date(date);
 
@@ -54,7 +55,7 @@ function getNextWeekRange(date = new Date()) {
   const startFormatted = formatDate(startOfNextWeek);
   const endFormatted = formatDate(endOfNextWeek);
 
-  return { startFormatted, endFormatted };
+  return `${startFormatted} to ${endFormatted}`;
 }
 
 export const fetchPersonnelNeeded = async (clubName) => {
@@ -88,12 +89,12 @@ export const fetchPersonnelNeeded = async (clubName) => {
     const personnelData = personnelSnapshot.val();
 
     // Get the next week's date range
-    const { startFormatted, endFormatted } = getNextWeekRange();
+    const nextWeekRange = getNextWeekRange();
 
     // Add the assigned property to each shift for the next week
     const schedule = [];
     for (const week in shiftsData) {
-      if (week >= startFormatted && week <= endFormatted) {
+      if (week === nextWeekRange) {
         for (const day in shiftsData[week]) {
           const personnelNum = shiftsData[week][day];
           const assigned = checkIfAssigned(personnelData, clubName, week, day);
