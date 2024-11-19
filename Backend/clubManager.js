@@ -6,6 +6,8 @@ export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
   try {
     const clubRef = ref(db, `Clubs/${clubName}/Shifts/${week}/${day}`);
     await set(clubRef, personnelNum);
+
+    const financesRef = ref(db, `Clubs/${clubName}/Finances/${week}/${day}`);
     return clubName;
   } catch (error) {
     console.error('Uploading number of personnel error:', error);
@@ -76,10 +78,39 @@ export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
 // adding attendance:  
 export const addingAttendance = async (personnelName, dateRange, day, attendance) => {
   try {
-    const clubRef = ref(db, `securityPersonnel/${personnelName}/Shifts/${dateRange}/${day}`);
-    await update(clubRef, {
+    const personnelRef = ref(db, `securityPersonnel/${personnelName}/Shifts/${dateRange}/${day}`);
+    await update(personnelRef, {
       attendance: attendance,
     });
+
+    // Getting the rate of the personnel
+    const personnelRateRef = ref(db, `securityPersonnel/${personnelName}/rate`);
+    const rateSnapshot = await get(personnelRateRef);
+    let rate = 0;
+    if (rateSnapshot.exists()) {
+      rate = rateSnapshot.val();
+    } else {
+      console.error('Rate not found for personnel:', personnelName);
+      throw new Error('Rate not found');
+    }
+
+  if(attendance==="Attended"){
+    // get actual:
+    const actualIncomeRef = ref(db, `securityPersonnel/${personnelName}/Finances/${dateRange}`);
+    const actualSnapshot = await get(actualIncomeRef);
+  
+    let actual = 0; // Default value if actualAmount is not set
+    if (actualSnapshot.exists() && actualSnapshot.val().actualAmount !== undefined) {
+    actual = Number(actualSnapshot.val().actualAmount); // Ensure actualAmount is a number
+  }
+     rate = Number(rate);
+    // Calculate the new actual amount
+    const newActual = rate + actual;
+    // updating actual:
+    await update(actualIncomeRef, {
+      actualAmount: newActual,
+    });
+  }
     return attendance;
   } catch (error) {
     console.error('Uploading attendance error:', error);
