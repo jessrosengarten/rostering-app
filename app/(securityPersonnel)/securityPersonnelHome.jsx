@@ -104,6 +104,7 @@ const SecurityHome = () => {
       );
       return;
     }
+    console.log(availablePersonnel);
     Alert.alert(
       'Confirm Cancellation',
       `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ?selectedShift.clubName : ''}?`,

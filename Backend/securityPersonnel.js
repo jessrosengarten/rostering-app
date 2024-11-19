@@ -71,6 +71,7 @@ export const fetchPersonnelShifts = async (personnelName, weekDates) => {
 export const cancelShift = async (personnelName, date) => {
   try {
     let userId = null;
+    let rate = 0;
 
     const personnelRef = ref(db, 'securityPersonnel');
     const snapshot = await get(personnelRef);
@@ -80,14 +81,27 @@ export const cancelShift = async (personnelName, date) => {
     Object.keys(personnel).forEach(key => {
       if (personnel[key].fullName === personnelName) {
         userId = key;
+        rate = personnel[key].rate; 
       }
     });
 
     if (!userId) {
       throw new Error(`No user found with the name ${personnelName}`);
     }
+
     const shiftsRef = ref(db, `securityPersonnel/${userId}/Shifts/${date}`);
     await remove(shiftsRef);
+    // Count the number of days in the week for which shifts are assigned
+    const weekShiftsRef = ref(db, `securityPersonnel/${userId}/Shifts/${date}`);
+    const weekShiftsSnapshot = await get(weekShiftsRef);
+    const daysInWeek = weekShiftsSnapshot.exists() ? Object.keys(weekShiftsSnapshot.val()).length : 0;
+
+    // Calculate the estimated amount
+    const estimatedAmount = daysInWeek * rate;
+
+    // Save the estimated amount under the correct path
+    const financesRef = ref(db, `securityPersonnel/${userId}/Finances/${date}/estimatedAmount`);
+    await set(financesRef, estimatedAmount);
     console.log(`Shift canceled: ${shiftsRef}`);
   } catch (error) {
     console.error('Error deleting club:', error);
