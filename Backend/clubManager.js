@@ -7,7 +7,22 @@ export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
     const clubRef = ref(db, `Clubs/${clubName}/Shifts/${week}/${day}`);
     await set(clubRef, personnelNum);
 
-    const financesRef = ref(db, `Clubs/${clubName}/Finances/${week}/${day}`);
+    const clubRefFinances = ref(db, `Clubs/${clubName}/rate`);
+    const rateSnapshot = await get(clubRefFinances);
+    let rate = 0;
+    if (rateSnapshot.exists()) {
+      rate = rateSnapshot.val();
+      const amountDue= rate *personnelNum;
+
+      const financesRef = ref(db, `Clubs/${clubName}/Finances/${week}/${day}`);
+      await set(financesRef, {
+      amountDue: amountDue,
+    });
+    } else {
+      console.error('Rate not found for club:', clubName);
+      throw new Error('Rate not found');
+    }
+
     return clubName;
   } catch (error) {
     console.error('Uploading number of personnel error:', error);
