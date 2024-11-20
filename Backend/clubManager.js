@@ -16,7 +16,7 @@ export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
 
       const financesRef = ref(db, `Clubs/${clubName}/Finances/${week}/${day}`);
       await set(financesRef, {
-      amountDue: amountDue,
+      estimatedAmount: amountDue,
     });
     } else {
       console.error('Rate not found for club:', clubName);
@@ -57,6 +57,7 @@ export const getSchedule = async (clubName, week) => {
     return [];
   }
 };
+
 export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'securityPersonnel'));
@@ -110,7 +111,7 @@ export const addingAttendance = async (clubName,personnelName, dateRange, day, a
     }
 
   if(attendance==="Attended"){
-    // get actual:
+    // finance for personnel get actual:
     const actualIncomeRef = ref(db, `securityPersonnel/${personnelName}/Finances/${dateRange}`);
     const actualSnapshot = await get(actualIncomeRef);
   
@@ -125,30 +126,66 @@ export const addingAttendance = async (clubName,personnelName, dateRange, day, a
     await update(actualIncomeRef, {
       actualAmount: newActual,
     });
-  }
-  if(attendance==="Not Attended"){
+
+    // finance for club
     const clubRefFinances = ref(db, `Clubs/${clubName}/rate`);
     const rateSnapshot = await get(clubRefFinances);
-    let rate = 0;
+    let clubRate = 0;
     if (rateSnapshot.exists()) {
-      rate = rateSnapshot.val();
-
-      const amountDueRef = ref(db, `Clubs/${clubName}/Finances/${dateRange}/${day}`);
-      const amountDueSnapshot = await get(amountDueRef);
-      let amountDue = 0;
-    if (amountDueSnapshot.exists()) {
-      amountDue = amountDueSnapshot.val();
-      const newAmountDue= amountDue-rate;
+      clubRate = rateSnapshot.val();
+  
       const financesRef = ref(db, `Clubs/${clubName}/Finances/${dateRange}/${day}`);
-      await set(financesRef, {
-      amountDue: newAmountDue,
-    });
+      const actualAmountSnapshot = await get(financesRef);
+  
+      let actualAmount = 0; // Default value if actualAmount is not set
+      if (actualAmountSnapshot.exists() && actualAmountSnapshot.val().amountDue !== undefined) {
+        actualAmount = Number(actualAmountSnapshot.val().amountDue); // Ensure actualAmount is a number
+      }
+      clubRate = Number(clubRate);
+      // Calculate the new actual amount
+      const newActualDue = clubRate + actualAmount;
+      // updating actual:
+      await update(financesRef, {
+        amountDue: newActualDue,
+      });
+    }
   }
-    }
-    }
+  // if(attendance==="Not Attended"){
+  //   const clubRefFinances = ref(db, `Clubs/${clubName}/rate`);
+  //   const rateSnapshot = await get(clubRefFinances);
+  //   let rate = 0;
+  //   if (rateSnapshot.exists()) {
+  //     rate = rateSnapshot.val();
+
+  //     const amountDueRef = ref(db, `Clubs/${clubName}/Finances/${dateRange}/${day}`);
+  //     const amountDueSnapshot = await get(amountDueRef);
+  //     let amountDue = 0;
+  //   if (amountDueSnapshot.exists()) {
+  //     amountDue = amountDueSnapshot.val();
+  //     const newAmountDue= amountDue-rate;
+  //     const financesRef = ref(db, `Clubs/${clubName}/Finances/${dateRange}/${day}`);
+  //     await set(financesRef, {
+  //     amountDue: newAmountDue,
+  //   });
+  // }
+  //   }
+  //   }
     return attendance;
   } catch (error) {
     console.error('Uploading attendance error:', error);
     throw error;
+  }
+};
+
+export const getFinances = async (clubName, dateRange) => {
+  const dbRef = ref(db);
+  const snapshot = await get(child(dbRef, `Clubs/${clubName}/Finances/${dateRange}`));
+  if (snapshot.exists()) {
+    result.push({
+                  day,
+                  amountDue,
+                });
+  } else {
+    return [];
   }
 };
