@@ -15,6 +15,8 @@ const SecurityHome = () => {
   const { personnelName } = useLocalSearchParams();
 
   useEffect(() => {
+    setThisWeekShifts([]); 
+    setNextWeekShifts([]); 
     const fetchShifts = async () => {
       try {
         const fetchedShifts = await fetchPersonnelShifts(personnelName, thisWeekDates);

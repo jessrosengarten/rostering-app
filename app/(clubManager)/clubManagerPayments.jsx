@@ -54,6 +54,28 @@ const clubManagerPayments = () => {
     }
   };
 
+  // Function to calculate the totals for amountDue and estimatedAmount
+const calculateTotals = (payments) => {
+  let totalAmountDue = 0;
+  let totalEstimatedAmount = 0;
+
+  if (payments) {
+    payments.forEach(payment => {
+      totalAmountDue += payment.amountDue || 0; 
+      totalEstimatedAmount += payment.estimatedAmount || 0; 
+    });
+  }
+
+  return {
+    totalAmountDue,
+    totalEstimatedAmount
+  };
+};
+
+const thisWeekTotals = calculateTotals(thisWeekPayments);
+  const nextWeekTotals = calculateTotals(nextWeekPayments);
+
+
   // Function to group finances by day
   const sortPaymentsByDay = (payments) => {
   if (!Array.isArray(payments) || payments.length === 0) {
@@ -128,25 +150,36 @@ const clubManagerPayments = () => {
 
    // Function to render payments in a table-like format
 const renderPayments = (payments) => {
+  const totalAmounts = calculateTotals(payments);
   return (
     <View style={styles.tableContainer}>
       <View style={styles.tableHeader}>
         <Text style={styles.tableHeaderText}>Day</Text>
-        <Text style={styles.tableHeaderText}>Amount Due</Text>
         <Text style={styles.tableHeaderText}>Estimated</Text>
+        <Text style={styles.tableHeaderText}>Amount Due</Text>
       </View>
 
       {payments.map((payment, index) => (
         <View key={index} style={styles.tableRow}>
           <Text style={styles.tableCell}>{payment.day}</Text>
           <Text style={styles.tableCell}>
-            R {payment.amountDue.toFixed(2)}
+            R {payment.estimatedAmount.toFixed(2)}
           </Text>
           <Text style={styles.tableCell}>
-            R {payment.estimatedAmount.toFixed(2)}
+            R {payment.amountDue.toFixed(2)}
           </Text>
         </View>
       ))}
+      {/* Row for totals */}
+      <View style={styles.tableRow}>
+        <Text style={styles.tableCell}>Total</Text>
+        <Text style={styles.tableCell}>
+          R {totalAmounts.totalEstimatedAmount.toFixed(2)}
+        </Text>
+        <Text style={styles.tableCell}>
+          R {totalAmounts.totalAmountDue.toFixed(2)}
+        </Text>
+      </View>
     </View>
   );
 };
