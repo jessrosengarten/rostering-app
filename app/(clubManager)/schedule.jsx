@@ -19,6 +19,8 @@ const Schedule = () => {
 
 
   useEffect(() => {
+    setThisWeekSchedule([]); 
+    setNextWeekSchedule([]); 
     loadPersonnelListNextWeek();
     loadPersonnelListThisWeek();
     loadSchedule();
