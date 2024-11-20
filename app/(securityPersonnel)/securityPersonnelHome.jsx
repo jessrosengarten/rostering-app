@@ -117,7 +117,7 @@ const SecurityHome = () => {
           text: 'Cancel Shift',
           onPress: async () => {
             try {
-              await cancelShift(personnelName, weekDate);
+              await cancelShift(personnelName, weekDate, selectedShift.day);
               await reassignShiftToPersonnel(availablePersonnel[0], selectedShift.clubName, weekDate, selectedShift.day, selectedShift.startTime);
               Alert.alert('Shift Cancelled', 'Your shift has been cancelled and reassigned.');
             } catch (error) {

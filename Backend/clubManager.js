@@ -7,7 +7,22 @@ export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
     const clubRef = ref(db, `Clubs/${clubName}/Shifts/${week}/${day}`);
     await set(clubRef, personnelNum);
 
-    const financesRef = ref(db, `Clubs/${clubName}/Finances/${week}/${day}`);
+    const clubRefFinances = ref(db, `Clubs/${clubName}/rate`);
+    const rateSnapshot = await get(clubRefFinances);
+    let rate = 0;
+    if (rateSnapshot.exists()) {
+      rate = rateSnapshot.val();
+      const amountDue= rate *personnelNum;
+
+      const financesRef = ref(db, `Clubs/${clubName}/Finances/${week}/${day}`);
+      await set(financesRef, {
+      amountDue: amountDue,
+    });
+    } else {
+      console.error('Rate not found for club:', clubName);
+      throw new Error('Rate not found');
+    }
+
     return clubName;
   } catch (error) {
     console.error('Uploading number of personnel error:', error);
@@ -76,7 +91,7 @@ export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
 };
 
 // adding attendance:  
-export const addingAttendance = async (personnelName, dateRange, day, attendance) => {
+export const addingAttendance = async (clubName,personnelName, dateRange, day, attendance) => {
   try {
     const personnelRef = ref(db, `securityPersonnel/${personnelName}/Shifts/${dateRange}/${day}`);
     await update(personnelRef, {
@@ -111,6 +126,26 @@ export const addingAttendance = async (personnelName, dateRange, day, attendance
       actualAmount: newActual,
     });
   }
+  if(attendance==="Not Attended"){
+    const clubRefFinances = ref(db, `Clubs/${clubName}/rate`);
+    const rateSnapshot = await get(clubRefFinances);
+    let rate = 0;
+    if (rateSnapshot.exists()) {
+      rate = rateSnapshot.val();
+
+      const amountDueRef = ref(db, `Clubs/${clubName}/Finances/${dateRange}/${day}`);
+      const amountDueSnapshot = await get(amountDueRef);
+      let amountDue = 0;
+    if (amountDueSnapshot.exists()) {
+      amountDue = amountDueSnapshot.val();
+      const newAmountDue= amountDue-rate;
+      const financesRef = ref(db, `Clubs/${clubName}/Finances/${dateRange}/${day}`);
+      await set(financesRef, {
+      amountDue: newAmountDue,
+    });
+  }
+    }
+    }
     return attendance;
   } catch (error) {
     console.error('Uploading attendance error:', error);

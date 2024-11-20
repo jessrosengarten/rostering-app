@@ -68,7 +68,7 @@ export const fetchPersonnelShifts = async (personnelName, weekDates) => {
   }
 };
 
-export const cancelShift = async (personnelName, date) => {
+export const cancelShift = async (personnelName, date, day) => {
   try {
     let userId = null;
     let rate = 0;
@@ -89,7 +89,7 @@ export const cancelShift = async (personnelName, date) => {
       throw new Error(`No user found with the name ${personnelName}`);
     }
 
-    const shiftsRef = ref(db, `securityPersonnel/${userId}/Shifts/${date}`);
+    const shiftsRef = ref(db, `securityPersonnel/${userId}/Shifts/${date}/${day}`);
     await remove(shiftsRef);
     // Count the number of days in the week for which shifts are assigned
     const weekShiftsRef = ref(db, `securityPersonnel/${userId}/Shifts/${date}`);

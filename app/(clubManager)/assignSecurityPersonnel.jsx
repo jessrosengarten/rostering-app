@@ -91,6 +91,7 @@ const AssignSecurityPersonnel = () => {
             }
 
             alert("Personnel requirements assigned successfully!");
+            router.push(`/schedule?club=${encodeURIComponent(JSON.stringify(club))}`);
 
             // clearing fields:
             setIsClubOpen({

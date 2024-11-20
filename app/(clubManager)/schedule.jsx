@@ -184,7 +184,7 @@ const Schedule = () => {
           onPress: async () => {
             try {
               const personnelName = name.email.replace(/\./g, ',');
-              const status = await addingAttendance(personnelName, dateRange, day, 'Attended');
+              const status = await addingAttendance(club.name,personnelName, dateRange, day, 'Attended');
               await loadPersonnelListThisWeek();
               console.log("Attendance updated:", status);
             } catch (error) {
@@ -198,7 +198,7 @@ const Schedule = () => {
             try {
               const personnelName = name.email.replace(/\./g, ',');
 
-              const status = await addingAttendance(personnelName, dateRange, day, 'Not Attended');
+              const status = await addingAttendance(club.name, personnelName, dateRange, day, 'Not Attended');
               await loadPersonnelListThisWeek();
               console.log("Attendance updated:", status);
             } catch (error) {
