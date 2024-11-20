@@ -1,8 +1,104 @@
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { getFinances } from '../../Backend/clubManager';
 
 const clubManagerPayments = () => {
+    const router = useRouter();
+    const { club: clubParam } = useLocalSearchParams();
+    const club = JSON.parse(decodeURIComponent(clubParam));
+    const [payments, setPayments] = useState([]);
+    const thisWeekDates = getWeekRange();
+    const nextWeekDates = getNextWeekRange();
+
+     useEffect(() => {
+
+  }, [club.name, thisWeekDates, nextWeekDates]);
+
+   // Function to load personnel data
+  const loadFinancesThisWeek = async () => {
+    try {
+      const financesThisWeek = await getFinances(club.name, thisWeekDates); 
+      const groupedShifts = groupShiftsByDay(personnelDetails);
+      setThisWeekPersonnelList(groupedShifts);
+    } catch (error) {
+      console.error("Error fetching personnel list:", error);
+    }
+  };
+
+  // Function to group finances by day
+  const groupShiftsByDay = (shifts) => {
+    const grouped = {};
+
+    shifts.forEach((person) => {
+      const { day, email, shiftDetails } = person;
+
+      // If the day is not in the grouped object, initialize it
+      if (!grouped[day]) {
+        grouped[day] = [];
+      }
+
+      // Add the person to the correct day group
+      grouped[day].push({ email, ...shiftDetails, fullName: person.fullName });
+    });
+
+    return grouped;
+  };
+
+  // Function to get the date range for the week
+  function getWeekRange(date = new Date()) {
+    const currentDate = new Date(date);
+
+    const startOfWeekDay = 1; // Monday
+    const currentDay = currentDate.getDay();
+
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const formatDate = (date) => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    const startFormatted = formatDate(startOfWeek);
+    const endFormatted = formatDate(endOfWeek);
+
+    return `${startFormatted} to ${endFormatted}`;
+  }
+
+  // fucntion to get the next weeks range
+  function getNextWeekRange(date = new Date()) {
+    const currentDate = new Date(date);
+
+    const startOfWeekDay = 1; // Monday
+    const currentDay = currentDate.getDay();
+
+    const startOfNextWeek = new Date(currentDate);
+    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+
+    const endOfNextWeek = new Date(startOfNextWeek);
+    endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+
+    const formatDate = (date) => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    const startFormatted = formatDate(startOfNextWeek);
+    const endFormatted = formatDate(endOfNextWeek);
+
+    return `${startFormatted} to ${endFormatted}`;
+  }
+
     // Dummy data
     const paymentData = {
         clubName: 'Neon Night Club',
