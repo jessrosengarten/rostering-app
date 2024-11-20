@@ -178,14 +178,27 @@ export const addingAttendance = async (clubName,personnelName, dateRange, day, a
 };
 
 export const getFinances = async (clubName, dateRange) => {
-  const dbRef = ref(db);
-  const snapshot = await get(child(dbRef, `Clubs/${clubName}/Finances/${dateRange}`));
-  if (snapshot.exists()) {
-    result.push({
-                  day,
-                  amountDue,
-                });
-  } else {
-    return [];
+  try {
+    const dbRef = ref(db);
+    const snapshot = await get(child(dbRef, `Clubs/${clubName}/Finances/${dateRange}`));
+
+    if (snapshot.exists()) {
+      const finances = snapshot.val();
+      const result = [];
+
+      for (const day in finances) {
+        const { amountDue = 0, estimatedAmount = 0 } = finances[day];
+        result.push({ day, amountDue, estimatedAmount });
+      }
+
+      return result; // List of all days with their amounts
+    } else {
+      console.warn('No finances found for the given date range.');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching finances:', error);
+    throw error;
   }
 };
+

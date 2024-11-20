@@ -6,46 +6,73 @@ import React, { useState, useEffect } from 'react';
 import { getFinances } from '../../Backend/clubManager';
 
 const clubManagerPayments = () => {
-    const router = useRouter();
     const { club: clubParam } = useLocalSearchParams();
     const club = JSON.parse(decodeURIComponent(clubParam));
-    const [payments, setPayments] = useState([]);
+    const [thisWeekPayments, setThisWeekPayments] = useState([]);
+    const [nextWeekPayments, setNextWeekPayments] = useState([]);
     const thisWeekDates = getWeekRange();
     const nextWeekDates = getNextWeekRange();
 
      useEffect(() => {
-
+        setThisWeekPayments([]); 
+        setNextWeekPayments([]); 
+        loadFinancesThisWeek();
+        loadFinancesNextWeek();
   }, [club.name, thisWeekDates, nextWeekDates]);
 
-   // Function to load personnel data
+   // Function to load this week payments data
   const loadFinancesThisWeek = async () => {
     try {
       const financesThisWeek = await getFinances(club.name, thisWeekDates); 
-      const groupedShifts = groupShiftsByDay(personnelDetails);
-      setThisWeekPersonnelList(groupedShifts);
+      if (Array.isArray(financesThisWeek) && financesThisWeek.length > 0) {
+
+      const sortedFinances = sortPaymentsByDay(financesThisWeek);
+
+      setThisWeekPayments(sortedFinances);
+    } else {
+      console.warn("No finances to display.");
+    }
     } catch (error) {
-      console.error("Error fetching personnel list:", error);
+      console.error("Error fetching this week payments:", error);
+    }
+  };
+
+     // Function to load next week payments data
+  const loadFinancesNextWeek = async () => {
+    try {
+      const financesNextWeek = await getFinances(club.name, nextWeekDates); 
+      if (Array.isArray(financesNextWeek) && financesNextWeek.length > 0) {
+
+      const sortedFinances = sortPaymentsByDay(financesNextWeek);
+
+      setNextWeekPayments(sortedFinances); // Set next week's payments
+    } else {
+      console.warn("No finances for next week to display.");
+    }
+    } catch (error) {
+      console.error("Error fetching next week payments:", error);
     }
   };
 
   // Function to group finances by day
-  const groupShiftsByDay = (shifts) => {
-    const grouped = {};
+  const sortPaymentsByDay = (payments) => {
+  if (!Array.isArray(payments) || payments.length === 0) {
+    console.warn("No payments to sort.");
+    return [];
+  }
 
-    shifts.forEach((person) => {
-      const { day, email, shiftDetails } = person;
+  // Define the order of days for sorting
+  const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-      // If the day is not in the grouped object, initialize it
-      if (!grouped[day]) {
-        grouped[day] = [];
-      }
+  // Sort based on the dayOrder array
+  return payments.sort((a, b) => {
+    const dayAIndex = dayOrder.indexOf(a.day);
+    const dayBIndex = dayOrder.indexOf(b.day);
 
-      // Add the person to the correct day group
-      grouped[day].push({ email, ...shiftDetails, fullName: person.fullName });
-    });
-
-    return grouped;
-  };
+    // Sort by the index of the day in the week
+    return dayAIndex - dayBIndex;
+  });
+};
 
   // Function to get the date range for the week
   function getWeekRange(date = new Date()) {
@@ -99,63 +126,70 @@ const clubManagerPayments = () => {
     return `${startFormatted} to ${endFormatted}`;
   }
 
-    // Dummy data
-    const paymentData = {
-        clubName: 'Neon Night Club',
-        clubLogo: images.neon, // Placeholder for club logo URL
-        payments: {
-            Thursday: 750.00,
-            Friday: 950.00,
-            Saturday: 500.00,
-            Sunday: 1250.00,
-        },
-        total: 3450.00
-    };
+   // Function to render payments in a table-like format
+const renderPayments = (payments) => {
+  return (
+    <View style={styles.tableContainer}>
+      <View style={styles.tableHeader}>
+        <Text style={styles.tableHeaderText}>Day</Text>
+        <Text style={styles.tableHeaderText}>Amount Due</Text>
+        <Text style={styles.tableHeaderText}>Estimated</Text>
+      </View>
+
+      {payments.map((payment, index) => (
+        <View key={index} style={styles.tableRow}>
+          <Text style={styles.tableCell}>{payment.day}</Text>
+          <Text style={styles.tableCell}>
+            R {payment.amountDue.toFixed(2)}
+          </Text>
+          <Text style={styles.tableCell}>
+            R {payment.estimatedAmount.toFixed(2)}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+};
 
     return (
         <SafeAreaView edges={[]}>
-            <ImageBackground source={images.background} className='h-full w-full'>
-                {/* Semi-transparent Header */}
+            <ImageBackground source={images.background} style={styles.background}>
+                {/* Header */}
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Payments</Text>
                 </View>
-                <ScrollView contentContainerStyle={{ height: '100%' }}>
 
-                    <ScrollView contentContainerStyle={styles.scrollContainer}>
-                        {/* Club Name and Logo */}
-                        <View style={styles.clubInfo}>
-                            <Text style={styles.clubName}>{paymentData.clubName}</Text>
-                            <Image
-                                source={paymentData.clubLogo}
-                                style={styles.clubLogo}
-                                resizeMode='contain'
-                            />
-                        </View>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    {/* Club Info */}
+                    <View style={styles.clubInfo}>
+                        <Text style={styles.clubName}>{club.name}</Text>
+                        <Image source={images.neon} style={styles.clubLogo} resizeMode="contain" />
+                    </View>
 
-                        {/* Payments List */}
-                        <View style={styles.paymentDetails}>
-                            <Text style={styles.sectionTitle}>Total Invoice to Pay</Text>
-                            {Object.keys(paymentData.payments).map((day, index) => (
-                                <View key={index} style={styles.paymentRow}>
-                                    <Text style={styles.dayText}>{day}:</Text>
-                                    <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
-                                </View>
-                            ))}
+                    {/* This Week Payments */}
+                    <View style={styles.paymentDetails}>
+                        <Text style={styles.sectionTitle}>This Week's Payments</Text>
+                        {Object.keys(thisWeekPayments).length > 0 ? (
+                            renderPayments(thisWeekPayments)
+                        ) : (
+                            <Text style={styles.noPaymentsText}>No payments for this week.</Text>
+                        )}
+                    </View>
 
-                            {/* Total */}
-                            <View style={styles.paymentRow}>
-                                <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
-                                <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
-                                    R {paymentData.total.toFixed(2)}
-                                </Text>
-                            </View>
-                        </View>
+                    {/* Next Week Payments */}
+                    <View style={styles.paymentDetails}>
+                        <Text style={styles.sectionTitle}>Next Week's Payments</Text>
+                        {Object.keys(nextWeekPayments).length > 0 ? (
+                            renderPayments(nextWeekPayments)
+                        ) : (
+                            <Text style={styles.noPaymentsText}>No payments for next week.</Text>
+                        )}
+                    </View>
 
-                        {/* Payment Button */}
-                        <TouchableOpacity style={styles.paymentButton}>
-                            <Text style={styles.paymentButtonText}>Make Payment</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
+                    {/* Payment Button */}
+                    <TouchableOpacity style={styles.paymentButton}>
+                        <Text style={styles.paymentButtonText}>Make Payment</Text>
+                    </TouchableOpacity>
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
@@ -163,6 +197,34 @@ const clubManagerPayments = () => {
 };
 
 const styles = StyleSheet.create({
+    tableContainer: {
+    marginTop: 10,             
+    paddingHorizontal: 10,  
+  },
+  tableHeader: {
+    flexDirection: 'row',    
+    backgroundColor: '#f0f0f0', 
+    paddingVertical: 10,      
+    borderBottomWidth: 1,  
+    borderColor: '#ccc',   
+  },
+  tableHeaderText: {
+    flex: 1,                  
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,   
+  },
+  tableRow: {
+    flexDirection: 'row', 
+    paddingVertical: 12,   
+    borderBottomWidth: 1,  
+    borderColor: '#e0e0e0', 
+  },
+  tableCell: {
+    flex: 1,                    
+    textAlign: 'center',  
+    fontSize: 16,  
+  },
     container: {
         flex: 1,
     },
