@@ -8,7 +8,7 @@ function HomePage() {
     <Container
       style={{
         color: 'black',
-        height: '75vh', // Full viewport height
+        height: '75vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -16,7 +16,6 @@ function HomePage() {
         textAlign: 'center',
       }}
     >
-      {/* Use Nara logo */}
       <img
         src={naraLogoCentered}
         alt="Nara Logo"
