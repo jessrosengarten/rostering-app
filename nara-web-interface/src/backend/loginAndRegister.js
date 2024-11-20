@@ -14,10 +14,8 @@ export const register = async (email, password) => {
 export const login = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log('Successfully logged in');
     return userCredential.user;
   } catch (error) {
-    console.error('Login Error:', error);
-    throw error;
+    throw new Error('Login failed. Please check your credentials.');
   }
 };
