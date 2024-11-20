@@ -1,19 +1,74 @@
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import React, { useState } from 'react';
 import CustomButton from '../../components/CustomButton';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { getEstimatedAmountsForAllClubs } from '../../Backend/securityAdmin';
 
 const Finance = () => {
   const router = useRouter();
-  // State for dropdown visibility
   const [showSection, setShowSection] = useState(null);
+  const [estimatedAmounts, setEstimatedAmounts] = useState({});
+
+  useEffect(() => {
+    const fetchEstimatedAmounts = async () => {
+      try {
+        const amounts = await getEstimatedAmountsForAllClubs();
+        setEstimatedAmounts(amounts);
+      } catch (error) {
+        console.error('Error fetching estimated amounts:', error);
+      }
+    };
+
+    fetchEstimatedAmounts();
+  }, []);
 
   const toggleSection = (section) => {
     setShowSection((prevSection) => (prevSection === section ? null : section));
   };
+
+  const renderCosts = (costs) => {
+    return costs.map(({ day, amount }) => (
+      <View style={styles.row} key={day}>
+        <Text style={styles.summaryTextTitle2}>{day}:</Text>
+        <Text style={styles.summaryTextData}>R{amount}</Text>
+      </View>
+    ));
+  };
+
+  const renderClubCosts = (clubName, costs, currentWeekRange, nextWeekRange) => (
+    <View key={clubName} style={styles.clubContainer}>
+      <View style={styles.clubCosts}>
+        <Text style={styles.clubName}>{clubName}</Text>
+        {costs.currentWeek.length > 0 && (
+          <>
+            <Text style={styles.summaryTextTitle}>
+              This Week: <Text style={styles.dateText}> ({currentWeekRange})</Text>
+            </Text>
+            {renderCosts(costs.currentWeek)}
+          </>
+        )}
+        {costs.nextWeek.length > 0 && (
+          <>
+            <Text style={styles.summaryTextTitle}>
+              Next Week: <Text style={styles.dateText}> ({nextWeekRange})</Text>
+            </Text>
+            {renderCosts(costs.nextWeek)}
+          </>
+        )}
+        <View style={styles.row}>
+          <Text style={styles.summaryTextTitle}>Estimated Earn:</Text>
+          <Text style={styles.summaryTextData}>R
+            {costs.currentWeek.reduce((total, { amount }) => total + amount, 0) +
+             costs.nextWeek.reduce((total, { amount }) => total + amount, 0)}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.separator} />
+    </View>
+  );
 
   return (
     <SafeAreaView edges={[]}>
@@ -25,7 +80,7 @@ const Finance = () => {
           </View>
 
           {/* Payments from Specific Club Dropdown */}
-          <View style={styles.summary}>
+          {/* <View style={styles.summary}>
             <TouchableOpacity
               style={styles.dropdownButton}
               onPress={() => toggleSection('clubPayments')}
@@ -40,7 +95,6 @@ const Finance = () => {
 
             {showSection === 'clubPayments' && (
               <View style={styles.extraInfo}>
-                {/* Breakdown by night */}
                 <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
                 <View style={styles.row}>
                   <Text style={styles.summaryTextTitle2}>Monday:</Text>
@@ -60,7 +114,7 @@ const Finance = () => {
                 </View>
               </View>
             )}
-          </View>
+          </View> */}
 
           {/* Payments from All Clubs Dropdown */}
           <View style={styles.summary}>
@@ -79,22 +133,18 @@ const Finance = () => {
             {showSection === 'allClubsPayments' && (
               <View style={styles.extraInfo}>
                 {/* Breakdown by night */}
-                <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
+                {Object.entries(estimatedAmounts.clubs || {}).map(([clubName, costs]) =>
+                  renderClubCosts(clubName, costs, estimatedAmounts.currentWeekRange, estimatedAmounts.nextWeekRange)
+                )}
                 <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
+                  <Text style={styles.summaryTextTitle}>Total Estimated Earn:</Text>
+                  <Text style={styles.summaryTextData}>R
+                    {Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
+                      const thisWeekTotal = clubCosts.currentWeek.reduce((sum, { amount }) => sum + amount, 0);
+                      const nextWeekTotal = clubCosts.nextWeek.reduce((sum, { amount }) => sum + amount, 0);
+                      return acc + thisWeekTotal + nextWeekTotal;
+                    }, 0)}
+                  </Text>
                 </View>
               </View>
             )}
@@ -237,9 +287,10 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   summaryTextTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: 'red',
   },
   summaryTextTitle2: {
     fontSize: 16,
@@ -248,6 +299,10 @@ const styles = StyleSheet.create({
   summaryTextData: {
     fontSize: 16,
     fontWeight: 'normal',
+  },
+  dateText: {
+    fontSize: 15,
+    color: 'black',
   },
   extraInfo: {
     marginTop: 10,
@@ -261,6 +316,22 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
+  },
+  clubContainer: {
+    marginBottom: 20,
+  },
+  clubCosts: {
+    marginBottom: 20,
+  },
+  clubName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#d3d3d3',
+    marginVertical: 10,
   },
 });
 

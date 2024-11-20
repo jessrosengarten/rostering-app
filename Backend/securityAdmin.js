@@ -32,7 +32,6 @@ export const fetchAllClubManagers = async () => {
 };
 
 // Function to get the next week's range
-// Function to get the next week's range
 function getNextWeekRange(date = new Date()) {
   const currentDate = new Date(date);
 
@@ -96,8 +95,12 @@ export const fetchPersonnelNeeded = async (clubName) => {
     for (const week in shiftsData) {
       if (week === nextWeekRange) {
         for (const day in shiftsData[week]) {
-          const personnelNum = shiftsData[week][day];
-          const assigned = checkIfAssigned(personnelData, clubName, week, day);
+          let personnelNum = shiftsData[week][day];
+          const assignedCount = getAssignedCount(personnelData, week, day);
+          const assigned = assignedCount >= personnelNum;
+          if (assignedCount > 0) {
+            personnelNum -= assignedCount;
+          }
           schedule.push({
             week,
             day,
@@ -116,13 +119,28 @@ export const fetchPersonnelNeeded = async (clubName) => {
   }
 };
 
-export const fetchSecurityPersonnelFullNames = async () => {
+const getAssignedCount = (personnelData, week, day) => {
+  let assignedCount = 0;
+  for (const userId in personnelData) {
+    const userShifts = personnelData[userId].Shifts;
+    if (userShifts && userShifts[week] && userShifts[week][day]) {
+      assignedCount++;
+    }
+  }
+  return assignedCount;
+};
+
+export const fetchSecurityPersonnelFullNames = async (day, week) => {
   try {
     const personnelRef = ref(db, 'securityPersonnel');
     const snapshot = await get(personnelRef);
     if (snapshot.exists()) {
       const personnel = snapshot.val();
-      const fullNames = Object.values(personnel).map(person => person.fullName);
+      const availablePersonnel = Object.values(personnel).filter(person => {
+        const userShifts = person.Shifts;
+        return !(userShifts && userShifts[week] && userShifts[week][day]);
+      });
+      const fullNames = availablePersonnel.map(person => person.fullName);
       return fullNames;
     } else {
       console.log('No data available');
@@ -273,3 +291,88 @@ export const fetchAllClubsByManager = async (managerName) => {
   return result;
 };
 
+export const getEstimatedAmountsForAllClubs = async () => {
+  try {
+    // Fetch all clubs
+    const clubsRef = ref(db, 'Clubs');
+    const clubsSnapshot = await get(clubsRef);
+    if (!clubsSnapshot.exists()) {
+      console.log('No clubs data available');
+      return {};
+    }
+    const clubsData = clubsSnapshot.val();
+
+    // Get the current week's and next week's date ranges
+    const currentWeekRange = getCurrentWeekRange();
+    const nextWeekRange = getNextWeekRange();
+
+    // Initialize the result object
+    const estimatedAmounts = {
+      currentWeekRange,
+      nextWeekRange,
+      clubs: {}
+    };
+
+    // Iterate over all clubs
+    for (const clubName in clubsData) {
+      const financesRef = ref(db, `Clubs/${clubName}/Finances`);
+      const financesSnapshot = await get(financesRef);
+      if (!financesSnapshot.exists()) {
+        //console.log(`No finances data available for club ${clubName}`);
+        continue;
+      }
+      const financesData = financesSnapshot.val();
+
+      // Extract the estimated amounts for the current week and next week
+      const currentWeekAmounts = [];
+      const nextWeekAmounts = [];
+
+      if (financesData[currentWeekRange]) {
+        for (const day in financesData[currentWeekRange]) {
+          const dayData = financesData[currentWeekRange][day];
+          if (dayData.estimatedAmount) {
+            currentWeekAmounts.push({
+              day,
+              amount: dayData.estimatedAmount
+            });
+          }
+        }
+      }
+
+      if (financesData[nextWeekRange]) {
+        for (const day in financesData[nextWeekRange]) {
+          const dayData = financesData[nextWeekRange][day];
+          if (dayData.estimatedAmount) {
+            nextWeekAmounts.push({
+              day,
+              amount: dayData.estimatedAmount
+            });
+          }
+        }
+      }
+
+      // Only add the club to the result if there are amounts for either week
+      if (currentWeekAmounts.length > 0 || nextWeekAmounts.length > 0) {
+        estimatedAmounts.clubs[clubName] = {
+          currentWeek: currentWeekAmounts,
+          nextWeek: nextWeekAmounts
+        };
+      }
+    }
+
+    return estimatedAmounts;
+  } catch (error) {
+    console.error('Error fetching estimated amounts for all clubs:', error);
+    return {};
+  }
+};
+
+// Helper function to get the current week's date range
+const getCurrentWeekRange = () => {
+  const now = new Date();
+  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+  const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 7));
+  const start = `${startOfWeek.getDate()}-${startOfWeek.getMonth() + 1}-${startOfWeek.getFullYear()}`;
+  const end = `${endOfWeek.getDate()}-${endOfWeek.getMonth() + 1}-${endOfWeek.getFullYear()}`;
+  return `${start} to ${end}`;
+};
