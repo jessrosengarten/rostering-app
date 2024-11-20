@@ -13,6 +13,7 @@ const SecurityHome = () => {
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const { personnelName } = useLocalSearchParams();
+  
 
   useEffect(() => {
     setThisWeekShifts([]); 

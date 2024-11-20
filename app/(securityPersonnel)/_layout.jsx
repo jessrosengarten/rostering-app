@@ -57,6 +57,7 @@ const SecurityPersonnelLayout = () => {
                         />
                     )
                 }}
+                initialParams={{ personnelName }}
             />
             <Tabs.Screen
                 name="securityPersonnelFinances"
@@ -72,7 +73,9 @@ const SecurityPersonnelLayout = () => {
                         />
                     )
                 }}
-            />
+                initialParams={{ personnelName }}
+/>
+            
             <Tabs.Screen
                 name="securityPersonnelEarningHistory"
                 options={{
