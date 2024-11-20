@@ -35,7 +35,7 @@ const AssignPersonnelManagement = () => {
       <View style={styles.shiftBox}>
         <View style={styles.textContainer}>
           <Text style={styles.dayText}>{item.day}:</Text>
-          <Text style={styles.personnelText}>{item.personnelNum} Security Personnel</Text>
+          <Text style={styles.personnelText}>{item.personnelNum} Security Personnel To Assign</Text>
           <Text>Week: {item.week}</Text>
           <Text>Opening Time: {item.openingTime}</Text>
         </View>

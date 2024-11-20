@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Modal, TouchableOpacity, Alert, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import { images } from '../../constants';
@@ -9,7 +9,6 @@ import { fetchSecurityPersonnelFullNames, assignPersonnelToShift } from '../../B
 
 const Assign = () => {
   const { day, personnelCount, clubName, week, startTime, club } = useLocalSearchParams();
-  //const parsedClub = JSON.parse(club);
   const router = useRouter();
 
   const [selectedPersonnel, setSelectedPersonnel] = useState(Array(personnelCount).fill(''));
@@ -24,7 +23,7 @@ const Assign = () => {
   useEffect(() => {
     const fetchPersonnel = async () => {
       try {
-        const fullNames = await fetchSecurityPersonnelFullNames();
+        const fullNames = await fetchSecurityPersonnelFullNames(day, week);
         setPersonnelOptions(fullNames);
       } catch (error) {
         console.error('Error fetching security personnel:', error);
@@ -74,7 +73,6 @@ const Assign = () => {
                   { text: "OK", onPress: () => {
                     setCurrentPickerIndex(selectedPersonnel.indexOf(fullName));
                     setTempSelectedValue(fullName);
-                    //setPickerVisible(true);
                   }}
                 ]
               );
@@ -110,6 +108,12 @@ const Assign = () => {
       pathname: 'assignPersonnelManagement',
       params: { clubName: clubName }
     });
+  };
+
+  const closePicker = () => {
+    setPickerVisible(false);
+    setCurrentPickerIndex(null);
+    setTempSelectedValue(null);
   };
 
   return (
@@ -168,29 +172,33 @@ const Assign = () => {
         <Modal
           transparent={true}
           visible={pickerVisible}
-          onRequestClose={() => setPickerVisible(false)}
+          onRequestClose={closePicker}
           animationType="slide"
         >
-          <View style={styles.pickerModalOverlay}>
-            <View style={styles.pickerModalContainer}>
-              <Picker
-                selectedValue={tempSelectedValue}
-                onValueChange={handlePersonnelChange}
-                style={pickerSelectStyles.picker}
-              >
-                <Picker.Item label="Select a person..." value="" />
-                {personnelOptions.filter((person) => !assignedPersonnel.includes(person)).map((person, idx) => (
-                  <Picker.Item key={idx} label={person} value={person} />
-                ))}
-              </Picker>
-              <TouchableOpacity
-                style={styles.pickerModalButton}
-                onPress={handleConfirmSelection}
-              >
-                <Text style={styles.pickerModalButtonText}>Done</Text>
-              </TouchableOpacity>
+          <TouchableWithoutFeedback onPress={closePicker}>
+            <View style={styles.pickerModalOverlay}>
+              <TouchableWithoutFeedback>
+                <View style={styles.pickerModalContainer}>
+                  <Picker
+                    selectedValue={tempSelectedValue}
+                    onValueChange={handlePersonnelChange}
+                    style={pickerSelectStyles.picker}
+                  >
+                    <Picker.Item label="Select a person..." value="" />
+                    {personnelOptions.filter((person) => !assignedPersonnel.includes(person)).map((person, idx) => (
+                      <Picker.Item key={idx} label={person} value={person} />
+                    ))}
+                  </Picker>
+                  <TouchableOpacity
+                    style={styles.pickerModalButton}
+                    onPress={handleConfirmSelection}
+                  >
+                    <Text style={styles.pickerModalButtonText}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </Modal>
       </ImageBackground>
     </SafeAreaView>
