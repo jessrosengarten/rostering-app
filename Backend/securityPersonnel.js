@@ -1,4 +1,4 @@
-import { ref, get, remove, set } from 'firebase/database';
+import { ref, get,child, remove, set } from 'firebase/database';
 import { db } from './firebaseConfig'; // Adjust the import according to your project structure
 
 export const fetchPersonnelShifts = async (personnelName, weekDates) => {
@@ -213,3 +213,46 @@ export const reassignShiftToPersonnel = async (personnelName, clubName, week, da
     throw error;
   }
 };
+
+export const getFinances = async (personnelName, dateRange) => {
+  try {
+    let userId = null;
+    let rate = 0;
+
+    const personnelRef = ref(db, 'securityPersonnel');
+    const snapshot = await get(personnelRef);
+    const personnel = snapshot.val();
+
+    // Find the user with the matching fullName
+    Object.keys(personnel).forEach(key => {
+      if (personnel[key].fullName === personnelName) {
+        userId = key;
+        rate = personnel[key].rate;
+      }
+    });
+
+    if (!userId) {
+      throw new Error(`No user found with the name ${personnelName}`);
+    }
+
+    const financeRef = ref(db, `securityPersonnel/${userId}/Finances/${dateRange}`);
+    const financeSnapshot = await get(financeRef);
+
+    if (financeSnapshot.exists()) {
+      const finances = financeSnapshot.val();
+      const result = {
+        actualAmount: finances.actualAmount || 0,
+        estimatedAmount: finances.estimatedAmount || 0, 
+        rate: rate || 0,
+      };
+      return result;
+    } else {
+      console.warn('No finances found for the given date range.');
+      return { actualAmount: 0, estimatedAmount: 0 , rate: rate || 0 };
+    }
+  } catch (error) {
+    console.error('Error fetching finances:', error);
+    throw error;
+  }
+};
+
