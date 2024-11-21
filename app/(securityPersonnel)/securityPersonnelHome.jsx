@@ -211,8 +211,8 @@ const SecurityHome = () => {
                     onPress={() => handleCancelShift(shift, nextWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
                       <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
-            {'Cancel Shift'}
-          </Text>
+                      {'Cancel Shift'}
+                      </Text>
                   </TouchableOpacity>
                 </View>
               </View>

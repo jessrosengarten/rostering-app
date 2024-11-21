@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { getFinances} from '../../Backend/securityPersonnel';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const Finances = () => {
+  const router = useRouter();
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const [thisWeekPayments, setThisWeekPayments] = useState([]);
@@ -91,56 +92,80 @@ const Finances = () => {
     return `${startFormatted} to ${endFormatted}`;
   }
 
+  const handleViewHistory = () => {
+    router.push('/securityPersonnelEarningHistory'); // Update the route as per your app's navigation
+  };
+
+  const renderthisWeekPayments = (title, dateRange, payments) => {
+    return (
+      <View style={styles.tableContainer}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.dateRange}>{dateRange}</Text>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableCell}>Rate per shift: R {(payments.rate || 0)}</Text>
+        </View>
+        <View style={styles.tableHeader}>
+          <Text style={styles.tableHeaderText}></Text>
+          <Text style={styles.tableHeaderText}>Number of shifts</Text>
+          <Text style={styles.tableHeaderText}>Amount</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableCell}>Estimated Amount: </Text>
+          <Text style={styles.tableCell}>{(payments.actualAmount / payments.rate || 0)}</Text>
+          <Text style={styles.tableCell}>R {(payments.actualAmount || 0).toFixed(2)}</Text>
+        </View>
+        <View style={styles.tableRow}>
+            <Text style={styles.tableCell}>Actual Amount: </Text>
+            <Text style={styles.tableCell}>{(payments.actualAmount / payments.rate || 0)} </Text>
+            <Text style={styles.tableCell}>R {(payments.actualAmount || 0).toFixed(2)}</Text>
+          </View>
+      </View>
+    );
+  };
+
+  const rendernextWeekPayments = (title, payments) => {
+    return (
+      <View style={styles.tableContainer}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.dateRange}>{nextWeekDates}</Text>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableCell}>Rate per shift: R {(payments.rate || 0)}</Text>
+        </View>
+        <View style={styles.tableHeader}>
+          <Text style={styles.tableHeaderText}></Text>
+          <Text style={styles.tableHeaderText}>Number of shifts</Text>
+          <Text style={styles.tableHeaderText}>Amount</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableCell}>Estimated Amount: </Text>
+          <Text style={styles.tableCell}>{(payments.actualAmount / payments.rate || 0)}</Text>
+          <Text style={styles.tableCell}>R {(payments.actualAmount || 0).toFixed(2)}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} style={styles.background}>
-        <ScrollView contentContainerStyle={{ height: '100%' }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.header}>
             <Text style={styles.headerText}>Finances</Text>
           </View>
 
           {/* Projected Weekly Earnings Section */}
           <View style={styles.earningsContainer}>
-            <Text style={styles.sectionTitle}>This Weeks Earnings</Text>
-            <Text style={styles.dateRange}>{thisWeekDates}</Text>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Rate per shift:</Text>
-              <Text style={styles.valueText}>R {thisWeekPayments.rate}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Number of shifts:</Text>
-              <Text style={styles.valueText}>4</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Estimated Amount:</Text>
-              <Text style={styles.valueText}>R {thisWeekPayments.estimatedAmount}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Actual Amount:</Text>
-              <Text style={styles.valueText}>R {thisWeekPayments.actualAmount}</Text>
-            </View>
+            {renderthisWeekPayments("This Week's Earnings", thisWeekDates, thisWeekPayments)}
           </View>
 
           {/* Previous Weeks Earnings Section */}
           <View style={styles.earningsContainer}>
-            <Text style={styles.sectionTitle}>Next Weeks Projected Earnings</Text>
-            <Text style={styles.dateRange}>{nextWeekDates}</Text>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Rate per shift:</Text>
-              <Text style={styles.valueText}>R{nextWeekPayments.rate}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Number of shifts:</Text>
-              <Text style={styles.valueText}>3</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Estimated Amount:</Text>
-              <Text style={styles.valueText}>R {nextWeekPayments.estimatedAmount}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.labelText}>Actual Amount:</Text>
-              <Text style={styles.valueText}>R {nextWeekPayments.actualAmount}</Text>
-            </View>
+            {rendernextWeekPayments("Next Week's Projected Earnings", nextWeekDates, nextWeekPayments)}
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={handleViewHistory}>
+              <Text style={styles.buttonText}>View Finance History</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -149,6 +174,23 @@ const Finances = () => {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  button: {
+        backgroundColor: '#E21A1A',
+        paddingVertical: 15,
+        paddingHorizontal: 50,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
   header: {
     width: '100%',
     padding: 15,
@@ -162,6 +204,34 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#000',
+  },
+  tableContainer: {
+    marginTop: 10,             
+    paddingHorizontal: 10,  
+  },
+  tableHeader: {
+    flexDirection: 'row',    
+    backgroundColor: '#f0f0f0', 
+    paddingVertical: 10,      
+    borderBottomWidth: 1,  
+    borderColor: '#ccc',   
+  },
+  tableHeaderText: {
+    flex: 1,                  
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,   
+  },
+  tableRow: {
+    flexDirection: 'row', 
+    paddingVertical: 12,   
+    borderBottomWidth: 1,  
+    borderColor: '#e0e0e0', 
+  },
+  tableCell: {
+    flex: 1,                    
+    textAlign: 'center',  
+    fontSize: 16,  
   },
   earningsContainer: {
     backgroundColor: '#FFF',
@@ -209,6 +279,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+
 });
 
 export default Finances;
