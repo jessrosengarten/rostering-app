@@ -31,32 +31,6 @@ export const fetchAllClubManagers = async () => {
   }
 };
 
-// Function to get the next week's range
-function getNextWeekRange(date = new Date()) {
-  const currentDate = new Date(date);
-
-  const startOfWeekDay = 1; // Monday
-  const currentDay = currentDate.getDay();
-
-  const startOfNextWeek = new Date(currentDate);
-  startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
-
-  const endOfNextWeek = new Date(startOfNextWeek);
-  endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
-
-  const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  const startFormatted = formatDate(startOfNextWeek);
-  const endFormatted = formatDate(endOfNextWeek);
-
-  return `${startFormatted} to ${endFormatted}`;
-}
-
 export const fetchPersonnelNeeded = async (clubName) => {
   try {
     // Fetch the club's data to get the opening time
@@ -367,6 +341,50 @@ export const getEstimatedAmountsForAllClubs = async () => {
   }
 };
 
+export const getAmountsForAllSecurityPersonnel = async () => {
+  try {
+    // Fetch all security personnel
+    const personnelRef = ref(db, 'securityPersonnel');
+    const personnelSnapshot = await get(personnelRef);
+    if (!personnelSnapshot.exists()) {
+      console.log('No security personnel data available');
+      return {};
+    }
+    const personnelData = personnelSnapshot.val();
+
+    // Get the current week's and next week's date ranges
+    const currentWeekRange = getCurrentWeekRange();
+    const nextWeekRange = getNextWeekRange();
+
+    // Initialize the result object
+    const amounts = {
+      currentWeekRange,
+      nextWeekRange,
+      personnel: []
+    };
+
+    // Iterate over all security personnel
+    for (const personnelId in personnelData) {
+      const personnel = personnelData[personnelId];
+      const finances = personnel.Finances;
+
+      const currentWeekAmount = finances && finances[currentWeekRange] ? finances[currentWeekRange].actualAmount || 0 : 0;
+      const nextWeekAmount = finances && finances[nextWeekRange] ? finances[nextWeekRange].estimatedAmount || 0 : 0;
+
+      amounts.personnel.push({
+        name: personnel.fullName,
+        currentWeekAmount,
+        nextWeekAmount
+      });
+    }
+
+    return amounts;
+  } catch (error) {
+    console.error('Error fetching amounts for all security personnel:', error);
+    return {};
+  }
+};
+
 // Helper function to get the current week's date range
 const getCurrentWeekRange = () => {
   const now = new Date();
@@ -376,3 +394,29 @@ const getCurrentWeekRange = () => {
   const end = `${endOfWeek.getDate()}-${endOfWeek.getMonth() + 1}-${endOfWeek.getFullYear()}`;
   return `${start} to ${end}`;
 };
+
+// Function to get the next week's range
+function getNextWeekRange(date = new Date()) {
+  const currentDate = new Date(date);
+
+  const startOfWeekDay = 1; // Monday
+  const currentDay = currentDate.getDay();
+
+  const startOfNextWeek = new Date(currentDate);
+  startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+
+  const endOfNextWeek = new Date(startOfNextWeek);
+  endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const startFormatted = formatDate(startOfNextWeek);
+  const endFormatted = formatDate(endOfNextWeek);
+
+  return `${startFormatted} to ${endFormatted}`;
+}
