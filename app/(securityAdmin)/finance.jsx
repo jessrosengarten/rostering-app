@@ -5,12 +5,13 @@ import { images } from '../../constants';
 import CustomButton from '../../components/CustomButton';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { getEstimatedAmountsForAllClubs } from '../../Backend/securityAdmin';
+import { getEstimatedAmountsForAllClubs, getAmountsForAllSecurityPersonnel } from '../../Backend/securityAdmin';
 
 const Finance = () => {
   const router = useRouter();
   const [showSection, setShowSection] = useState(null);
   const [estimatedAmounts, setEstimatedAmounts] = useState({});
+  const [personnelAmounts, setPersonnelAmounts] = useState({});
 
   useEffect(() => {
     const fetchEstimatedAmounts = async () => {
@@ -22,7 +23,17 @@ const Finance = () => {
       }
     };
 
+    const fetchPersonnelAmounts = async () => {
+      try {
+        const amounts = await getAmountsForAllSecurityPersonnel();
+        setPersonnelAmounts(amounts);
+      } catch (error) {
+        console.error('Error fetching personnel amounts:', error);
+      }
+    };
+
     fetchEstimatedAmounts();
+    fetchPersonnelAmounts();
   }, []);
 
   const toggleSection = (section) => {
@@ -69,6 +80,27 @@ const Finance = () => {
       <View style={styles.separator} />
     </View>
   );
+
+  const renderPersonnelCosts = (personnel) => {
+    return personnel.map(({ name, currentWeekAmount, nextWeekAmount }) => (
+      <View key={name} style={styles.clubContainer}>
+        <View style={styles.clubCosts}>
+          <Text style={styles.clubName}>{name}</Text>
+          <Text style={styles.summaryTextTitle}>This Week:</Text>
+          <View style={styles.row}>
+            <Text style={styles.summaryTextTitle2}>Actual Amount:</Text>
+            <Text style={styles.summaryTextData}>R{currentWeekAmount}</Text>
+          </View>
+          <Text style={styles.summaryTextTitle}>Next Week:</Text>
+          <View style={styles.row}>
+            <Text style={styles.summaryTextTitle2}>Estimated Amount:</Text>
+            <Text style={styles.summaryTextData}>R{nextWeekAmount}</Text>
+          </View>
+        </View>
+        <View style={styles.separator} />
+      </View>
+    ));
+  };
 
   return (
     <SafeAreaView edges={[]}>
@@ -129,7 +161,6 @@ const Finance = () => {
                 color="black"
               />
             </TouchableOpacity>
-
             {showSection === 'allClubsPayments' && (
               <View style={styles.extraInfo}>
                 {/* Breakdown by night */}
@@ -167,22 +198,12 @@ const Finance = () => {
             {showSection === 'bouncersPayments' && (
               <View style={styles.extraInfo}>
                 {/* Breakdown by night */}
-                <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
+                {renderPersonnelCosts(personnelAmounts.personnel || [])}
                 <View style={styles.row}>
                   <Text style={styles.summaryTextTitle}>Total Payments:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
+                  <Text style={styles.summaryTextData}>R
+                    {personnelAmounts.personnel.reduce((acc, { currentWeekAmount, nextWeekAmount }) => acc + currentWeekAmount + nextWeekAmount, 0)}
+                  </Text>
                 </View>
               </View>
             )}
