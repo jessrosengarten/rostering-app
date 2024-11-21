@@ -1,26 +1,27 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomButton from '../../components/CustomButton';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { images } from '../../constants';
-import { useRouter } from 'expo-router';
+import { getShiftsForPersonnel } from '../../Backend/securityAdmin';
 
 const SecurityPersonnelPayments = () => {
+  const router = useRouter();
+  const { personnelName } = useLocalSearchParams();
+  const [paymentData, setPaymentData] = useState({ payments: {}, total: 0, weekRange: '' });
 
-  //Dummy data
-  const paymentData = {
-    personnelName: 'Bart',
-    payments: {
-      Thursday: 750.00,
-      Friday: 950.00,
-      Saturday: 500.00,
-      Sunday: 1250.00,
-    },
-    total: 3450.00
-  };
+  useEffect(() => {
+    const fetchShifts = async () => {
+      if (personnelName) {
+        const { shifts, total, weekRange } = await getShiftsForPersonnel(personnelName);
+        setPaymentData({ payments: shifts, total, weekRange });
+      }
+    };
+
+    fetchShifts();
+  }, [personnelName]);
 
   // Temporary payment status
-  //REPLACE WITH ACTUAL DATA IN THE FUTURE
   const paymentStatus = paymentData.isPaid ? "Paid" : "Not Paid";
 
   return (
@@ -30,18 +31,15 @@ const SecurityPersonnelPayments = () => {
           <Text style={styles.headerText}>Security Personnel Payments</Text>
         </View>
 
-
         <ScrollView contentContainerStyle={{ height: '100%' }}>
-
-
           <ScrollView contentContainerStyle={styles.scrollContainer}>
-
             <View style={styles.paymentDetails}>
-              <Text style={styles.sectionTitle}>To Pay ...</Text>
+              <Text style={styles.sectionTitle}>To Pay {personnelName}</Text>
+              <Text style={styles.weekRangeText}>({paymentData.weekRange})</Text>
               {Object.keys(paymentData.payments).map((day, index) => (
                 <View key={index} style={styles.paymentRow}>
                   <Text style={styles.dayText}>{day}:</Text>
-                  <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
+                  <Text style={styles.amountText}>R {Number(paymentData.payments[day]).toFixed(2)}</Text>
                 </View>
               ))}
 
@@ -49,7 +47,7 @@ const SecurityPersonnelPayments = () => {
               <View style={styles.paymentRow}>
                 <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
                 <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
-                  R {paymentData.total.toFixed(2)}
+                  R {Number(paymentData.total).toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -69,14 +67,13 @@ const SecurityPersonnelPayments = () => {
               </Text>
             </View>
           </ScrollView>
-
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default SecurityPersonnelPayments
+export default SecurityPersonnelPayments;
 
 const styles = StyleSheet.create({
   container: {
@@ -114,7 +111,6 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
   },
-
   statusContainer: {
     marginTop: 20,
     paddingVertical: 15,
@@ -128,7 +124,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
-
   statusText: {
     fontSize: 18,
     color: '#333',
@@ -142,7 +137,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontWeight: 'bold',
   },
-
   paymentDetails: {
     width: '100%',
     backgroundColor: '#FFF',
@@ -160,6 +154,13 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 15,
     textAlign: 'center',
+  },
+  weekRangeText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   paymentRow: {
     flexDirection: 'row',

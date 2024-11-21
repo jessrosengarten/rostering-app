@@ -395,6 +395,58 @@ const getCurrentWeekRange = () => {
   return `${start} to ${end}`;
 };
 
+// Method to get shifts attended by a specific personnel for the current week
+export const getShiftsForPersonnel = async (personnelName) => {
+  try {
+    // Fetch all security personnel
+    const personnelRef = ref(db, 'securityPersonnel');
+    const personnelSnapshot = await get(personnelRef);
+    if (!personnelSnapshot.exists()) {
+      console.log('No security personnel data available');
+      return {};
+    }
+    const personnelData = personnelSnapshot.val();
+
+    // Get the current week's date range
+    const currentWeekRange = getCurrentWeekRange();
+
+    // Find the personnel by name
+    const personnel = Object.values(personnelData).find(p => p.fullName === personnelName);
+    if (!personnel) {
+      console.log(`No personnel found with name ${personnelName}`);
+      return {};
+    }
+
+    // Get the shifts attended for the current week
+    const shifts = personnel.Shifts && personnel.Shifts[currentWeekRange] ? personnel.Shifts[currentWeekRange] : {};
+    const ratePerShift = personnel.rate || 0;
+
+    // Create a shifts object with the rate for each day and calculate the total
+    const shiftsWithAmounts = Object.keys(shifts).reduce((acc, day) => {
+      if (shifts[day].attendance === "Attended") {
+        acc[day] = ratePerShift;
+      }
+      return acc;
+    }, {});
+
+    // Calculate the total
+    const total = Object.values(shiftsWithAmounts).reduce((sum, amount) => sum + amount, 0);
+
+    return {
+      shifts: shiftsWithAmounts,
+      total,
+      weekRange: currentWeekRange
+    };
+  } catch (error) {
+    console.error('Error fetching shifts for personnel:', error);
+    return {
+      shifts: {},
+      total: 0,
+      weekRange: ''
+    };
+  }
+};
+
 // Function to get the next week's range
 function getNextWeekRange(date = new Date()) {
   const currentDate = new Date(date);
