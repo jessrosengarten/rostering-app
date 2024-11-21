@@ -64,7 +64,7 @@ export const fetchPersonnelShifts = async (personnelName, weekDates) => {
 
     return personnelShifts;
   } catch (error) {
-    throw new Error(`Fetching personnel shifts error: ${error.message}`);
+    throw new Error(`${error.message}`);
   }
 };
 

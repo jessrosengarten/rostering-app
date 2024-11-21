@@ -25,7 +25,7 @@ const SecurityHome = () => {
         setNextWeekShifts(nextWeekShifts);
         setThisWeekShifts(fetchedShifts);
       } catch (error) {
-        Alert.alert('Error', error.message);
+        Alert.alert('Notice', error.message);
       }
     };
 

@@ -14,7 +14,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
                 tintColor={color}
                 className="w-6 h-6"
             />
-            <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs w-16 text-center`}>
+            <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs w-20 text-center`}>
                 {name}
             </Text>
         </View>
@@ -74,14 +74,21 @@ const SecurityPersonnelLayout = () => {
                     )
                 }}
                 initialParams={{ personnelName }}
-/>
-            
+            />
+
             <Tabs.Screen
                 name="securityPersonnelEarningHistory"
                 options={{
-                    title: '',
+                    title: 'Earning History',
                     headerShown: true,
-                    //href: null,
+                    tabBarIcon: ({ color, focused }) => (
+                        <TabIcon
+                            icon={icons.bookmark}
+                            color={color}
+                            name="Earnings"
+                            focused={focused}
+                        />
+                    )
                 }}
             />
             <Tabs.Screen
