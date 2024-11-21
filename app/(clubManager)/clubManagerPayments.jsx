@@ -72,10 +72,6 @@ const calculateTotals = (payments) => {
   };
 };
 
-const thisWeekTotals = calculateTotals(thisWeekPayments);
-  const nextWeekTotals = calculateTotals(nextWeekPayments);
-
-
   // Function to group finances by day
   const sortPaymentsByDay = (payments) => {
   if (!Array.isArray(payments) || payments.length === 0) {
