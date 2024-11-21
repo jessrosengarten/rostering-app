@@ -52,7 +52,10 @@ const SecurityPersonnelProfile = () => {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => router.push('securityPersonnelPayments')}
+              onPress={() => router.push({
+                pathname: 'securityPersonnelPayments',
+                params: { personnelName: parsedPersonnel.fullName },
+              })}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>

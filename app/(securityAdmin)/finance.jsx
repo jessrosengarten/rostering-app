@@ -40,8 +40,11 @@ const Finance = () => {
     setShowSection((prevSection) => (prevSection === section ? null : section));
   };
 
+  const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
   const renderCosts = (costs) => {
-    return costs.map(({ day, amount }) => (
+    const sortedCosts = costs.sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
+    return sortedCosts.map(({ day, amount }) => (
       <View style={styles.row} key={day}>
         <Text style={styles.summaryTextTitle2}>{day}:</Text>
         <Text style={styles.summaryTextData}>R{amount}</Text>
@@ -81,26 +84,35 @@ const Finance = () => {
     </View>
   );
 
-  const renderPersonnelCosts = (personnel) => {
-    return personnel.map(({ name, currentWeekAmount, nextWeekAmount }) => (
-      <View key={name} style={styles.clubContainer}>
-        <View style={styles.clubCosts}>
-          <Text style={styles.clubName}>{name}</Text>
-          <Text style={styles.summaryTextTitle}>This Week:</Text>
-          <View style={styles.row}>
-            <Text style={styles.summaryTextTitle2}>Actual Amount:</Text>
-            <Text style={styles.summaryTextData}>R{currentWeekAmount}</Text>
+  const renderPersonnelCosts = (personnel, currentWeekRange, nextWeekRange) => {
+    return personnel
+      .filter(({ currentWeekAmount, nextWeekAmount }) => currentWeekAmount > 0 || nextWeekAmount > 0)
+      .map(({ name, currentWeekAmount, nextWeekAmount }) => (
+        <View key={name} style={styles.clubContainer}>
+          <View style={styles.clubCosts}>
+            <Text style={styles.clubName}>{name}</Text>
+            <Text style={styles.summaryTextTitle}>
+              This Week: <Text style={styles.dateText}> ({currentWeekRange})</Text>
+            </Text>
+            <View style={styles.row}>
+              <Text style={styles.summaryTextTitle2}>Actual Amount:</Text>
+              <Text style={styles.summaryTextData}>R{currentWeekAmount}</Text>
+            </View>
+            <Text style={styles.summaryTextTitle}>
+              Next Week: <Text style={styles.dateText}> ({nextWeekRange})</Text>
+            </Text>
+            <View style={styles.row}>
+              <Text style={styles.summaryTextTitle2}>Estimated Amount:</Text>
+              <Text style={styles.summaryTextData}>R{nextWeekAmount}</Text>
+            </View>
           </View>
-          <Text style={styles.summaryTextTitle}>Next Week:</Text>
-          <View style={styles.row}>
-            <Text style={styles.summaryTextTitle2}>Estimated Amount:</Text>
-            <Text style={styles.summaryTextData}>R{nextWeekAmount}</Text>
-          </View>
+          <View style={styles.separator} />
         </View>
-        <View style={styles.separator} />
-      </View>
-    ));
+      ));
   };
+
+  const totalPaymentsThisWeek = personnelAmounts.personnel?.reduce((acc, { currentWeekAmount }) => acc + currentWeekAmount, 0) || 0;
+  const estimatedPaymentsNextWeek = personnelAmounts.personnel?.reduce((acc, { nextWeekAmount }) => acc + nextWeekAmount, 0) || 0;
 
   return (
     <SafeAreaView edges={[]}>
@@ -198,12 +210,14 @@ const Finance = () => {
             {showSection === 'bouncersPayments' && (
               <View style={styles.extraInfo}>
                 {/* Breakdown by night */}
-                {renderPersonnelCosts(personnelAmounts.personnel || [])}
+                {renderPersonnelCosts(personnelAmounts.personnel || [], personnelAmounts.currentWeekRange, personnelAmounts.nextWeekRange)}
                 <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Payments:</Text>
-                  <Text style={styles.summaryTextData}>R
-                    {personnelAmounts.personnel.reduce((acc, { currentWeekAmount, nextWeekAmount }) => acc + currentWeekAmount + nextWeekAmount, 0)}
-                  </Text>
+                  <Text style={styles.summaryTextTitle}>Total Payments This Week:</Text>
+                  <Text style={styles.summaryTextData}>R{totalPaymentsThisWeek}</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Payments Next Week:</Text>
+                  <Text style={styles.summaryTextData}>R{estimatedPaymentsNextWeek}</Text>
                 </View>
               </View>
             )}
@@ -322,7 +336,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   dateText: {
-    fontSize: 15,
+    fontSize: 12,
     color: 'black',
   },
   extraInfo: {
@@ -348,6 +362,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10,
+    textDecorationLine: 'underline',
   },
   separator: {
     height: 1,
