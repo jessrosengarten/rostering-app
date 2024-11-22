@@ -74,7 +74,7 @@ const ClubDetails = () => {
               style={styles.button}
               onPress={() => router.push({
                 pathname: 'assignPersonnelManagement',
-                params: { club: JSON.stringify(parsedClub), }
+                params: { club, clubName: parsedClub.name }
               })}
             >
               <Text style={styles.buttonText}>Assign Personnel</Text>

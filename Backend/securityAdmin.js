@@ -70,15 +70,13 @@ export const fetchPersonnelNeeded = async (clubName) => {
       if (week === nextWeekRange) {
         for (const day in shiftsData[week]) {
           let personnelNum = shiftsData[week][day];
-          const assignedCount = getAssignedCount(personnelData, week, day);
-          const assigned = assignedCount >= personnelNum;
-          if (assignedCount > 0) {
-            personnelNum -= assignedCount;
-          }
+          const assignedCount = getAssignedCount(personnelData, week, day, clubName);
+          const remainingPersonnelNum = personnelNum - assignedCount;
+          const assigned = remainingPersonnelNum <= 0;
           schedule.push({
             week,
             day,
-            personnelNum,
+            personnelNum: remainingPersonnelNum > 0 ? remainingPersonnelNum : 0,
             openingTime,
             assigned
           });
@@ -93,11 +91,12 @@ export const fetchPersonnelNeeded = async (clubName) => {
   }
 };
 
-const getAssignedCount = (personnelData, week, day) => {
+// Helper function to get the assigned count
+const getAssignedCount = (personnelData, week, day, clubName) => {
   let assignedCount = 0;
   for (const userId in personnelData) {
     const userShifts = personnelData[userId].Shifts;
-    if (userShifts && userShifts[week] && userShifts[week][day]) {
+    if (userShifts && userShifts[week] && userShifts[week][day] && userShifts[week][day].clubName === clubName) {
       assignedCount++;
     }
   }
