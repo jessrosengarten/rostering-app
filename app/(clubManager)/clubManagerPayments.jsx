@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { getFinances } from '../../Backend/clubManager';
 
 const clubManagerPayments = () => {
+  const router = useRouter();
     const { club: clubParam } = useLocalSearchParams();
     const club = JSON.parse(decodeURIComponent(clubParam));
     const [thisWeekPayments, setThisWeekPayments] = useState([]);
@@ -143,6 +144,9 @@ const calculateTotals = (payments) => {
 
     return `${startFormatted} to ${endFormatted}`;
   }
+  const handleViewHistory = () => {
+    router.push(`/clubManagerFinanceHistory?club=${encodeURIComponent(JSON.stringify(club))}`)
+  };
 
    // Function to render payments in a table-like format
 const renderPayments = (payments) => {
@@ -220,6 +224,11 @@ const renderPayments = (payments) => {
                     <TouchableOpacity style={styles.paymentButton}>
                         <Text style={styles.paymentButtonText}>Make Payment</Text>
                     </TouchableOpacity>
+
+            <TouchableOpacity style={styles.paymentButton} onPress={handleViewHistory}>
+              <Text style={styles.paymentButtonText}>View Finance History</Text>
+            </TouchableOpacity>
+        
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>

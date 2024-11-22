@@ -182,3 +182,48 @@ export const getFinances = async (clubName, dateRange) => {
   }
 };
 
+
+export const getAllFinances = async (clubName) => {
+  try {
+    const clubRefFinances = ref(db, `Clubs/${clubName}/rate`);
+    const rateSnapshot = await get(clubRefFinances);
+    let rate = 0;
+    if (rateSnapshot.exists()) {
+      rate = rateSnapshot.val();
+    };
+
+    const dbRef = ref(db);
+    const snapshot = await get(child(dbRef, `Clubs/${clubName}/Finances`));
+
+    if (snapshot.exists()) {
+      const finances = snapshot.val();
+      const result = [];
+      let totalAmount=0;
+
+      // Iterate through all date ranges within the Finances node
+      for (const dateRange in finances) {
+        const dailyFinances = finances[dateRange];
+
+        // Iterate through each day within the current date range
+        for (const day in dailyFinances) {
+          const { amountDue = 0} = dailyFinances[day];
+          totalAmount +=amountDue;
+        }
+        const numberOfShifts = rate > 0 ? totalAmount / rate : 0;
+        result.push({
+          rate:rate,
+            dateRange,
+            totalAmount,
+            numberOfShifts: numberOfShifts.toFixed(0),
+          });
+      }
+      return result; 
+    } else {
+      console.warn('No finances found for the given club.');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching finances:', error);
+    throw error;
+  }
+};

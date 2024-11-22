@@ -2,39 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { getAllFinances} from '../../Backend/securityPersonnel';
+import { getAllFinances} from '../../Backend/clubManager';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
-const EarningsHistory = () => {
+const FinanceHistory = () => {
   const router = useRouter();
   const [allPayments, setAllPayments] = useState([]);
-  const { personnelName } = useLocalSearchParams();
+  const { club: clubParam } = useLocalSearchParams();
+    const club = JSON.parse(decodeURIComponent(clubParam));
 
   useEffect(() => {
     setAllPayments([]); 
     loadFinances();
-  }, [personnelName]);
+  }, [club.name]);
 
   // Function to load payments data
   const loadFinances = async () => {
   try {
-    const financesThisWeek = await getAllFinances(personnelName);
+    const finances = await getAllFinances(club.name);
 
-    // Map the response to match the structure required by the component
-    const formattedPayments = financesThisWeek.map((finance) => {
-      const ratePerShift = parseFloat(finance.rate); // Parse rate as a float
-      const actualAmount = finance.actualamountDueAmount;
-
-      // Calculate number of shifts dynamically
-      const numberOfShifts = actualAmount / ratePerShift;
-
-      return {
-        weekRange: finance.dateRange,
-        ratePerShift: `R${ratePerShift.toFixed(2)}`, // Format as currency
-        numberOfShifts: numberOfShifts.toFixed(0), // Rounded to nearest whole number
-        totalEarned: `R${actualAmount.toFixed(2)}`, // Format as currency
-      };
-    });
+    // Format data for display
+    const formattedPayments = finances.map((finance) => ({
+      rate : `R${parseFloat(finance.rate)}`,
+      weekRange: finance.dateRange, // Keep date range as-is
+      totalAmount: `R${finance.totalAmount.toFixed(2)}`, // Format totalAmount as currency,
+      numberOfShifts: finance.numberOfShifts,
+    }));
 
     setAllPayments(formattedPayments);
   } catch (error) {
@@ -43,7 +36,7 @@ const EarningsHistory = () => {
 };
 
 const handleBack = () => {
-    router.push(`/securityPersonnelFinances?personnelName=${personnelName}`)
+    router.push(`/clubManagerPayments?club=${club}`)
   };
 
   return (
@@ -55,22 +48,22 @@ const handleBack = () => {
           </View>
 
           {allPayments.map((data, index) => (
-            <View key={index} style={styles.earningsContainer}>
-              <Text style={styles.sectionTitle}>{data.weekRange}</Text>
-              <View style={styles.row}>
-                <Text style={styles.labelText}>Rate per shift:</Text>
-                <Text style={styles.valueText}>{data.ratePerShift}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.labelText}>Number of shifts:</Text>
-                <Text style={styles.valueText}>{data.numberOfShifts}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.labelText}>Total earned:</Text>
-                <Text style={styles.valueText}>{data.totalEarned}</Text>
-              </View>
-            </View>
-          ))}
+  <View key={index} style={styles.earningsContainer}>
+    <Text style={styles.sectionTitle}>{data.weekRange || "No Date Range"}</Text>
+    <View style={styles.row}>
+      <Text style={styles.labelText}>Rate Per Shift:</Text>
+      <Text style={styles.valueText}>{data.rate || "R0.00"}</Text>
+    </View>
+    <View style={styles.row}>
+      <Text style={styles.labelText}>Number of shifts:</Text>
+      <Text style={styles.valueText}>{data.numberOfShifts || "0"}</Text>
+    </View>
+    <View style={styles.row}>
+      <Text style={styles.labelText}>Total Amount:</Text>
+      <Text style={styles.valueText}>{data.totalAmount || "R0.00"}</Text>
+    </View>
+  </View>
+))}
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={handleBack}>
               <Text style={styles.buttonText}>Back</Text>
@@ -83,6 +76,23 @@ const handleBack = () => {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  button: {
+        backgroundColor: '#E21A1A',
+        paddingVertical: 15,
+        paddingHorizontal: 50,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
   buttonContainer: {
     alignItems: 'center',
     marginTop: 20,
@@ -168,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarningsHistory;
+export default FinanceHistory;
