@@ -79,16 +79,9 @@ const SecurityPersonnelLayout = () => {
             <Tabs.Screen
                 name="securityPersonnelEarningHistory"
                 options={{
-                    title: 'Earning History',
+                    title: '',
                     headerShown: true,
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabIcon
-                            icon={icons.bookmark}
-                            color={color}
-                            name="Earnings"
-                            focused={focused}
-                        />
-                    )
+                    href: null,
                 }}
             />
             <Tabs.Screen
