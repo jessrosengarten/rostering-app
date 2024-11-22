@@ -94,7 +94,7 @@ const Finances = () => {
   }
 
   const handleViewHistory = () => {
-    router.push('/securityPersonnelEarningHistory'); // Update the route as per your app's navigation
+    router.push(`/securityPersonnelEarningHistory?personnelName=${personnelName}`)
   };
 
   const renderthisWeekPayments = (title, dateRange, payments) => {

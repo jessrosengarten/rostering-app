@@ -1,39 +1,50 @@
-import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ImageBackground, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
+import { getAllFinances} from '../../Backend/securityPersonnel';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const EarningsHistory = () => {
-  // Helper function to format date as "29 Jan 2024"
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    }).format(date);
-  };
+  const router = useRouter();
+  const [allPayments, setAllPayments] = useState([]);
+  const { personnelName } = useLocalSearchParams();
 
-  // Function to calculate the Monday and Sunday of a given week offset from the current week
-  const calculateWeekRange = (weekOffset) => {
-    const currentDate = new Date();
-    const currentDay = currentDate.getDay();
-    const monday = new Date(currentDate);
-    monday.setDate(currentDate.getDate() - (currentDay === 0 ? 6 : currentDay - 1) - 7 * weekOffset);
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    return { monday: formatDate(monday), sunday: formatDate(sunday) };
-  };
+  useEffect(() => {
+    setAllPayments([]); 
+    loadFinances();
+  }, [personnelName]);
 
-  // Generate the last four weeks' date ranges
-  const earningsData = Array.from({ length: 4 }, (_, index) => {
-    const { monday, sunday } = calculateWeekRange(index + 1);
-    return {
-      weekRange: `${monday} - ${sunday}`,
-      ratePerShift: index % 2 === 0 ? 'R200.00' : 'R300.00', // Sample rate per shift
-      numberOfShifts: 3 + index, // Sample number of shifts
-      totalEarned: `R ${200 * (3 + index)}.00`, // Sample total earned
-    };
-  });
+  // Function to load this week payments data
+  const loadFinances = async () => {
+  try {
+    const financesThisWeek = await getAllFinances(personnelName);
+
+    // Map the response to match the structure required by the component
+    const formattedPayments = financesThisWeek.map((finance) => {
+      const ratePerShift = parseFloat(finance.rate); // Parse rate as a float
+      const actualAmount = finance.actualAmount;
+
+      // Calculate number of shifts dynamically
+      const numberOfShifts = actualAmount / ratePerShift;
+
+      return {
+        weekRange: finance.dateRange,
+        ratePerShift: `R${ratePerShift.toFixed(2)}`, // Format as currency
+        numberOfShifts: numberOfShifts.toFixed(0), // Rounded to nearest whole number
+        totalEarned: `R${actualAmount.toFixed(2)}`, // Format as currency
+      };
+    });
+
+    setAllPayments(formattedPayments);
+  } catch (error) {
+    console.error("Error fetching finances:", error);
+  }
+};
+
+const handleViewHistory = () => {
+    router.push(`/securityPersonnelFinances?personnelName=${personnelName}`)
+  };
 
   return (
     <SafeAreaView edges={[]} style={styles.safeArea}>
@@ -43,7 +54,7 @@ const EarningsHistory = () => {
             <Text style={styles.headerText}>Earnings History</Text>
           </View>
 
-          {earningsData.map((data, index) => (
+          {allPayments.map((data, index) => (
             <View key={index} style={styles.earningsContainer}>
               <Text style={styles.sectionTitle}>{data.weekRange}</Text>
               <View style={styles.row}>
@@ -60,6 +71,11 @@ const EarningsHistory = () => {
               </View>
             </View>
           ))}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={handleViewHistory}>
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+            </View>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -67,6 +83,23 @@ const EarningsHistory = () => {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  button: {
+        backgroundColor: '#E21A1A',
+        paddingVertical: 15,
+        paddingHorizontal: 50,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
   safeArea: {
     flex: 1,
   },

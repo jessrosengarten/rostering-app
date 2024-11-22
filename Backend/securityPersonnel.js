@@ -256,3 +256,50 @@ export const getFinances = async (personnelName, dateRange) => {
   }
 };
 
+export const getAllFinances = async (personnelName) => {
+  try {
+    let userId = null;
+    let rate = 0;
+
+    const personnelRef = ref(db, 'securityPersonnel');
+    const snapshot = await get(personnelRef);
+    
+    const personnel = snapshot.val();
+
+    // Find the user with the matching fullName
+    Object.keys(personnel).forEach(key => {
+      if (personnel[key].fullName === personnelName) {
+        userId = key;
+        rate = personnel[key].rate;
+      }
+    });
+    
+    if (!userId) {
+      throw new Error(`No user found with the name ${personnelName}`);
+    }
+
+    const financesRef = ref(db, `securityPersonnel/${userId}/Finances`);
+    const financesSnapshot = await get(financesRef);
+
+    if (financesSnapshot.exists()) {
+      const finances = financesSnapshot.val();
+      const allFinances = Object.keys(finances).map(dateRange => {
+        const finance = finances[dateRange];
+        return {
+          dateRange,
+          actualAmount: finance.actualAmount || 0,
+          estimatedAmount: finance.estimatedAmount || 0,
+          rate: rate || 0,
+        };
+      });
+
+      return allFinances;
+    } else {
+      console.warn('No finances found.');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching finances:', error);
+    throw error;
+  }
+};
