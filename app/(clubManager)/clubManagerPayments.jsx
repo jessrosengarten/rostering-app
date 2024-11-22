@@ -149,6 +149,7 @@ const renderPayments = (payments) => {
   const totalAmounts = calculateTotals(payments);
   return (
     <View style={styles.tableContainer}>
+      <Text style={styles.tableHeaderText}>{payments.rate}</Text>
       <View style={styles.tableHeader}>
         <Text style={styles.tableHeaderText}>Day</Text>
         <Text style={styles.tableHeaderText}>Estimated</Text>
