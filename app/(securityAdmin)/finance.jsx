@@ -52,38 +52,6 @@ const Finance = () => {
     ));
   };
 
-  const renderClubCosts = (clubName, costs, currentWeekRange, nextWeekRange) => (
-    <View key={clubName} style={styles.clubContainer}>
-      <View style={styles.clubCosts}>
-        <Text style={styles.clubName}>{clubName}</Text>
-        {costs.currentWeek.length > 0 && (
-          <>
-            <Text style={styles.summaryTextTitle}>
-              This Week: <Text style={styles.dateText}> ({currentWeekRange})</Text>
-            </Text>
-            {renderCosts(costs.currentWeek)}
-          </>
-        )}
-        {costs.nextWeek.length > 0 && (
-          <>
-            <Text style={styles.summaryTextTitle}>
-              Next Week: <Text style={styles.dateText}> ({nextWeekRange})</Text>
-            </Text>
-            {renderCosts(costs.nextWeek)}
-          </>
-        )}
-        <View style={styles.row}>
-          <Text style={styles.summaryTextTitle}>Estimated Earn:</Text>
-          <Text style={styles.summaryTextData}>R
-            {costs.currentWeek.reduce((total, { amount }) => total + amount, 0) +
-             costs.nextWeek.reduce((total, { amount }) => total + amount, 0)}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.separator} />
-    </View>
-  );
-
   const renderPersonnelCosts = (personnel, currentWeekRange, nextWeekRange) => {
     return personnel
       .filter(({ currentWeekAmount, nextWeekAmount }) => currentWeekAmount > 0 || nextWeekAmount > 0)
@@ -114,6 +82,53 @@ const Finance = () => {
   const totalPaymentsThisWeek = personnelAmounts.personnel?.reduce((acc, { currentWeekAmount }) => acc + currentWeekAmount, 0) || 0;
   const estimatedPaymentsNextWeek = personnelAmounts.personnel?.reduce((acc, { nextWeekAmount }) => acc + nextWeekAmount, 0) || 0;
 
+  const renderClubCosts = (clubName, costs, currentWeekRange, nextWeekRange) => {
+    const actualEarnThisWeek = costs.currentWeek.reduce((total, { amount }) => total + amount, 0);
+
+    return (
+      <View key={clubName} style={styles.clubContainer}>
+        <View style={styles.clubCosts}>
+          <Text style={styles.clubName}>{clubName}</Text>
+          {costs.currentWeek.length > 0 && (
+            <>
+              <Text style={styles.summaryTextTitle}>
+                This Week: <Text style={styles.dateText}> ({currentWeekRange})</Text>
+              </Text>
+              {renderCosts(costs.currentWeek)}
+              <View style={styles.row}>
+                <Text style={styles.summaryTextTitle2}>Actual Earn:</Text>
+                <Text style={styles.summaryTextData}>R{actualEarnThisWeek}</Text>
+              </View>
+            </>
+          )}
+          {costs.nextWeek.length > 0 && (
+            <>
+              <Text style={styles.summaryTextTitle}>
+                Next Week: <Text style={styles.dateText}> ({nextWeekRange})</Text>
+              </Text>
+              {renderCosts(costs.nextWeek)}
+            </>
+          )}
+          <View style={styles.row}>
+            <Text style={styles.summaryTextTitle2}>Estimated Earn:</Text>
+            <Text style={styles.summaryTextData}>R
+              {costs.nextWeek.reduce((total, { amount }) => total + amount, 0)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.separator} />
+      </View>
+    );
+  };
+
+  const totalActualEarnThisWeek = Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
+    return acc + clubCosts.currentWeek.reduce((sum, { amount }) => sum + amount, 0);
+  }, 0);
+
+  const totalEstimatedEarnNextWeek = Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
+    return acc + clubCosts.nextWeek.reduce((sum, { amount }) => sum + amount, 0);
+  }, 0);
+
   return (
     <SafeAreaView edges={[]}>
       <ImageBackground source={images.background} className='h-full w-full'>
@@ -122,43 +137,6 @@ const Finance = () => {
           <View style={styles.header}>
             <Text style={styles.headerText}>Finance Management</Text>
           </View>
-
-          {/* Payments from Specific Club Dropdown */}
-          {/* <View style={styles.summary}>
-            <TouchableOpacity
-              style={styles.dropdownButton}
-              onPress={() => toggleSection('clubPayments')}
-            >
-              <Text style={styles.summaryTitle}>Payments from ...</Text>
-              <Ionicons
-                name={showSection === 'clubPayments' ? 'chevron-up' : 'chevron-down'}
-                size={20}
-                color="black"
-              />
-            </TouchableOpacity>
-
-            {showSection === 'clubPayments' && (
-              <View style={styles.extraInfo}>
-                <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Earned:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
-                </View>
-              </View>
-            )}
-          </View> */}
 
           {/* Payments from All Clubs Dropdown */}
           <View style={styles.summary}>
@@ -180,14 +158,12 @@ const Finance = () => {
                   renderClubCosts(clubName, costs, estimatedAmounts.currentWeekRange, estimatedAmounts.nextWeekRange)
                 )}
                 <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle}>Total Actual Earn:</Text>
+                  <Text style={styles.summaryTextData}>R{totalActualEarnThisWeek}</Text>
+                </View>
+                <View style={styles.row}>
                   <Text style={styles.summaryTextTitle}>Total Estimated Earn:</Text>
-                  <Text style={styles.summaryTextData}>R
-                    {Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
-                      const thisWeekTotal = clubCosts.currentWeek.reduce((sum, { amount }) => sum + amount, 0);
-                      const nextWeekTotal = clubCosts.nextWeek.reduce((sum, { amount }) => sum + amount, 0);
-                      return acc + thisWeekTotal + nextWeekTotal;
-                    }, 0)}
-                  </Text>
+                  <Text style={styles.summaryTextData}>R{totalEstimatedEarnNextWeek}</Text>
                 </View>
               </View>
             )}
