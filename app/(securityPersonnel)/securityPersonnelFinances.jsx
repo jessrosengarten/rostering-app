@@ -35,6 +35,7 @@ const Finances = () => {
     try {
       const financesNextWeek = await getFinances(personnelName, nextWeekDates); 
       setNextWeekPayments(financesNextWeek); 
+      console.log(nextWeekPayments);
     } catch (error) {
       console.error("Error fetching next week payments:", error);
     }
@@ -111,8 +112,8 @@ const Finances = () => {
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableCell}>Estimated Amount: </Text>
-          <Text style={styles.tableCell}>{(payments.actualAmount / payments.rate || 0)}</Text>
-          <Text style={styles.tableCell}>R {(payments.actualAmount || 0).toFixed(2)}</Text>
+          <Text style={styles.tableCell}>{(payments.estimatedAmount / payments.rate || 0)}</Text>
+          <Text style={styles.tableCell}>R {(payments.estimatedAmount || 0).toFixed(2)}</Text>
         </View>
         <View style={styles.tableRow}>
             <Text style={styles.tableCell}>Actual Amount: </Text>
@@ -123,11 +124,11 @@ const Finances = () => {
     );
   };
 
-  const rendernextWeekPayments = (title, payments) => {
+  const rendernextWeekPayments = (title,dateRange, payments) => {
     return (
       <View style={styles.tableContainer}>
         <Text style={styles.sectionTitle}>{title}</Text>
-        <Text style={styles.dateRange}>{nextWeekDates}</Text>
+        <Text style={styles.dateRange}>{dateRange}</Text>
         <View style={styles.tableRow}>
           <Text style={styles.tableCell}>Rate per shift: R {(payments.rate || 0)}</Text>
         </View>
@@ -138,8 +139,8 @@ const Finances = () => {
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableCell}>Estimated Amount: </Text>
-          <Text style={styles.tableCell}>{(payments.actualAmount / payments.rate || 0)}</Text>
-          <Text style={styles.tableCell}>R {(payments.actualAmount || 0).toFixed(2)}</Text>
+          <Text style={styles.tableCell}>{(payments.estimatedAmount / payments.rate || 0)}</Text>
+          <Text style={styles.tableCell}>R {(payments.estimatedAmount || 0).toFixed(2)}</Text>
         </View>
       </View>
     );
