@@ -84,6 +84,7 @@ const Finance = () => {
 
   const renderClubCosts = (clubName, costs, currentWeekRange, nextWeekRange) => {
     const actualEarnThisWeek = costs.currentWeek.reduce((total, { amount }) => total + amount, 0);
+    const estimatedEarnNextWeek = costs.nextWeek.reduce((total, { amount }) => total + amount, 0);
 
     return (
       <View key={clubName} style={styles.clubContainer}>
@@ -107,14 +108,12 @@ const Finance = () => {
                 Next Week: <Text style={styles.dateText}> ({nextWeekRange})</Text>
               </Text>
               {renderCosts(costs.nextWeek)}
+              <View style={styles.row}>
+                <Text style={styles.summaryTextTitle2}>Estimated Earn:</Text>
+                <Text style={styles.summaryTextData}>R{estimatedEarnNextWeek}</Text>
+              </View>
             </>
           )}
-          <View style={styles.row}>
-            <Text style={styles.summaryTextTitle2}>Estimated Earn:</Text>
-            <Text style={styles.summaryTextData}>R
-              {costs.nextWeek.reduce((total, { amount }) => total + amount, 0)}
-            </Text>
-          </View>
         </View>
         <View style={styles.separator} />
       </View>
@@ -128,6 +127,9 @@ const Finance = () => {
   const totalEstimatedEarnNextWeek = Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
     return acc + clubCosts.nextWeek.reduce((sum, { amount }) => sum + amount, 0);
   }, 0);
+
+  const totalProfitThisWeek = totalActualEarnThisWeek - totalPaymentsThisWeek;
+  const totalProfitNextWeek = totalEstimatedEarnNextWeek - estimatedPaymentsNextWeek;
 
   return (
     <SafeAreaView edges={[]}>
@@ -216,22 +218,35 @@ const Finance = () => {
             {showSection === 'profit' && (
               <View style={styles.extraInfo}>
                 {/* Breakdown by night */}
-                <Text style={styles.summaryTextTitle}>Breakdown by Night:</Text>
+                <Text style={styles.summaryTextTitle}>
+                  This Week: <Text style={styles.dateText}>({estimatedAmounts.currentWeekRange})</Text>
+                </Text>
                 <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Monday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
+                  <Text style={styles.summaryTextTitle2}>Total Income:</Text>
+                  <Text style={styles.summaryTextData}>R{totalActualEarnThisWeek}</Text>
                 </View>
                 <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Tuesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
+                  <Text style={styles.summaryTextTitle2}>Total Expenses:</Text>
+                  <Text style={styles.summaryTextData}>R{totalPaymentsThisWeek}</Text>
                 </View>
                 <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle2}>Wednesday:</Text>
-                  <Text style={styles.summaryTextData}>200</Text>
+                  <Text style={styles.summaryTextTitle2}>Total Profit:</Text>
+                  <Text style={styles.summaryTextData}>R{totalProfitThisWeek}</Text>
+                </View>
+                <Text style={styles.summaryTextTitle}>
+                  Next Week: <Text style={styles.dateText}>({estimatedAmounts.nextWeekRange})</Text>
+                  </Text>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Total Income:</Text>
+                  <Text style={styles.summaryTextData}>R{totalEstimatedEarnNextWeek}</Text>
                 </View>
                 <View style={styles.row}>
-                  <Text style={styles.summaryTextTitle}>Total Profit:</Text>
-                  <Text style={styles.summaryTextData}>600</Text>
+                  <Text style={styles.summaryTextTitle2}>Total Expenses:</Text>
+                  <Text style={styles.summaryTextData}>R{estimatedPaymentsNextWeek}</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.summaryTextTitle2}>Total Profit:</Text>
+                  <Text style={styles.summaryTextData}>R{totalProfitNextWeek}</Text>
                 </View>
               </View>
             )}
