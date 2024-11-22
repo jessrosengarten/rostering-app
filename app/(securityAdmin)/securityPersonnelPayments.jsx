@@ -13,8 +13,12 @@ const SecurityPersonnelPayments = () => {
   useEffect(() => {
     const fetchShifts = async () => {
       if (personnelName) {
-        const { shifts, total, weekRange } = await getShiftsForPersonnel(personnelName);
-        setPaymentData({ payments: shifts, total, weekRange });
+        const { shifts, weekRange } = await getShiftsForPersonnel(personnelName);
+        const numericShifts = Object.fromEntries(
+          Object.entries(shifts).map(([day, amount]) => [day, Number(amount)])
+        );
+        const total = Object.values(numericShifts).reduce((sum, amount) => sum + amount, 0);
+        setPaymentData({ payments: numericShifts, total, weekRange });
       }
     };
 
@@ -39,7 +43,9 @@ const SecurityPersonnelPayments = () => {
               {Object.keys(paymentData.payments).map((day, index) => (
                 <View key={index} style={styles.paymentRow}>
                   <Text style={styles.dayText}>{day}:</Text>
-                  <Text style={styles.amountText}>R {Number(paymentData.payments[day]).toFixed(2)}</Text>
+                  <Text style={styles.amountText}>
+                    R {paymentData.payments[day] ? paymentData.payments[day].toFixed(2) : '0.00'}
+                  </Text>
                 </View>
               ))}
 
@@ -47,7 +53,7 @@ const SecurityPersonnelPayments = () => {
               <View style={styles.paymentRow}>
                 <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
                 <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
-                  R {Number(paymentData.total).toFixed(2)}
+                  R {paymentData.total.toFixed(2)}
                 </Text>
               </View>
             </View>

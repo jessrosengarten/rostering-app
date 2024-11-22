@@ -107,7 +107,7 @@ const SignIn = () => {
                                     containerStyles="mt-7"
                                     isLoading={isSubmitting}
                                 />
-                                <View className="justify-center pt-5 flex-row ">
+                                {/* <View className="justify-center pt-5 flex-row ">
                                     <Link href={'/change-password'} className="text-lg font-pregular text-black" style={{ textDecorationLine: 'underline' }}>Forgot Password?</Link>
                                 </View>
                                 <View className="justify-center pt-3" style={{ flexDirection: 'row' }}>
@@ -115,7 +115,7 @@ const SignIn = () => {
                                         Don't have an account?
                                     </Text>
                                     <Link href={'/sign-up'} className="text-lg font-psemibold text-secondary">  Sign Up</Link>
-                                </View>
+                                </View> */}
                             </View>
                         </Card.Content>
                     </Card>
