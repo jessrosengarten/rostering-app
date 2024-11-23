@@ -264,7 +264,7 @@ export const fetchAllClubsByManager = async (managerName) => {
   return result;
 };
 
-export const getEstimatedAmountsForAllClubs = async () => {
+export const getAmountsForAllClubs = async () => {
   try {
     // Fetch all clubs
     const clubsRef = ref(db, 'Clubs');
@@ -303,10 +303,10 @@ export const getEstimatedAmountsForAllClubs = async () => {
       if (financesData[currentWeekRange]) {
         for (const day in financesData[currentWeekRange]) {
           const dayData = financesData[currentWeekRange][day];
-          if (dayData.estimatedAmount) {
+          if (dayData.amountDue) {
             currentWeekAmounts.push({
               day,
-              amount: dayData.amountDue || 0
+              amount: dayData.amountDue
             });
           }
         }
@@ -338,7 +338,6 @@ export const getEstimatedAmountsForAllClubs = async () => {
     return {};
   }
 };
-
 export const getAmountsForAllSecurityPersonnel = async () => {
   try {
     // Fetch all security personnel

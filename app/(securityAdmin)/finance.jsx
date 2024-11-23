@@ -5,7 +5,7 @@ import { images } from '../../constants';
 import CustomButton from '../../components/CustomButton';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { getEstimatedAmountsForAllClubs, getAmountsForAllSecurityPersonnel } from '../../Backend/securityAdmin';
+import { getAmountsForAllClubs, getAmountsForAllSecurityPersonnel } from '../../Backend/securityAdmin';
 
 const Finance = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const Finance = () => {
 
   const fetchEstimatedAmounts = async () => {
     try {
-      const amounts = await getEstimatedAmountsForAllClubs();
+      const amounts = await getAmountsForAllClubs();
       setEstimatedAmounts(amounts);
     } catch (error) {
       console.error('Error fetching estimated amounts:', error);
@@ -97,7 +97,6 @@ const Finance = () => {
   const renderClubCosts = (clubName, costs, currentWeekRange, nextWeekRange) => {
     const actualEarnThisWeek = costs.currentWeek.reduce((total, { amount }) => total + amount, 0);
     const estimatedEarnNextWeek = costs.nextWeek.reduce((total, { amount }) => total + amount, 0);
-    console.log(costs.nextWeek);
 
     return (
       <View key={clubName} style={styles.clubContainer}>
