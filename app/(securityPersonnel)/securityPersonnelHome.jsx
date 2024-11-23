@@ -5,6 +5,7 @@ import { images } from '../../constants';
 import { fetchPersonnelShifts, cancelShift, checkAvailablePersonnel, reassignShiftToPersonnel } from '../../Backend/securityPersonnel';
 import { router, useLocalSearchParams } from 'expo-router';
 import NotificationService from '../../Backend/NotificationService';
+import * as Notifications from 'expo-notifications';
 
 const { width, height } = Dimensions.get('window');
 
@@ -150,7 +151,6 @@ const SecurityHome = () => {
                   title: 'Shift Cancelled',
                   body: `Your shift on ${selectedShift.date} at ${selectedShift.clubName} has been cancelled.`,
                   data: { shift: selectedShift },
-                  icon: require('../../assets/images/naraLogo.png'), // Use local asset for icon
                 };
                 await NotificationService.sendPushNotification(expoPushToken, message);
               } catch (error) {
