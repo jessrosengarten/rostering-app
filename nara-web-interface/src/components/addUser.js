@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import { Form, Button, Container, Row, Col, Alert, InputGroup } from 'react-bootstrap';
 import './style.css';
 import { addUser } from '../backend/UserManagement';
@@ -38,25 +39,45 @@ const AddUser = () => {
         }
     };
 
+    const sanitizeInput = (value) => {
+        return DOMPurify.sanitize(value);
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'role') {
-            setForm({
-                email: '',
-                role: value,
-                password: '',
-                fullName: '',
-                rate: '',
-                contactNumber: '',
-                bankDetails: '',
-                gender: '',
-                personnelType: '',
-            });
-            setErrors({});
-        } else {
-            setForm({ ...form, [name]: value });
-            if (errors[name]) {
-                setErrors({ ...errors, [name]: '' });
+        const sanitizedValue = sanitizeInput(value);
+
+        // Update the form field value
+        setForm({ ...form, [name]: sanitizedValue });
+
+        // Clear existing errors for the field
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: '' });
+        }
+
+        // Contact number validation
+        if (name === 'contactNumber') {
+            const contactNumberRegex = /^\d{10}$/;
+            if (!contactNumberRegex.test(sanitizedValue)) {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    contactNumber: 'Contact Number must be 10 digits.',
+                }));
+            } else {
+                setErrors((prevErrors) => ({ ...prevErrors, contactNumber: '' }));
+            }
+        }
+
+        // Email validation
+        if (name === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(sanitizedValue)) {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    email: 'Please enter a valid email address.',
+                }));
+            } else {
+                setErrors((prevErrors) => ({ ...prevErrors, email: '' }));
             }
         }
     };
@@ -84,9 +105,21 @@ const AddUser = () => {
         e.preventDefault();
         if (!validateForm()) return;
 
-        const { email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType } = form;
+        // Sanitize all inputs before submission
+        const sanitizedForm = {
+            email: sanitizeInput(form.email),
+            role: sanitizeInput(form.role),
+            password: sanitizeInput(form.password),
+            fullName: sanitizeInput(form.fullName),
+            rate: sanitizeInput(form.rate),
+            contactNumber: sanitizeInput(form.contactNumber),
+            bankDetails: sanitizeInput(form.bankDetails),
+            gender: sanitizeInput(form.gender),
+            personnelType: sanitizeInput(form.personnelType),
+        };
+
         try {
-            await addUser({ email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType });
+            await addUser(sanitizedForm);
             setAlertMessage('User added successfully');
             setAlertVariant('success');
             setShowAlert(true);
@@ -117,7 +150,7 @@ const AddUser = () => {
 
     React.useEffect(() => {
         document.body.style.backgroundColor = '#bfbfbf';
-      }, []);
+    }, []);
 
     return (
         <Container style={{ marginTop: '50px', marginBottom: '50px' }}>
@@ -125,15 +158,7 @@ const AddUser = () => {
                 <Col md={8}>
                     <h1 className="mt-4">Add a User</h1>
                     {showAlert && <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>{alertMessage}</Alert>}
-                    <Form onSubmit={handleSubmit} 
-                        style={{ 
-                            backgroundColor: '#4d4d4d', 
-                            padding: '20px', 
-                            borderRadius: '5px', 
-                            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', 
-                            color: 'white' 
-                        }}
-                    >
+                    <Form onSubmit={handleSubmit} style={{ backgroundColor: '#4d4d4d', padding: '20px', borderRadius: '5px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', color: 'white' }}>
                         <Form.Group controlId="formRole" className="mt-3">
                             <Form.Label>User Type</Form.Label>
                             <Form.Control
@@ -146,7 +171,7 @@ const AddUser = () => {
                                     backgroundColor: '#e4e3e3',
                                     color: '#333',
                                     borderColor: '#e4e3e3',
-                                  }}
+                                }}
                             >
                                 <option value="">Select User Type</option>
                                 <option value="clubManager">Club Manager</option>
@@ -169,14 +194,14 @@ const AddUser = () => {
                                             backgroundColor: '#e4e3e3',
                                             color: '#333',
                                             borderColor: '#e4e3e3',
-                                          }}
+                                        }}
                                     />
                                     <Form.Control.Feedback type="invalid">{errors.fullName}</Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group controlId="formContactNumber" className="mt-3">
                                     <Form.Label>Contact Number</Form.Label>
                                     <Form.Control
-                                        type="number"
+                                        type="text"
                                         name="contactNumber"
                                         value={form.contactNumber}
                                         onChange={handleChange}
@@ -185,9 +210,9 @@ const AddUser = () => {
                                             backgroundColor: '#e4e3e3',
                                             color: '#333',
                                             borderColor: '#e4e3e3',
-                                          }}
+                                        }}
                                     />
-                                    <Form.Control.Feedback type="invalid">{errors.contactNumber}</Form.Control.Feedback>
+                                    {errors.contactNumber && <small className="text-danger">{errors.contactNumber}</small>}
                                 </Form.Group>
                                 <Form.Group controlId="formEmail" className="mt-3">
                                     <Form.Label>Email</Form.Label>
@@ -201,9 +226,9 @@ const AddUser = () => {
                                             backgroundColor: '#e4e3e3',
                                             color: '#333',
                                             borderColor: '#e4e3e3',
-                                          }}
+                                        }}
                                     />
-                                    <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                                    {errors.email && <small className="text-danger">{errors.email}</small>}
                                 </Form.Group>
                                 <Form.Group controlId="formPassword" className="mt-3">
                                     <Form.Label>Password</Form.Label>
@@ -218,10 +243,10 @@ const AddUser = () => {
                                                 backgroundColor: '#e4e3e3',
                                                 color: '#333',
                                                 borderColor: '#e4e3e3',
-                                              }}
+                                            }}
                                         />
                                         <Button variant="secondary" onClick={handleGeneratePassword} className='generate-password-button'
-                                        style={{ backgroundColor: '#272727', borderColor: '#272727', color: 'white' }}>
+                                            style={{ backgroundColor: '#272727', borderColor: '#272727', color: 'white' }}>
                                             Generate Password
                                         </Button>
                                         <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
@@ -241,7 +266,7 @@ const AddUser = () => {
                                                     backgroundColor: '#e4e3e3',
                                                     color: '#333',
                                                     borderColor: '#e4e3e3',
-                                                  }}
+                                                }}
                                             />
                                             <Form.Control.Feedback type="invalid">{errors.rate}</Form.Control.Feedback>
                                         </Form.Group>
@@ -257,7 +282,7 @@ const AddUser = () => {
                                                     backgroundColor: '#e4e3e3',
                                                     color: '#333',
                                                     borderColor: '#e4e3e3',
-                                                  }}
+                                                }}
                                             />
                                             <Form.Control.Feedback type="invalid">{errors.bankDetails}</Form.Control.Feedback>
                                         </Form.Group>
@@ -273,7 +298,7 @@ const AddUser = () => {
                                                     backgroundColor: '#e4e3e3',
                                                     color: 'black',
                                                     borderColor: '#e4e3e3',
-                                                  }}
+                                                }}
                                             >
                                                 <option value="">Select Gender</option>
                                                 <option value="Male">Male</option>
@@ -294,7 +319,7 @@ const AddUser = () => {
                                                     backgroundColor: '#e4e3e3',
                                                     color: '#333',
                                                     borderColor: '#e4e3e3',
-                                                  }}
+                                                }}
                                             >
                                                 <option value="">Select Personnel Type</option>
                                                 <option value="headSecurity">Head Security</option>
@@ -305,7 +330,7 @@ const AddUser = () => {
                                     </>
                                 )}
                                 <Button type="submit" variant="#ff4a4a" className="mt-3"
-                                style={{ backgroundColor: '#fc2929', borderColor: '#fc2929', color: 'white' }}>
+                                    style={{ backgroundColor: '#fc2929', borderColor: '#fc2929', color: 'white' }}>
                                     Add User
                                 </Button>
                             </>

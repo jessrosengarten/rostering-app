@@ -1,38 +1,52 @@
-import { View, Text, ScrollView, Image, ImageBackground, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, ImageBackground, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '../../constants'
-import FormField from '../../components/FormField'
-import CustomButton from '../../components/CustomButton'
-import { Link, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { images } from '../../constants';
+import FormField from '../../components/FormField';
+import CustomButton from '../../components/CustomButton';
+import { useRouter } from 'expo-router';
 import { Card } from 'react-native-paper';
 import { login } from '../../Backend/loginAndRegister';
-import { db } from '../../Backend/firebaseConfig'
-import { ref, get } from 'firebase/database'
+import { db } from '../../Backend/firebaseConfig';
+import { ref, get } from 'firebase/database';
 
 const SignIn = () => {
     const [form, setform] = useState({
-        email: "",
-        password: "",
-    })
+        email: '',
+        password: '',
+    });
 
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const router = useRouter()
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
+
+    const sanitizeInput = (input) => {
+        //sanitization
+        return input.replace(/<[^>]*>?/gm, '').trim();
+    };
+
+    const handleSanitizedChange = (field, value) => {
+        const sanitizedValue = sanitizeInput(value);
+        setform((prevForm) => ({
+            ...prevForm,
+            [field]: sanitizedValue,
+        }));
+    };
 
     const handleLogin = async () => {
         const { email, password } = form;
 
         try {
-            await login(email, password);
-            //console.log("Login Success");
+            const sanitizedEmail = sanitizeInput(email);
+            const sanitizedPassword = sanitizeInput(password);
 
-            // Fetch user role from Realtime Database
+            await login(sanitizedEmail, sanitizedPassword);
+
             const roles = ['securityAdmin', 'securityPersonnel', 'clubManager'];
             let userRole = null;
             let userData = null;
 
             for (const role of roles) {
-                const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
+                const userRef = ref(db, `${role}/${sanitizedEmail.replace('.', ',')}`);
                 const snapshot = await get(userRef);
                 if (snapshot.exists()) {
                     userRole = role;
@@ -58,7 +72,6 @@ const SignIn = () => {
                         return;
                 }
             }
-
         } catch (e) {
             alert(e.message);
         }
@@ -67,11 +80,11 @@ const SignIn = () => {
     const submit = () => {
         setIsSubmitting(true);
         handleLogin().finally(() => setIsSubmitting(false));
-    }
+    };
 
     return (
-        <SafeAreaView edges={[]} >
-            <ImageBackground source={images.background} className='h-full w-full'>
+        <SafeAreaView edges={[]}>
+            <ImageBackground source={images.background} className="h-full w-full">
                 <View style={Styles.topTextContainer}>
                     <Text style={Styles.topText}>Log In</Text>
                 </View>
@@ -82,23 +95,16 @@ const SignIn = () => {
                                 <FormField
                                     title="Email"
                                     value={form.email}
-                                    placeholder={"Enter Email"}
-                                    handleChangeText={(e) => setform({
-                                        ...form,
-                                        email: e
-                                    })}
+                                    placeholder="Enter Email"
+                                    handleChangeText={(value) => handleSanitizedChange('email', value)}
                                     otherStyles=""
                                     keyboardType="email-address"
                                 />
-
                                 <FormField
                                     title="Password"
                                     value={form.password}
-                                    placeholder={"Enter Password"}
-                                    handleChangeText={(e) => setform({
-                                        ...form,
-                                        password: e
-                                    })}
+                                    placeholder="Enter Password"
+                                    handleChangeText={(value) => handleSanitizedChange('password', value)}
                                     otherStyles="mt-5"
                                 />
                                 <CustomButton
@@ -107,25 +113,16 @@ const SignIn = () => {
                                     containerStyles="mt-7"
                                     isLoading={isSubmitting}
                                 />
-                                {/* <View className="justify-center pt-5 flex-row ">
-                                    <Link href={'/change-password'} className="text-lg font-pregular text-black" style={{ textDecorationLine: 'underline' }}>Forgot Password?</Link>
-                                </View>
-                                <View className="justify-center pt-3" style={{ flexDirection: 'row' }}>
-                                    <Text className="text-lg text-black font-pregular" style={{ textDecorationLine: 'underline' }}>
-                                        Don't have an account?
-                                    </Text>
-                                    <Link href={'/sign-up'} className="text-lg font-psemibold text-secondary">  Sign Up</Link>
-                                </View> */}
                             </View>
                         </Card.Content>
                     </Card>
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>
-    )
-}
+    );
+};
 
-export default SignIn
+export default SignIn;
 
 const Styles = StyleSheet.create({
     scrollViewContent: {
@@ -133,7 +130,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 0,
-        marginTop: 0
+        marginTop: 0,
     },
     card: {
         width: '85%',
@@ -144,7 +141,7 @@ const Styles = StyleSheet.create({
         marginTop: 100,
         marginBottom: 50,
         paddingHorizontal: 15,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     topTextContainer: {
         position: 'absolute',
