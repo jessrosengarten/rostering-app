@@ -36,7 +36,7 @@ const FinanceHistory = () => {
 };
 
 const handleBack = () => {
-    router.push(`/clubManagerPayments?club=${club}`)
+    router.push(`/clubManagerPayments?club=${encodeURIComponent(JSON.stringify(club))}`)
   };
 
   return (
