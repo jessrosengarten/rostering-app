@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../backend/loginAndRegister';
@@ -12,23 +13,38 @@ function Login({ onLoginSuccess }) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
-  const [messageType, setMessageType] = useState(''); // 'success' or 'danger'
+  const [messageType, setMessageType] = useState('');
   const navigate = useNavigate();
+
+  const sanitizeInput = (value) => {
+    return DOMPurify.sanitize(value);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const sanitizedValue = sanitizeInput(value);
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: sanitizedValue,
+    }));
+  };
 
   const handleLogin = async () => {
     const { email, password } = form;
 
     try {
-      const user = await login(email, password);
+      const sanitizedEmail = sanitizeInput(email);
+      const sanitizedPassword = sanitizeInput(password);
 
-      const userRef = ref(db, `securityAdmin/${email.replace('.', ',')}`);
+      const user = await login(sanitizedEmail, sanitizedPassword);
+
+      const userRef = ref(db, `securityAdmin/${sanitizedEmail.replace('.', ',')}`);
       const snapshot = await get(userRef);
 
       if (snapshot.exists()) {
-        const userData = snapshot.val();
         setMessageType('success');
         setMessage('Successfully logged in.');
-        onLoginSuccess('securityAdmin'); // Pass role to App
+        onLoginSuccess('securityAdmin');
         navigate('/Home');
       } else {
         setMessageType('danger');
@@ -65,6 +81,7 @@ function Login({ onLoginSuccess }) {
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
+            name="email"
             placeholder="Enter email"
             style={{
               backgroundColor: '#e4e3e3',
@@ -72,7 +89,7 @@ function Login({ onLoginSuccess }) {
               color: '#333',
             }}
             value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            onChange={handleInputChange}
           />
         </Form.Group>
 
@@ -80,6 +97,7 @@ function Login({ onLoginSuccess }) {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
+            name="password"
             placeholder="Enter password"
             style={{
               backgroundColor: '#e4e3e3',
@@ -87,7 +105,7 @@ function Login({ onLoginSuccess }) {
               color: '#333',
             }}
             value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            onChange={handleInputChange}
           />
         </Form.Group>
 
