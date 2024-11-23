@@ -384,16 +384,6 @@ export const getAmountsForAllSecurityPersonnel = async () => {
   }
 };
 
-// Helper function to get the current week's date range
-const getCurrentWeekRange = () => {
-  const now = new Date();
-  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
-  const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 7));
-  const start = `${startOfWeek.getDate()}-${startOfWeek.getMonth() + 1}-${startOfWeek.getFullYear()}`;
-  const end = `${endOfWeek.getDate()}-${endOfWeek.getMonth() + 1}-${endOfWeek.getFullYear()}`;
-  return `${start} to ${end}`;
-};
-
 // Method to get shifts attended by a specific personnel for the current week
 export const getShiftsForPersonnel = async (personnelName) => {
   try {
@@ -446,6 +436,35 @@ export const getShiftsForPersonnel = async (personnelName) => {
   }
 };
 
+export const getClubFinances = async (clubName) => {
+  try {
+    const dbRef = ref(db);
+
+    // Get the date range for the current week
+    const currentWeekRange = getCurrentWeekRange();
+
+    // Fetch finances for the current week
+    const currentWeekSnapshot = await get(child(dbRef, `Clubs/${clubName}/Finances/${currentWeekRange}`));
+    const currentWeekFinances = currentWeekSnapshot.exists() ? currentWeekSnapshot.val() : {};
+
+    // Process the results
+    const result = {
+      weekRange: currentWeekRange,
+      finances: []
+    };
+
+    for (const day in currentWeekFinances) {
+      const { amountDue = 0, estimatedAmount = 0 } = currentWeekFinances[day];
+      result.finances.push({ day, amountDue, estimatedAmount });
+    }
+
+    return result; // Object containing the week range and list of all days with their amounts
+  } catch (error) {
+    console.error('Error fetching finances:', error);
+    throw error;
+  }
+};
+
 // Function to get the next week's range
 function getNextWeekRange(date = new Date()) {
   const currentDate = new Date(date);
@@ -471,3 +490,13 @@ function getNextWeekRange(date = new Date()) {
 
   return `${startFormatted} to ${endFormatted}`;
 }
+
+// Helper function to get the current week's date range
+const getCurrentWeekRange = () => {
+  const now = new Date();
+  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+  const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 7));
+  const start = `${startOfWeek.getDate()}-${startOfWeek.getMonth() + 1}-${startOfWeek.getFullYear()}`;
+  const end = `${endOfWeek.getDate()}-${endOfWeek.getMonth() + 1}-${endOfWeek.getFullYear()}`;
+  return `${start} to ${end}`;
+};

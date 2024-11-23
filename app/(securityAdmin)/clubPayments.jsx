@@ -1,18 +1,36 @@
-import { StyleSheet, Text, View, ImageBackground, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { images } from '../../constants'
-import React from 'react'
-import { useRoute } from '@react-navigation/native'
-
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ImageBackground, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { images } from '../../constants';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { getClubFinances } from '../../Backend/securityAdmin';
 
 const Payments = () => {
+  const { clubName } = useLocalSearchParams();
+  const [paymentData, setPaymentData] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState('Not Paid');
+  const [weekRange, setWeekRange] = useState('');
+  const router = useRouter();
 
-  const route = useRoute();
-  const { club, paymentData } = route.params; // Get the club data from Club Details page
+  useEffect(() => {
+    const fetchPaymentData = async () => {
+      try {
+        const { weekRange, finances } = await getClubFinances(clubName);
+        const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const sortedFinances = finances.sort((a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day));
+        setPaymentData(sortedFinances);
+        setWeekRange(weekRange);
 
-  // Temporary payment status
-  //REPLACE WITH ACTUAL DATA IN THE FUTURE
-  const paymentStatus = paymentData.isPaid ? "Paid" : "Not Paid";
+        // Determine payment status based on the fetched data
+        const isPaid = finances.some(finance => finance.amountDue > 0);
+        setPaymentStatus(isPaid ? 'Paid' : 'Not Paid');
+      } catch (error) {
+        console.error('Error fetching payment data:', error);
+      }
+    };
+
+    fetchPaymentData();
+  }, [clubName]);
 
   return (
     <SafeAreaView edges={[]}>
@@ -20,17 +38,18 @@ const Payments = () => {
         <ScrollView contentContainerStyle={{ height: '100%' }}>
           {/* Semi-transparent Header */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Payments: {club.name}</Text>
+            <Text style={styles.headerText}>Payments: {clubName}</Text>
           </View>
 
           {/* Payments List */}
           <View style={styles.paymentDetails}>
             <Text style={styles.sectionTitle}>Total Income:</Text>
-            {Object.keys(paymentData.payments).map((day, index) => (
+            <Text style={styles.weekRangeText}>{weekRange}</Text>
+            {paymentData.map((data, index) => (
               <View key={index} style={styles.paymentRow}>
-                <Text style={styles.dayText}>{day}:</Text>
+                <Text style={styles.dayText}>{data.day}:</Text>
                 <View style={styles.amountContainer}>
-                  <Text style={styles.amountText}>R {paymentData.payments[day].toFixed(2)}</Text>
+                  <Text style={styles.amountText}>R {data.amountDue.toFixed(2)}</Text>
                 </View>
               </View>
             ))}
@@ -40,7 +59,7 @@ const Payments = () => {
               <Text style={[styles.dayText, { fontWeight: 'bold' }]}>Total for the Week:</Text>
               <View style={styles.amountContainer}>
                 <Text style={[styles.amountText, { fontWeight: 'bold', color: 'red' }]}>
-                  R {paymentData.total.toFixed(2)}
+                  R {paymentData.reduce((total, data) => total + data.amountDue, 0).toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -50,7 +69,7 @@ const Payments = () => {
           <View style={styles.statusContainer}>
             <Text style={styles.statusText}>
               Payment Status:
-              <Text style={paymentStatus === "Paid" ? styles.paidText : styles.notPaidText}>
+              <Text style={paymentStatus === 'Paid' ? styles.paidText : styles.notPaidText}>
                 {` ${paymentStatus}`}
               </Text>
             </Text>
@@ -58,8 +77,8 @@ const Payments = () => {
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -93,6 +112,15 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+
+  weekRangeText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+
   paymentRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -112,7 +140,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-
   statusContainer: {
     marginTop: 20,
     paddingVertical: 15,
@@ -141,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Payments
+export default Payments;
