@@ -16,7 +16,6 @@ const allClubsFinances = () => {
     setThisWeekAllPayments([]); 
     setNextAllPayments([]); 
     loadThisWeekAndNextWeekFinances();
-    //loadNextWeekFinances();
   }, [managerName,thisWeekDates, nextWeekDates]);
 
   // Function to load payments data
@@ -62,30 +61,6 @@ const loadThisWeekAndNextWeekFinances = async () => {
     console.error("Error fetching finances:", error);
   }
 };
-
-// Function to load payments data
-  const loadNextWeekFinances = async () => {
-  try {
-    const finances = await fetchFinancesByManager(managerName);
-
-    // Flatten and format the data for display
-    const formattedPayments = Object.entries(finances).flatMap(([clubName, clubFinances]) =>
-      clubFinances.map((finance) => ({
-        clubName,
-        rate: `R${parseFloat(finance.rate).toFixed(2)}`, // Format the rate
-        weekRange: finance.dateRange || "No Date Range", // Use dateRange from the finance object
-        totalAmount: `R${parseFloat(finance.totalAmount).toFixed(2)}`, // Format the total amount
-        numberOfShifts: finance.numberOfShifts || "0", // Include number of shifts
-      }))
-    );
-    const uniquePayments = Array.from(new Map(formattedPayments.map(item => [item.clubName, item])).values());
-
-    setNextAllPayments(uniquePayments);
-  } catch (error) {
-    console.error('Error fetching finances:', error);
-  }
-};
-
 
 // Function to get the date range for the week
   function getWeekRange(date = new Date()) {
