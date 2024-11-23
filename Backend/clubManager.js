@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { ref, set, get, child, remove, update } from 'firebase/database';
+import { ref, set, get, child, update } from 'firebase/database';
 
 // adding security personnel needed: 
 export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
@@ -227,3 +227,29 @@ export const getAllFinances = async (clubName) => {
     throw error;
   }
 };
+
+export const fetchFinancesByManager = async (managerName, dateRange) => {
+  try {
+    // Fetch all clubs managed by the manager
+    const clubs = await fetchClubsByManager(managerName);
+
+    if (Object.keys(clubs).length === 0) {
+      console.warn('No clubs found for the manager.');
+      return {};
+    }
+
+    const clubFinances = {};
+
+    for (const clubName in clubs) {
+      // Get finances for each club
+      const finances = await getFinances(clubName, dateRange);
+      clubFinances[clubName] = finances;
+    }
+    console.log(clubFinances);
+    return clubFinances; // Object with club names as keys and their finances as values
+  } catch (error) {
+    console.error('Error fetching finances by manager:', error);
+    throw error;
+  }
+};
+
