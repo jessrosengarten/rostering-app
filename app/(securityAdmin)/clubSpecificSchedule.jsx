@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import RNPickerSelect from 'react-native-picker-select';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { images } from '../../constants';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { images } from '../../constants';
 import { getSchedule, getSecurityPersonnelShifts } from '../../Backend/securityAdmin';
 
 const ClubSpecificSchedule = () => {
@@ -20,14 +18,7 @@ const ClubSpecificSchedule = () => {
   const nextWeekDates = getNextWeekRange();
   const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  useEffect(() => {
-    loadPersonnelListNextWeek();
-    loadPersonnelListThisWeek();
-    loadSchedule();
-  }, [parsedClub.name, thisWeekDates, nextWeekDates]);
-
-
-  const loadSchedule = async () => {
+  const fetchSchedule = async () => {
     try {
       const thisWeekSchedule = await getSchedule(parsedClub.name, thisWeekDates);
       const nextWeekSchedule = await getSchedule(parsedClub.name, nextWeekDates);
@@ -82,6 +73,25 @@ const ClubSpecificSchedule = () => {
     });
     return grouped;
   };
+
+  useEffect(() => {
+    fetchSchedule();
+    loadPersonnelListThisWeek();
+    loadPersonnelListNextWeek();
+  }, [parsedClub.name, thisWeekDates, nextWeekDates]);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      fetchSchedule();
+      loadPersonnelListThisWeek();
+      loadPersonnelListNextWeek();
+    };
+
+    // Simulate route change detection
+    const interval = setInterval(handleRouteChange, 1000);
+
+    return () => clearInterval(interval);
+  }, [parsedClub.name, thisWeekDates, nextWeekDates]);
 
   function getWeekRange(date = new Date()) {
     const currentDate = new Date(date);

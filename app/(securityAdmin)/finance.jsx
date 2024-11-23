@@ -13,27 +13,39 @@ const Finance = () => {
   const [estimatedAmounts, setEstimatedAmounts] = useState({});
   const [personnelAmounts, setPersonnelAmounts] = useState({});
 
+  const fetchEstimatedAmounts = async () => {
+    try {
+      const amounts = await getEstimatedAmountsForAllClubs();
+      setEstimatedAmounts(amounts);
+    } catch (error) {
+      console.error('Error fetching estimated amounts:', error);
+    }
+  };
+
+  const fetchPersonnelAmounts = async () => {
+    try {
+      const amounts = await getAmountsForAllSecurityPersonnel();
+      setPersonnelAmounts(amounts);
+    } catch (error) {
+      console.error('Error fetching personnel amounts:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchEstimatedAmounts = async () => {
-      try {
-        const amounts = await getEstimatedAmountsForAllClubs();
-        setEstimatedAmounts(amounts);
-      } catch (error) {
-        console.error('Error fetching estimated amounts:', error);
-      }
-    };
-
-    const fetchPersonnelAmounts = async () => {
-      try {
-        const amounts = await getAmountsForAllSecurityPersonnel();
-        setPersonnelAmounts(amounts);
-      } catch (error) {
-        console.error('Error fetching personnel amounts:', error);
-      }
-    };
-
     fetchEstimatedAmounts();
     fetchPersonnelAmounts();
+  }, []);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      fetchEstimatedAmounts();
+      fetchPersonnelAmounts();
+    };
+
+    // Simulate route change detection
+    const interval = setInterval(handleRouteChange, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const toggleSection = (section) => {
