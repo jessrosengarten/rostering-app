@@ -97,6 +97,7 @@ const Finance = () => {
   const renderClubCosts = (clubName, costs, currentWeekRange, nextWeekRange) => {
     const actualEarnThisWeek = costs.currentWeek.reduce((total, { amount }) => total + amount, 0);
     const estimatedEarnNextWeek = costs.nextWeek.reduce((total, { amount }) => total + amount, 0);
+    console.log(costs.nextWeek);
 
     return (
       <View key={clubName} style={styles.clubContainer}>

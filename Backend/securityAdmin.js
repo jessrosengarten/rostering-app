@@ -306,7 +306,7 @@ export const getEstimatedAmountsForAllClubs = async () => {
           if (dayData.estimatedAmount) {
             currentWeekAmounts.push({
               day,
-              amount: dayData.estimatedAmount
+              amount: dayData.amountDue || 0
             });
           }
         }
@@ -332,7 +332,6 @@ export const getEstimatedAmountsForAllClubs = async () => {
         };
       }
     }
-
     return estimatedAmounts;
   } catch (error) {
     console.error('Error fetching estimated amounts for all clubs:', error);
