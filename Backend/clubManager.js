@@ -199,6 +199,7 @@ export const getAllFinances = async (clubName) => {
       const finances = snapshot.val();
       const result = [];
       let totalAmount=0;
+      let totalAmountEstimate=0;
 
       // Iterate through all date ranges within the Finances node
       for (const dateRange in finances) {
@@ -206,16 +207,22 @@ export const getAllFinances = async (clubName) => {
 
         // Iterate through each day within the current date range
         for (const day in dailyFinances) {
-          const { amountDue = 0} = dailyFinances[day];
+          const { amountDue = 0, estimatedAmount = 0 } = dailyFinances[day];
           totalAmount +=amountDue;
+          totalAmountEstimate += estimatedAmount;
         }
         const numberOfShifts = rate > 0 ? totalAmount / rate : 0;
+        const numberOfShiftsEstimate = rate > 0 ? totalAmountEstimate / rate : 0;
         result.push({
           rate:rate,
             dateRange,
             totalAmount,
             numberOfShifts: numberOfShifts.toFixed(0),
+            numberOfShiftsEstimate: numberOfShiftsEstimate.toFixed(0),
+            totalAmountEstimate,
           });
+          totalAmount=0;
+          totalAmountEstimate=0;
       }
       return result; 
     } else {

@@ -27,6 +27,8 @@ const FinanceHistory = () => {
         weekRange: finance.dateRange, // Keep date range as-is
         totalAmount: `R${finance.totalAmount.toFixed(2)}`, // Format totalAmount as currency,
         numberOfShifts: finance.numberOfShifts,
+        numberOfShiftsEstimate: finance.numberOfShiftsEstimate || "0", 
+        estimateTotal:`R${parseFloat(finance.totalAmountEstimate).toFixed(2)}`,
       }));
 
       setAllPayments(formattedPayments);
@@ -55,11 +57,19 @@ const FinanceHistory = () => {
                 <Text style={styles.valueText}>{data.rate || "R0.00"}</Text>
               </View>
               <View style={styles.row}>
-                <Text style={styles.labelText}>Number of shifts:</Text>
+                <Text style={styles.labelText}>Estimate Number of shifts:</Text>
+                <Text style={styles.valueText}>{data.numberOfShiftsEstimate || "0"}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.labelText}>Estimate Total Amount:</Text>
+                <Text style={styles.valueText}>{data.estimateTotal || "R0.00"}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.labelText}>Actual Number of shifts:</Text>
                 <Text style={styles.valueText}>{data.numberOfShifts || "0"}</Text>
               </View>
               <View style={styles.row}>
-                <Text style={styles.labelText}>Total Amount:</Text>
+                <Text style={styles.labelText}>Actual Total Amount:</Text>
                 <Text style={styles.valueText}>{data.totalAmount || "R0.00"}</Text>
               </View>
             </View>
