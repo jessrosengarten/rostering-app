@@ -62,7 +62,7 @@ const ClubManagerLayout = () => {
                     }}
                 />
                 <Tabs.Screen
-                    name="clubManagerPayments"
+                    name="allClubsFinances"
                     options={{
                         title: 'Payments',
                         headerShown: true,
@@ -74,6 +74,14 @@ const ClubManagerLayout = () => {
                                 focused={focused}
                             />
                         ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="clubManagerPayments"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        href: null,
                     }}
                 />
                 <Tabs.Screen
@@ -110,6 +118,14 @@ const ClubManagerLayout = () => {
                 />
                 <Tabs.Screen
                     name="schedule"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        href: null,
+                    }}
+                />
+                <Tabs.Screen
+                    name="clubManagerFinanceHistory"
                     options={{
                         title: '',
                         headerShown: true,

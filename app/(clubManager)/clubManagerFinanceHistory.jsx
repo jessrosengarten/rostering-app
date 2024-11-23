@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { getAllFinances} from '../../Backend/clubManager';
+import { getAllFinances } from '../../Backend/clubManager';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const FinanceHistory = () => {
   const router = useRouter();
   const [allPayments, setAllPayments] = useState([]);
   const { club: clubParam } = useLocalSearchParams();
-    const club = JSON.parse(decodeURIComponent(clubParam));
+  const club = JSON.parse(decodeURIComponent(clubParam));
 
   useEffect(() => {
-    setAllPayments([]); 
+    setAllPayments([]);
     loadFinances();
   }, [club.name]);
 
   // Function to load payments data
   const loadFinances = async () => {
-  try {
-    const finances = await getAllFinances(club.name);
+    try {
+      const finances = await getAllFinances(club.name);
 
-    // Format data for display
-    const formattedPayments = finances.map((finance) => ({
-      rate : `R${parseFloat(finance.rate)}`,
-      weekRange: finance.dateRange, // Keep date range as-is
-      totalAmount: `R${finance.totalAmount.toFixed(2)}`, // Format totalAmount as currency,
-      numberOfShifts: finance.numberOfShifts,
-    }));
+      // Format data for display
+      const formattedPayments = finances.map((finance) => ({
+        rate: `R${parseFloat(finance.rate)}`,
+        weekRange: finance.dateRange, // Keep date range as-is
+        totalAmount: `R${finance.totalAmount.toFixed(2)}`, // Format totalAmount as currency,
+        numberOfShifts: finance.numberOfShifts,
+      }));
 
-    setAllPayments(formattedPayments);
-  } catch (error) {
-    console.error("Error fetching finances:", error);
-  }
-};
+      setAllPayments(formattedPayments);
+    } catch (error) {
+      console.error("Error fetching finances:", error);
+    }
+  };
 
-const handleBack = () => {
+  const handleBack = () => {
     router.push(`/clubManagerPayments?club=${encodeURIComponent(JSON.stringify(club))}`)
   };
 
@@ -48,27 +48,27 @@ const handleBack = () => {
           </View>
 
           {allPayments.map((data, index) => (
-  <View key={index} style={styles.earningsContainer}>
-    <Text style={styles.sectionTitle}>{data.weekRange || "No Date Range"}</Text>
-    <View style={styles.row}>
-      <Text style={styles.labelText}>Rate Per Shift:</Text>
-      <Text style={styles.valueText}>{data.rate || "R0.00"}</Text>
-    </View>
-    <View style={styles.row}>
-      <Text style={styles.labelText}>Number of shifts:</Text>
-      <Text style={styles.valueText}>{data.numberOfShifts || "0"}</Text>
-    </View>
-    <View style={styles.row}>
-      <Text style={styles.labelText}>Total Amount:</Text>
-      <Text style={styles.valueText}>{data.totalAmount || "R0.00"}</Text>
-    </View>
-  </View>
-))}
+            <View key={index} style={styles.earningsContainer}>
+              <Text style={styles.sectionTitle}>{data.weekRange || "No Date Range"}</Text>
+              <View style={styles.row}>
+                <Text style={styles.labelText}>Rate Per Shift:</Text>
+                <Text style={styles.valueText}>{data.rate || "R0.00"}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.labelText}>Number of shifts:</Text>
+                <Text style={styles.valueText}>{data.numberOfShifts || "0"}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.labelText}>Total Amount:</Text>
+                <Text style={styles.valueText}>{data.totalAmount || "R0.00"}</Text>
+              </View>
+            </View>
+          ))}
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={handleBack}>
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
-            </View>
+          </View>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -82,34 +82,34 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   button: {
-        backgroundColor: '#E21A1A',
-        paddingVertical: 15,
-        paddingHorizontal: 50,
-        borderRadius: 5,
-        marginTop: 20,
-    },
-    buttonText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+    backgroundColor: '#E21A1A',
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   buttonContainer: {
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 30,
   },
   button: {
-        backgroundColor: '#E21A1A',
-        paddingVertical: 15,
-        paddingHorizontal: 50,
-        borderRadius: 5,
-        marginTop: 20,
-    },
-    buttonText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+    backgroundColor: '#E21A1A',
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   safeArea: {
     flex: 1,
   },
