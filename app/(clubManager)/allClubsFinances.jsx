@@ -15,30 +15,51 @@ const allClubsFinances = () => {
   useEffect(() => {
     setThisWeekAllPayments([]); 
     setNextAllPayments([]); 
-    loadThisWeekFinances();
-    loadNextWeekFinances();
+    loadThisWeekAndNextWeekFinances();
+    //loadNextWeekFinances();
   }, [managerName,thisWeekDates, nextWeekDates]);
 
   // Function to load payments data
-const loadThisWeekFinances = async () => {
+const loadThisWeekAndNextWeekFinances = async () => {
   try {
     const finances = await fetchFinancesByManager(managerName);
+    const thisWeekPayments = [];
+    const nextWeekPayments = [];
+    Object.entries(finances).forEach(([clubName, clubFinances]) => {
+      clubFinances.forEach((finance) => {
+        const { dateRange, rate, totalAmount, numberOfShifts,numberOfShiftsEstimate, totalAmountEstimate } = finance;
 
-    const formattedPayments = Object.entries(finances).flatMap(([clubName, clubFinances]) =>
-      clubFinances.map((finance) => ({
-        clubName,
-        rate: `R${parseFloat(finance.rate).toFixed(2)}`, // Format the rate
-        weekRange: finance.dateRange || "No Date Range", // Use dateRange from the finance object
-        totalAmount: `R${parseFloat(finance.totalAmount).toFixed(2)}`, // Format the total amount
-        numberOfShifts: finance.numberOfShifts || "0", // Include number of shifts
-      }))
-    );
+        // Add to this week if dateRange matches
+        if (dateRange === thisWeekDates) {
+          thisWeekPayments.push({
+            clubName,
+            rate: `R${parseFloat(rate).toFixed(2)}`, // Format the rate
+            weekRange: dateRange || "No Date Range",
+            totalAmount: `R${parseFloat(totalAmount).toFixed(2)}`, // Format total amount
+            numberOfShifts: numberOfShifts || "0", // Include number of shifts
+          });
+        }
 
-    const uniquePayments = Array.from(new Map(formattedPayments.map(item => [item.clubName, item])).values());
+        // Add to next week if dateRange matches
+        if (dateRange === nextWeekDates) {
+          nextWeekPayments.push({
+            clubName,
+            rate: `R${parseFloat(rate).toFixed(2)}`, // Format the rate
+            weekRange: dateRange || "No Date Range",
+            totalAmount: `R${parseFloat(totalAmount).toFixed(2)}`, // Format total amount
+            numberOfShifts: numberOfShifts || "0", // Include number of shifts
+            numberOfShiftsEstimate: numberOfShiftsEstimate || "0", 
+            estimateTotal:`R${parseFloat(totalAmountEstimate).toFixed(2)}`,
+          });
+        }
+      });
+    });
 
-    setThisWeekAllPayments(uniquePayments);
+    // Set the results to state
+    setThisWeekAllPayments(thisWeekPayments);
+    setNextAllPayments(nextWeekPayments);
   } catch (error) {
-    console.error('Error fetching finances:', error);
+    console.error("Error fetching finances:", error);
   }
 };
 
@@ -161,12 +182,12 @@ const loadThisWeekFinances = async () => {
                 <Text style={styles.valueText}>{data.rate}</Text>
               </View>
               <View style={styles.row}>
-                <Text style={styles.labelText}>Number of Shifts:</Text>
-                <Text style={styles.valueText}>{data.numberOfShifts}</Text>
+                <Text style={styles.labelText}>Estimate Number of Shifts:</Text>
+                <Text style={styles.valueText}>{data.numberOfShiftsEstimate}</Text>
               </View>
               <View style={styles.row}>
-                <Text style={styles.labelText}>Total Amount:</Text>
-                <Text style={styles.valueText}>{data.totalAmount}</Text>
+                <Text style={styles.labelText}>Estimated Total:</Text>
+                <Text style={styles.valueText}>{data.estimateTotal}</Text>
               </View>
             </View>
           ))}
