@@ -75,6 +75,15 @@ const ClubManagerLayout = () => {
                             />
                         ),
                     }}
+                    initialParams={{ managerName }}
+                />
+                <Tabs.Screen
+                    name="clubManagerPayments"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        href: null,
+                    }}
                 />
                 <Tabs.Screen
                     name="clubManagerPayments"

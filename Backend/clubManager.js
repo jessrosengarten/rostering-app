@@ -228,7 +228,7 @@ export const getAllFinances = async (clubName) => {
   }
 };
 
-export const fetchFinancesByManager = async (managerName, dateRange) => {
+export const fetchFinancesByManager = async (managerName) => {
   try {
     // Fetch all clubs managed by the manager
     const clubs = await fetchClubsByManager(managerName);
@@ -241,15 +241,14 @@ export const fetchFinancesByManager = async (managerName, dateRange) => {
     const clubFinances = {};
 
     for (const clubName in clubs) {
-      // Get finances for each club
-      const finances = await getFinances(clubName, dateRange);
+      // Get summarized finances for each club using getAllFinances
+      const finances = await getAllFinances(clubName);
       clubFinances[clubName] = finances;
     }
-    console.log(clubFinances);
-    return clubFinances; // Object with club names as keys and their finances as values
+
+    return clubFinances; // Object with club names as keys and summarized finances as values
   } catch (error) {
     console.error('Error fetching finances by manager:', error);
     throw error;
   }
 };
-

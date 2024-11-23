@@ -3,17 +3,14 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { fetchFinancesByManager} from '../../Backend/clubManager';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import {  useLocalSearchParams } from 'expo-router';
 
 const allClubsFinances = () => {
-  const router = useRouter();
   const { managerName } = useLocalSearchParams();
    const [thisWeekPayments, setThisWeekAllPayments] = useState([]);
   const [nextWeekPayments, setNextAllPayments] = useState([]);
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
-  const { club: clubParam } = useLocalSearchParams();
-    const club = JSON.parse(decodeURIComponent(clubParam));
 
   useEffect(() => {
     setThisWeekAllPayments([]); 
@@ -23,42 +20,51 @@ const allClubsFinances = () => {
   }, [managerName,thisWeekDates, nextWeekDates]);
 
   // Function to load payments data
-  const loadThisWeekFinances = async () => {
+const loadThisWeekFinances = async () => {
   try {
-    const finances = await fetchFinancesByManager(managerName, thisWeekDates);
+    const finances = await fetchFinancesByManager(managerName);
 
-    // Format data for display
-    const formattedPayments = finances.map((finance) => ({
-      rate : `R${parseFloat(finance.rate)}`,
-      weekRange: finance.dateRange, // Keep date range as-is
-      totalAmount: `R${finance.totalAmount.toFixed(2)}`, // Format totalAmount as currency,
-      numberOfShifts: finance.numberOfShifts,
-    }));
+    const formattedPayments = Object.entries(finances).flatMap(([clubName, clubFinances]) =>
+      clubFinances.map((finance) => ({
+        clubName,
+        rate: `R${parseFloat(finance.rate).toFixed(2)}`, // Format the rate
+        weekRange: finance.dateRange || "No Date Range", // Use dateRange from the finance object
+        totalAmount: `R${parseFloat(finance.totalAmount).toFixed(2)}`, // Format the total amount
+        numberOfShifts: finance.numberOfShifts || "0", // Include number of shifts
+      }))
+    );
 
-    setAllPayments(formattedPayments);
+    const uniquePayments = Array.from(new Map(formattedPayments.map(item => [item.clubName, item])).values());
+
+    setThisWeekAllPayments(uniquePayments);
   } catch (error) {
-    console.error("Error fetching finances:", error);
+    console.error('Error fetching finances:', error);
   }
 };
 
 // Function to load payments data
   const loadNextWeekFinances = async () => {
   try {
-    const finances = await fetchFinancesByManager(managerName, nextWeekDates);
+    const finances = await fetchFinancesByManager(managerName);
 
-    // Format data for display
-    const formattedPayments = finances.map((finance) => ({
-      rate : `R${parseFloat(finance.rate)}`,
-      weekRange: finance.dateRange, // Keep date range as-is
-      totalAmount: `R${finance.totalAmount.toFixed(2)}`, // Format totalAmount as currency,
-      numberOfShifts: finance.numberOfShifts,
-    }));
+    // Flatten and format the data for display
+    const formattedPayments = Object.entries(finances).flatMap(([clubName, clubFinances]) =>
+      clubFinances.map((finance) => ({
+        clubName,
+        rate: `R${parseFloat(finance.rate).toFixed(2)}`, // Format the rate
+        weekRange: finance.dateRange || "No Date Range", // Use dateRange from the finance object
+        totalAmount: `R${parseFloat(finance.totalAmount).toFixed(2)}`, // Format the total amount
+        numberOfShifts: finance.numberOfShifts || "0", // Include number of shifts
+      }))
+    );
+    const uniquePayments = Array.from(new Map(formattedPayments.map(item => [item.clubName, item])).values());
 
-    setAllPayments(formattedPayments);
+    setNextAllPayments(uniquePayments);
   } catch (error) {
-    console.error("Error fetching finances:", error);
+    console.error('Error fetching finances:', error);
   }
 };
+
 
 // Function to get the date range for the week
   function getWeekRange(date = new Date()) {
@@ -112,55 +118,93 @@ const allClubsFinances = () => {
     return `${startFormatted} to ${endFormatted}`;
   }
 
-  return (
-    <SafeAreaView edges={[]} style={styles.safeArea}>
-      <ImageBackground source={images.background} style={styles.background}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Earnings History</Text>
-          </View>
+ return (
+  <SafeAreaView edges={[]} style={styles.safeArea}>
+    <ImageBackground source={images.background} style={styles.background}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Payment History</Text>
+        </View>
 
+        {/* Container for This Week's Payments */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitleHeader}>This Week:</Text>
+          <Text style={styles.sectionTitleHeader2}>{thisWeekDates}</Text>
           {thisWeekPayments.map((data, index) => (
             <View key={index} style={styles.earningsContainer}>
-              <Text style={styles.sectionTitle}>{data.weekRange || "No Date Range"}</Text>
+              <Text style={styles.sectionTitle}>{data.clubName}</Text>
               <View style={styles.row}>
                 <Text style={styles.labelText}>Rate Per Shift:</Text>
-                <Text style={styles.valueText}>{data.rate || "R0.00"}</Text>
+                <Text style={styles.valueText}>{data.rate}</Text>
               </View>
               <View style={styles.row}>
-                <Text style={styles.labelText}>Number of shifts:</Text>
-                <Text style={styles.valueText}>{data.numberOfShifts || "0"}</Text>
+                <Text style={styles.labelText}>Number of Shifts:</Text>
+                <Text style={styles.valueText}>{data.numberOfShifts}</Text>
               </View>
               <View style={styles.row}>
                 <Text style={styles.labelText}>Total Amount:</Text>
-                <Text style={styles.valueText}>{data.totalAmount || "R0.00"}</Text>
+                <Text style={styles.valueText}>{data.totalAmount}</Text>
               </View>
             </View>
           ))}
+        </View>
+
+        {/* Container for Next Week's Payments */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitleHeader}>Next Week</Text>
+          <Text style={styles.sectionTitleHeader2}>{nextWeekDates}</Text>
           {nextWeekPayments.map((data, index) => (
             <View key={index} style={styles.earningsContainer}>
-              <Text style={styles.sectionTitle}>{data.weekRange || "No Date Range"}</Text>
+              <Text style={styles.sectionTitle}>{data.clubName}</Text>
               <View style={styles.row}>
                 <Text style={styles.labelText}>Rate Per Shift:</Text>
-                <Text style={styles.valueText}>{data.rate || "R0.00"}</Text>
+                <Text style={styles.valueText}>{data.rate}</Text>
               </View>
               <View style={styles.row}>
-                <Text style={styles.labelText}>Number of shifts:</Text>
-                <Text style={styles.valueText}>{data.numberOfShifts || "0"}</Text>
+                <Text style={styles.labelText}>Number of Shifts:</Text>
+                <Text style={styles.valueText}>{data.numberOfShifts}</Text>
               </View>
               <View style={styles.row}>
                 <Text style={styles.labelText}>Total Amount:</Text>
-                <Text style={styles.valueText}>{data.totalAmount || "R0.00"}</Text>
+                <Text style={styles.valueText}>{data.totalAmount}</Text>
               </View>
             </View>
           ))}
-        </ScrollView>
-      </ImageBackground>
-    </SafeAreaView>
-  );
+        </View>
+      </ScrollView>
+    </ImageBackground>
+  </SafeAreaView>
+);
 };
 
 const styles = StyleSheet.create({
+  sectionTitleHeader: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginBottom: 10,
+  marginHorizontal: 20,
+  color: '#FF0000',
+},
+sectionTitleHeader2: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginBottom: 10,
+  marginHorizontal: 20,
+  color: '#000',
+},
+sectionContainer: {
+  marginBottom: 20,
+  padding: 10,
+  backgroundColor: 'rgba(255, 255, 255, 0.8)', // Optional for distinction
+  borderRadius: 10,
+  marginHorizontal: 20,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 2 },
+  elevation: 3,
+},
+
+
   buttonContainer: {
     alignItems: 'center',
     marginTop: 20,
@@ -234,7 +278,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#000',
+    color: '#FF0000',
     textAlign: 'center',
   },
   sectionValue: {
