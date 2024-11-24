@@ -44,7 +44,7 @@ const ClubManagerLayout = () => {
                         height: 90,
                         paddingTop: 15,
                     },
-                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
+                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { managerName } }} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
                 }}
             >
                 <Tabs.Screen
