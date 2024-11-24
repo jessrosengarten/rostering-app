@@ -14,7 +14,10 @@ export const register = async (email, password) => {
 export const login = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
+    const user = userCredential.user;
+    const token = await user.getIdToken(); // Retrieve JWT token
+    console.log('JWT Token:', token); // Debugging purposes
+    return { user, token }; // Return user and token
   } catch (error) {
     throw new Error('Login failed. Please check your credentials.');
   }

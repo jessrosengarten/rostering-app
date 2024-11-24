@@ -25,15 +25,18 @@ export const login = async (email, password) => {
 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    //console.log('Successfully logged in');
+    const user = userCredential.user;
+    const token = await user.getIdToken(); // Get JWT token
+    console.log('JWT Token:', token);
+
     Alert.alert(
       "Login Successful",
       "You have successfully logged in.",
       [{ text: "OK" }]
     );
-    return userCredential.user;
+
+    return { user, token }; // Return both user and token
   } catch (error) {
-    //console.error('Login Error:', error);
     throw new Error('Error logging in. Please check your email and password.');
   }
 };

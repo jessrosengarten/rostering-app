@@ -36,8 +36,13 @@ function Login({ onLoginSuccess }) {
       const sanitizedEmail = sanitizeInput(email);
       const sanitizedPassword = sanitizeInput(password);
 
-      const user = await login(sanitizedEmail, sanitizedPassword);
+      // Call the login function and retrieve the token
+      const { user, token } = await login(sanitizedEmail, sanitizedPassword);
 
+      // Save the token to localStorage for future requests
+      localStorage.setItem('jwtToken', token);
+
+      // Fetch user role or additional data from the database
       const userRef = ref(db, `securityAdmin/${sanitizedEmail.replace('.', ',')}`);
       const snapshot = await get(userRef);
 

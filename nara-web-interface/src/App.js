@@ -28,7 +28,7 @@ const App = () => {
     <Router>
       <div className="App"
       style={{
-        backgroundColor: '#bfbfbf', // Set background color for the entire app
+        backgroundColor: '#bfbfbf',
         minHeight: '100vh',
       }}
       >
