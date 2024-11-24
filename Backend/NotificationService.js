@@ -4,6 +4,8 @@ import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
 class NotificationService {
+
+  //Constructor to initialize the notification handler
   constructor() {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
@@ -14,6 +16,7 @@ class NotificationService {
     });
   }
 
+  //Method to send the push notification
   async sendPushNotification(expoPushToken, message) {
     const notificationMessage = {
       to: expoPushToken,
@@ -35,6 +38,7 @@ class NotificationService {
     });
   }
 
+  //Method to register for push notifications
   async registerForPushNotificationsAsync() {
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
