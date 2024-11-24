@@ -26,6 +26,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set up authentication
+      run: echo "GH_PAT=${{ secrets.GH_PAT }}" > ~/.bashrc
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
