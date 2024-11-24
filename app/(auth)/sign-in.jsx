@@ -9,44 +9,85 @@ import { Card } from 'react-native-paper';
 import { login } from '../../Backend/loginAndRegister';
 import { db } from '../../Backend/firebaseConfig';
 import { ref, get } from 'firebase/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = () => {
-    const [form, setform] = useState({
+    const [form, setForm] = useState({
         email: '',
         password: '',
     });
-
+    const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
 
-    const sanitizeInput = (input) => {
-        //sanitization
-        return input.replace(/<[^>]*>?/gm, '').trim();
+    const validateInput = (field, value) => {
+        let error = '';
+
+        // Email validation
+        if (field === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                error = 'Please enter a valid email address.';
+            }
+        }
+
+        // Password validation
+        if (field === 'password') {
+            if (value.length < 6) {
+                error = 'Password must be at least 6 characters.';
+            }
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: error,
+        }));
+
+        return error === ''; // Return true if valid
     };
 
-    const handleSanitizedChange = (field, value) => {
-        const sanitizedValue = sanitizeInput(value);
-        setform((prevForm) => ({
+    const handleInputChange = (field, value) => {
+        setForm((prevForm) => ({
             ...prevForm,
-            [field]: sanitizedValue,
+            [field]: value,
         }));
+
+        // Validate input as the user types
+        validateInput(field, value);
+    };
+
+    const saveToken = async (token) => {
+        try {
+            await AsyncStorage.setItem('userToken', token);
+        } catch (error) {
+            console.error('Error saving token:', error);
+        }
     };
 
     const handleLogin = async () => {
         const { email, password } = form;
 
-        try {
-            const sanitizedEmail = sanitizeInput(email);
-            const sanitizedPassword = sanitizeInput(password);
+        // Validate all inputs before submission
+        const isEmailValid = validateInput('email', email);
+        const isPasswordValid = validateInput('password', password);
 
-            await login(sanitizedEmail, sanitizedPassword);
+        if (!isEmailValid || !isPasswordValid) {
+            alert('Please correct the errors before proceeding.');
+            return;
+        }
+
+        try {
+            const { user, token } = await login(email, password);
+
+            // Save the token locally
+            await saveToken(token);
 
             const roles = ['securityAdmin', 'securityPersonnel', 'clubManager'];
             let userRole = null;
             let userData = null;
 
             for (const role of roles) {
-                const userRef = ref(db, `${role}/${sanitizedEmail.replace('.', ',')}`);
+                const userRef = ref(db, `${role}/${email.replace('.', ',')}`);
                 const snapshot = await get(userRef);
                 if (snapshot.exists()) {
                     userRole = role;
@@ -67,7 +108,6 @@ const SignIn = () => {
                         router.push(`/clubManagerHome?managerName=${encodeURIComponent(userData.fullName)}`);
                         break;
                     default:
-                        console.log('Unknown user role');
                         alert('Unsuccessful, User Role Not Found');
                         return;
                 }
@@ -96,23 +136,40 @@ const SignIn = () => {
                                     title="Email"
                                     value={form.email}
                                     placeholder="Enter Email"
-                                    handleChangeText={(value) => handleSanitizedChange('email', value)}
+                                    handleChangeText={(value) => handleInputChange('email', value)}
                                     otherStyles=""
                                     keyboardType="email-address"
                                 />
+                                {errors.email && (
+                                    <Text style={Styles.errorText}>{errors.email}</Text>
+                                )}
+
                                 <FormField
                                     title="Password"
                                     value={form.password}
                                     placeholder="Enter Password"
-                                    handleChangeText={(value) => handleSanitizedChange('password', value)}
+                                    handleChangeText={(value) => handleInputChange('password', value)}
                                     otherStyles="mt-5"
                                 />
+                                {errors.password && (
+                                    <Text style={Styles.errorText}>{errors.password}</Text>
+                                )}
+
                                 <CustomButton
                                     title="Sign In"
                                     handlePress={submit}
                                     containerStyles="mt-7"
                                     isLoading={isSubmitting}
                                 />
+                                {/* <View className="justify-center pt-5 flex-row ">
+                                    <Link href={'/change-password'} className="text-lg font-pregular text-black" style={{ textDecorationLine: 'underline' }}>Forgot Password?</Link>
+                                </View>
+                                <View className="justify-center pt-3" style={{ flexDirection: 'row' }}>
+                                    <Text className="text-lg text-black font-pregular" style={{ textDecorationLine: 'underline' }}>
+                                        Don't have an account?
+                                    </Text>
+                                    <Link href={'/sign-up'} className="text-lg font-psemibold text-secondary">  Sign Up</Link>
+                                </View> */}
                             </View>
                         </Card.Content>
                     </Card>
@@ -145,15 +202,20 @@ const Styles = StyleSheet.create({
     },
     topTextContainer: {
         position: 'absolute',
-        top: 50, // Adjust the top position as needed
+        top: 50,
         width: '100%',
-        backgroundColor: 'rgba(255, 255, 255, 0.6)', // White background
-        paddingVertical: 10, // Vertical padding
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        paddingVertical: 10,
     },
     topText: {
-        fontSize: 24, // Adjust the font size as needed
+        fontSize: 24,
         fontWeight: 'bold',
-        color: 'black', // Adjust the color as needed
-        marginLeft: 20, // Adjust the left margin as needed
+        color: 'black',
+        marginLeft: 20,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        marginTop: 5,
     },
 });
