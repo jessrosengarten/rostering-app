@@ -22,6 +22,7 @@ const Finance = () => {
   const fetchAllPersonnelAmounts = async () => {
     try {
       const amounts = await getAllAmountsForSecurityPersonnel();
+      console.log(amounts);
       setAllPersonnelAmounts(amounts);
     } catch (error) {
       console.error('Error fetching estimated amounts:', error);
