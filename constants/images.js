@@ -7,5 +7,6 @@ import neon from "../assets/images/neon.jpeg";
 import jail from "../assets/images/jail.jpeg";
 import profileMale from "../assets/images/profileMale.png";
 import profileFemale from "../assets/images/profileFemale.png";
+import clubDefault from "../assets/images/clubDefaultLogo.jpg";
 
-export default { background, darkmodeBackgroundImage, naraLogo, omnia, oasis, neon, jail, profileMale, profileFemale };
+export default { background, darkmodeBackgroundImage, naraLogo, omnia, oasis, neon, jail, profileMale, profileFemale, clubDefault };
