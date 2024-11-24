@@ -1,17 +1,37 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch, ImageBackground } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { images } from '../../constants';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../Backend/firebaseConfig';
 
 const Settings = () => {
     // State for toggling switches
     const { personnelName } = useLocalSearchParams();
     const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false); // Notifications switch state
     const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev); // Toggle notifications state
+    const router = useRouter();
+
+    const handleChangePassword = () => {
+        router.push('/changePassword');
+      };
+
+      const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            router.replace('/sign-in');
+        } catch (error) {
+            console.error('Error signing out:', error);
+            alert('Error signing out. Please try again.');
+        }
+    };
+
 
     return (
         <SafeAreaView edges={[]}>
+            <ImageBackground source={images.background} className='h-full w-full'>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.profileContainer}>
                     <FontAwesome name="user" size={80} color="black" />
@@ -31,16 +51,17 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.settingsItem}>
+                <TouchableOpacity style={styles.settingsItem} onPress={handleChangePassword}>
                     <FontAwesome name="lock" size={24} color="black" />
                     <Text style={styles.settingsText}>Change Password</Text>
                 </TouchableOpacity>
 
                 {/* Logout Button */}
-                <TouchableOpacity style={styles.logoutButton}>
+                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                     <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
             </ScrollView>
+            </ImageBackground>
         </SafeAreaView>
     );
 };

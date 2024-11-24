@@ -27,7 +27,6 @@ export const login = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     const token = await user.getIdToken(); // Get JWT token
-    console.log('JWT Token:', token);
 
     Alert.alert(
       "Login Successful",
