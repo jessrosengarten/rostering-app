@@ -87,7 +87,7 @@ const SecurityAdmin = () => {
 
     if (type === 'clubs') {
       displayName = item.name;
-      logoSource = item.logo || images.clubDefaultLogo;
+      logoSource = item.logo || images.clubDefault;
     } else if (type === 'securityPersonnel' || type === 'clubManagers') {
       displayName = item.fullName;
       logoSource = images.profileMale;

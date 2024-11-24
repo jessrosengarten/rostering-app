@@ -44,7 +44,6 @@ const Finance = () => {
 
   allDateRanges.forEach((dateRange) => {
     const clubAmounts = clubData[dateRange] || { totalAmountDue: 0, totalEstimatedAmount: 0 };
-
     const personnelAmounts = personnelData[dateRange] || { totalAmountDue: 0, totalEstimatedAmount: 0 };
 
     // Calculate profit for the current date range
@@ -100,11 +99,11 @@ const chartConfig = {
        <View style={styles.header}>
             <Text style={styles.headerText}>Profit and Projected Profit Per Week</Text>
           </View>
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} horizontal style={styles.scrollView}>
       <BarChart
             style={styles.chart}
             data={chartData}
-            width={screenWidth - 40} 
+            width={screenWidth * 1.3} 
             height={500}
             chartConfig={chartConfig}
             verticalLabelRotation={30} 
@@ -151,6 +150,11 @@ const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
     borderRadius: 16,
+  },
+  scrollView: {
+    backgroundColor: '#F0F0F0', 
+    borderRadius: 16,
+    margin: 16,
   },
 });
 
