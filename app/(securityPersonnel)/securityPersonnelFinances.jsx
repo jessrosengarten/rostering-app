@@ -49,7 +49,8 @@ const Finances = () => {
     const currentDay = currentDate.getDay();
 
     const startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+    const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay);
+    startOfWeek.setDate(currentDate.getDate() - diff);
 
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
@@ -75,7 +76,8 @@ const Finances = () => {
     const currentDay = currentDate.getDay();
 
     const startOfNextWeek = new Date(currentDate);
-    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+    const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay); 
+    startOfNextWeek.setDate(currentDate.getDate() - diff + 7);
 
     const endOfNextWeek = new Date(startOfNextWeek);
     endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
