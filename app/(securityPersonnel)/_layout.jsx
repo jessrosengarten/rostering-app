@@ -40,7 +40,7 @@ const SecurityPersonnelLayout = () => {
                     paddingTop: 15,
                 },
 
-                header: () => <CustomHeader username={personnelName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
+                header: () => <CustomHeader username={personnelName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { personnelName } }} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
             }}
         >
             <Tabs.Screen
