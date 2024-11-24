@@ -23,7 +23,7 @@ const EarningsHistory = () => {
     // Map the response to match the structure required by the component
     const formattedPayments = financesThisWeek.map((finance) => {
       const ratePerShift = parseFloat(finance.rate); // Parse rate as a float
-      const actualAmount = finance.actualamountDueAmount;
+      const actualAmount = finance.actualAmount;
 
       // Calculate number of shifts dynamically
       const numberOfShifts = actualAmount / ratePerShift;
