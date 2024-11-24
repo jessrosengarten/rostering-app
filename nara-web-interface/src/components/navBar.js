@@ -49,6 +49,13 @@ function NavBar({ isAuthenticated, userRole, onLogout }) {
             >
               Manage Clubs
             </Nav.Link>
+            <Nav.Link
+              as={NavLink}
+              to="/Finances"
+              disabled={!isAuthenticated || userRole !== 'securityAdmin'}
+            >
+              Finances
+            </Nav.Link>
           </Nav>
           <Nav className="ms-auto">
             {!isAuthenticated ? (

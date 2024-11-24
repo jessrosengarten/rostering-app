@@ -8,6 +8,7 @@ import ClubsList from './components/clubsList';
 import HomePage from './components/home';
 import Login from './components/login';
 import ProtectedRoute from './backend/protectedRoute';
+import Finances from './components/finances';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -80,6 +81,17 @@ const App = () => {
             element={
               <ProtectedRoute
                 element={<ClubsList />}
+                isAuthenticated={isAuthenticated}
+                userRole={userRole}
+                allowedRole="securityAdmin"
+              />
+            }
+          />
+          <Route
+            path="/finances"
+            element={
+              <ProtectedRoute
+                element={<Finances />}
                 isAuthenticated={isAuthenticated}
                 userRole={userRole}
                 allowedRole="securityAdmin"
