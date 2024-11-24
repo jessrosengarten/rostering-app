@@ -10,17 +10,28 @@ const AssignPersonnelManagement = () => {
   const [schedule, setSchedule] = useState([]);
   const router = useRouter();
 
+  const fetchSchedule = async () => {
+    try {
+      const fetchedSchedule = await fetchPersonnelNeeded(clubName);
+      setSchedule(fetchedSchedule);
+    } catch (error) {
+      console.error('Error fetching schedule:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchSchedule = async () => {
-      try {
-        const fetchedSchedule = await fetchPersonnelNeeded(clubName);
-        setSchedule(fetchedSchedule);
-      } catch (error) {
-        console.error('Error fetching schedule:', error);
-      }
+    fetchSchedule();
+  }, [clubName]);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      fetchSchedule();
     };
 
-    fetchSchedule();
+    // Simulate route change detection
+    const interval = setInterval(handleRouteChange, 1000);
+
+    return () => clearInterval(interval);
   }, [clubName]);
 
   const handleAssignPress = (week, day, personnelCount, openingTime) => {

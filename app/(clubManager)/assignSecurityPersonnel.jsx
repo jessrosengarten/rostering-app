@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import { addPersonnelNeeded } from '../../Backend/clubManager';
 import { router, useLocalSearchParams } from 'expo-router';
+import NotificationService from '../../Backend/NotificationService';
 
 const screenWidth = Dimensions.get('window').width;
 const AssignSecurityPersonnel = () => {
@@ -11,7 +12,7 @@ const AssignSecurityPersonnel = () => {
     const club = JSON.parse(decodeURIComponent(clubParam));
     const nextWeekDates = getNextWeekRange();
 
-    // fucntion to get the next weeks range
+    // function to get the next weeks range
     function getNextWeekRange(date = new Date()) {
         const currentDate = new Date(date);
 
@@ -19,7 +20,8 @@ const AssignSecurityPersonnel = () => {
         const currentDay = currentDate.getDay();
 
         const startOfNextWeek = new Date(currentDate);
-        startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+        const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay); 
+        startOfNextWeek.setDate(currentDate.getDate() - diff + 7);
 
         const endOfNextWeek = new Date(startOfNextWeek);
         endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
@@ -68,6 +70,14 @@ const AssignSecurityPersonnel = () => {
         Sunday: false,
     });
 
+    const [expoPushToken, setExpoPushToken] = useState('');
+
+    useEffect(() => {
+        NotificationService.registerForPushNotificationsAsync()
+            .then(token => setExpoPushToken(token ?? ''))
+            .catch(error => setExpoPushToken(`${error}`));
+    }, []);
+
     const toggleSwitch = (day) => {
         setIsClubOpen((prevState) => ({
             ...prevState,
@@ -91,6 +101,17 @@ const AssignSecurityPersonnel = () => {
             }
 
             alert("Personnel requirements assigned successfully!");
+
+            // Send push notification
+            const message = {
+                to: expoPushToken,
+                sound: 'default',
+                title: 'Personnel Assigned',
+                body: `Personnel requirements have successfully been assigned for ${club.name} for the week of ${nextWeekDates}.`,
+                data: { clubName: club.name, weekDates },
+            };
+            await NotificationService.sendPushNotification(expoPushToken, message);
+
             router.push(`/schedule?club=${encodeURIComponent(JSON.stringify(club))}`);
 
             // clearing fields:

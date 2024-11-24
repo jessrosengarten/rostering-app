@@ -1,173 +1,161 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, StyleSheet, Dimensions,ImageBackground } from 'react-native';
+import { BarChart } from 'react-native-chart-kit';
 import { images } from '../../constants';
-import { Ionicons } from '@expo/vector-icons';
-import CustomButton from '../../components/CustomButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { getAmountsForAllDateRanges, getAllAmountsForSecurityPersonnel } from '../../Backend/securityAdmin';
 
+const screenWidth = Dimensions.get('window').width;
 const Finance = () => {
-  const [showSection, setShowSection] = useState(null);
+ const [clubAmounts, setClubAmounts] = useState({});
+ const [personnelAllAmounts, setAllPersonnelAmounts] = useState({});
 
-  const toggleSection = (section) => {
-    setShowSection((prevSection) => (prevSection === section ? null : section));
+   const fetchClubAmounts = async () => {
+    try {
+      const amounts = await getAmountsForAllDateRanges();
+      setClubAmounts(amounts);
+    } catch (error) {
+      console.error('Error fetching estimated amounts:', error);
+    }
   };
 
+  const fetchAllPersonnelAmounts = async () => {
+    try {
+      const amounts = await getAllAmountsForSecurityPersonnel();
+      console.log(amounts);
+      setAllPersonnelAmounts(amounts);
+    } catch (error) {
+      console.error('Error fetching estimated amounts:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPersonnelAmounts();
+    fetchClubAmounts();
+    calculateProfit(clubAmounts,personnelAllAmounts);
+  }, []);
+
+  const calculateProfit = (clubData, personnelData) => {
+  const profitData = {};
+
+  const allDateRanges = new Set([
+    ...Object.keys(clubData),
+    ...Object.keys(personnelData),
+  ]);
+
+  allDateRanges.forEach((dateRange) => {
+    const clubAmounts = clubData[dateRange] || { totalAmountDue: 0, totalEstimatedAmount: 0 };
+    const personnelAmounts = personnelData[dateRange] || { totalAmountDue: 0, totalEstimatedAmount: 0 };
+
+    // Calculate profit for the current date range
+    profitData[dateRange] = {
+      profitAmountDue: clubAmounts.totalAmountDue - personnelAmounts.totalAmountDue,
+      profitEstimatedAmount: clubAmounts.totalEstimatedAmount - personnelAmounts.totalEstimatedAmount,
+    };
+  });
+  return profitData;
+};
+  
+  const prepareChartData = (data) => {
+  const labels = [];
+  const profits = [];
+
+  for (const dateRange in data) {
+    labels.push(dateRange); // Add date ranges to labels
+    const { profitAmountDue, profitEstimatedAmount } = data[dateRange];
+    profits.push(profitAmountDue !== 0 ? profitAmountDue : profitEstimatedAmount);
+  }
+
+  return { labels, profits };
+};
+
+const { labels, profits } = prepareChartData(calculateProfit(clubAmounts,personnelAllAmounts));
+
+const chartData = {
+  labels, // Date ranges
+  datasets: [
+    {
+      data: profits, 
+      color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,// Bar color
+    },
+  ],
+};
+
+const chartConfig = {
+  backgroundColor: "#F0F0F0", 
+  backgroundGradientFrom: "#F0F0F0",
+  backgroundGradientTo: "#F0F0F0", 
+  decimalPlaces: 0, 
+  color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, 
+  barPercentage: 0.8,
+  style: {
+    borderRadius: 16,
+  },
+};
+
   return (
-    <SafeAreaView edges={[]}>
-      <ImageBackground source={images.background} style={styles.background}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Finance Management</Text>
+    <SafeAreaView edges={[]} style={styles.safeArea}>
+    <ImageBackground source={images.background} style={styles.background}>
+       <View style={styles.header}>
+            <Text style={styles.headerText}>Profit and Projected Profit Per Week</Text>
           </View>
-
-          {['clubPayments', 'allClubsPayments', 'bouncersPayments', 'profit'].map((section) => (
-            <View key={section} style={styles.dropdownContainer}>
-              <TouchableOpacity
-                style={styles.dropdownButton}
-                onPress={() => toggleSection(section)}
-              >
-                <Text style={styles.dropdownTitle}>
-                  {section === 'clubPayments'
-                    ? 'Payments from Specific Club'
-                    : section === 'allClubsPayments'
-                      ? 'Payments from All Clubs'
-                      : section === 'bouncersPayments'
-                        ? 'Payments to Security Personnel'
-                        : 'Profit'}
-                </Text>
-                <Ionicons
-                  name={showSection === section ? 'chevron-up' : 'chevron-down'}
-                  size={20}
-                  color="black"
-                />
-              </TouchableOpacity>
-
-              {showSection === section && (
-                <View style={styles.dropdownContent}>
-                  <View style={styles.row}>
-                    <Text style={styles.textLabel}>Total Earned:</Text>
-                    <Text style={styles.textValue}>600</Text>
-                  </View>
-                  <Text style={styles.textLabel}>Breakdown by Night:</Text>
-                  {['Monday', 'Tuesday', 'Wednesday'].map((day) => (
-                    <View key={day} style={styles.row}>
-                      <Text style={styles.textLabelSecondary}>{day}:</Text>
-                      <Text style={styles.textValue}>200</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
-          ))}
-
-          <View style={styles.buttonsContainer}>
-            <CustomButton
-              title="View Data Analytics"
-              handlePress={() => navigation.navigate('dataAnalytics')}
-              customStyle={styles.button}
-              textStyle={styles.buttonText}
-            />
-            <CustomButton
-              title="Back"
-              handlePress={() => navigation.navigate('securityAdminHome')}
-              customStyle={styles.button}
-              textStyle={styles.buttonText}
-            />
-          </View>
-        </ScrollView>
-      </ImageBackground>
+    <ScrollView contentContainerStyle={styles.container} horizontal style={styles.scrollView}>
+      <BarChart
+            style={styles.chart}
+            data={chartData}
+            width={screenWidth * 1.3} 
+            height={500}
+            chartConfig={chartConfig}
+            verticalLabelRotation={30} 
+            fromZero 
+          />
+    </ScrollView>
+    </ImageBackground>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  scrollContent: {
-    paddingBottom: 20,
-  },
   header: {
-    paddingVertical: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    paddingHorizontal: 20,
-    borderBottomWidth: 0.5,
+    width: '100%',
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
     borderBottomColor: '#d3d3d3',
-    alignItems: 'center',
-    marginBottom: 10,
   },
   headerText: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#000',
   },
-  dropdownContainer: {
-    marginVertical: 10,
-    marginHorizontal: 15,
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 6,
+  safeArea: {
+    flex: 1,
   },
-  dropdownButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomColor: '#e0e0e0',
-    borderBottomWidth: 1,
-    paddingBottom: 10,
+  background: {
+    flex: 1,
   },
-  dropdownTitle: {
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  title: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    marginBottom: 16,
+    textAlign: "center",
   },
-  dropdownContent: {
-    marginTop: 10,
-    backgroundColor: '#fafafa',
-    padding: 15,
-    borderRadius: 8,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 5,
-  },
-  textLabel: {
-    fontSize: 16,
-    color: '#555',
-    fontWeight: '600',
-  },
-  textLabelSecondary: {
-    fontSize: 15,
-    color: '#777',
-  },
-  textValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  buttonsContainer: {
-    marginTop: 20,
-    marginHorizontal: 15,
-  },
-  button: {
+  chart: {
     marginVertical: 8,
-    backgroundColor: '#4CAF50',
-    borderRadius: 8,
-    paddingVertical: 12,
+    borderRadius: 16,
   },
-  buttonText: {
-    fontSize: 18,
-    color: '#FFF',
-    textAlign: 'center',
+  scrollView: {
+    backgroundColor: '#F0F0F0', 
+    borderRadius: 16,
+    margin: 16,
   },
 });
 

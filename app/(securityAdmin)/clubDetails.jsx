@@ -65,7 +65,8 @@ const ClubDetails = () => {
             <TouchableOpacity
               style={styles.button}
               onPress={() => router.push({pathname:'clubPayments', 
-                params: { club }})}
+                params: {clubName: parsedClub.name }
+              })}
             >
               <Text style={styles.buttonText}>Finances</Text>
             </TouchableOpacity>

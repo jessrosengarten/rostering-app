@@ -27,6 +27,11 @@
     "plugins": [
       "expo-router"
     ],
-    "newArchEnabled": true 
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "96c86a33-6983-4094-8d9a-52f41464e981"
+      }
+    }
   }
 }

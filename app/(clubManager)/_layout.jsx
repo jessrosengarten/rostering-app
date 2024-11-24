@@ -44,7 +44,7 @@ const ClubManagerLayout = () => {
                         height: 90,
                         paddingTop: 15,
                     },
-                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={"settingsPage"} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
+                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { managerName } }} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
                 }}
             >
                 <Tabs.Screen
@@ -62,7 +62,7 @@ const ClubManagerLayout = () => {
                     }}
                 />
                 <Tabs.Screen
-                    name="clubManagerPayments"
+                    name="allClubsFinances"
                     options={{
                         title: 'Payments',
                         headerShown: true,
@@ -74,6 +74,15 @@ const ClubManagerLayout = () => {
                                 focused={focused}
                             />
                         ),
+                    }}
+                    initialParams={{ managerName }}
+                />
+                <Tabs.Screen
+                    name="clubManagerPayments"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        href: null,
                     }}
                 />
                 <Tabs.Screen
@@ -110,6 +119,14 @@ const ClubManagerLayout = () => {
                 />
                 <Tabs.Screen
                     name="schedule"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        href: null,
+                    }}
+                />
+                <Tabs.Screen
+                    name="clubManagerFinanceHistory"
                     options={{
                         title: '',
                         headerShown: true,

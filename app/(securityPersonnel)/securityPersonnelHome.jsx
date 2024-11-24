@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, ImageBackground, ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
-import { fetchPersonnelShifts, cancelShift, checkAvailablePersonnel , reassignShiftToPersonnel} from '../../Backend/securityPersonnel';
+import { fetchPersonnelShifts, cancelShift, checkAvailablePersonnel, reassignShiftToPersonnel } from '../../Backend/securityPersonnel';
 import { router, useLocalSearchParams } from 'expo-router';
+import NotificationService from '../../Backend/NotificationService';
+import * as Notifications from 'expo-notifications';
 
 const { width, height } = Dimensions.get('window');
 
@@ -13,11 +15,32 @@ const SecurityHome = () => {
   const thisWeekDates = getWeekRange();
   const nextWeekDates = getNextWeekRange();
   const { personnelName } = useLocalSearchParams();
-  
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useEffect(() => {
-    setThisWeekShifts([]); 
-    setNextWeekShifts([]); 
+    NotificationService.registerForPushNotificationsAsync()
+      .then(token => setExpoPushToken(token ?? ''))
+      .catch(error => setExpoPushToken(`${error}`));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      console.log(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      notificationListener.current && Notifications.removeNotificationSubscription(notificationListener.current);
+      responseListener.current && Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    setThisWeekShifts([]);
+    setNextWeekShifts([]);
     const fetchShifts = async () => {
       try {
         const fetchedShifts = await fetchPersonnelShifts(personnelName, thisWeekDates);
@@ -31,7 +54,6 @@ const SecurityHome = () => {
 
     fetchShifts();
   }, [personnelName]);
-
 
   const hasDatePassed = (dateString) => {
     const [day, month, year] = dateString.split('-').map(Number);
@@ -50,7 +72,8 @@ const SecurityHome = () => {
     const currentDay = currentDate.getDay();
 
     const startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+    const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay);
+    startOfWeek.setDate(currentDate.getDate() - diff);
 
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
@@ -68,7 +91,7 @@ const SecurityHome = () => {
     return `${startFormatted} to ${endFormatted}`;
   }
 
-  // fucntion to get the next weeks range
+  // Function to get the next week's range
   function getNextWeekRange(date = new Date()) {
     const currentDate = new Date(date);
 
@@ -76,7 +99,8 @@ const SecurityHome = () => {
     const currentDay = currentDate.getDay();
 
     const startOfNextWeek = new Date(currentDate);
-    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+    const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay); 
+    startOfNextWeek.setDate(currentDate.getDate() - diff + 7);
 
     const endOfNextWeek = new Date(startOfNextWeek);
     endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
@@ -95,47 +119,55 @@ const SecurityHome = () => {
   }
 
   const handleCancelShift = async (selectedShift, weekDate) => {
-    // First, check for available personnel
-  try {
-    const availablePersonnel = await checkAvailablePersonnel(personnelName,selectedShift);
-    
-    if (availablePersonnel.length === 0) {
-      // No available personnel, show alert to contact the company
+    try {
+      const availablePersonnel = await checkAvailablePersonnel(personnelName, selectedShift);
+
+      if (availablePersonnel.length === 0) {
+        Alert.alert(
+          'No Available Personnel',
+          'You cannot cancel the shift as there is no available personnel for reassignment. Please contact the company.'
+        );
+        return;
+      }
+      console.log(availablePersonnel);
       Alert.alert(
-        'No Available Personnel',
-        'You cannot cancel the shift as there is no available personnel for reassignment. Please contact the company.'
-      );
-      return;
-    }
-    console.log(availablePersonnel);
-    Alert.alert(
-      'Confirm Cancellation',
-      `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ?selectedShift.clubName : ''}?`,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Cancel Shift',
-          onPress: async () => {
-            try {
-              await cancelShift(personnelName, weekDate, selectedShift.day);
-              await reassignShiftToPersonnel(availablePersonnel[0], selectedShift.clubName, weekDate, selectedShift.day, selectedShift.startTime);
-              Alert.alert('Shift Cancelled', 'Your shift has been cancelled and reassigned.');
-            } catch (error) {
-              console.error("Error cancelling/ reassigning shift:", error);
-              Alert.alert('Error', 'There was an issue canceling or reassigning the shift.');
-            }
+        'Confirm Cancellation',
+        `Are you sure you want to cancel your shift on ${selectedShift ? selectedShift.day : ''} (${selectedShift ? selectedShift.date : ''}) at ${selectedShift ? selectedShift.clubName : ''}?`,
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
           },
-        },
-      ],
-      { cancelable: false }
-    );
+          {
+            text: 'Cancel Shift',
+            onPress: async () => {
+              try {
+                await cancelShift(personnelName, weekDate, selectedShift.day);
+                await reassignShiftToPersonnel(availablePersonnel[0], selectedShift.clubName, weekDate, selectedShift.day, selectedShift.startTime);
+                Alert.alert('Shift Cancelled', 'Your shift has been cancelled and reassigned.');
+
+                // Send push notification
+                const message = {
+                  to: expoPushToken,
+                  sound: 'default',
+                  title: 'Shift Cancelled',
+                  body: `Your shift on ${selectedShift.date} at ${selectedShift.clubName} has been cancelled.`,
+                  data: { shift: selectedShift },
+                };
+                await NotificationService.sendPushNotification(expoPushToken, message);
+              } catch (error) {
+                console.error("Error cancelling/ reassigning shift:", error);
+                Alert.alert('Error', 'There was an issue canceling or reassigning the shift.');
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
-    console.error('Error checking available personnel:', error);
-    Alert.alert('Error', 'There was an issue checking available personnel.');
-  }
+      console.error('Error checking available personnel:', error);
+      Alert.alert('Error', 'There was an issue checking available personnel.');
+    }
   };
 
   return (
@@ -174,9 +206,9 @@ const SecurityHome = () => {
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
                     onPress={() => handleCancelShift(shift, thisWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
-                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
-            {'Cancel Shift'}
-          </Text>
+                    <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+                      {'Cancel Shift'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -210,9 +242,9 @@ const SecurityHome = () => {
                     style={[styles.cancelButton, hasDatePassed(shift.date) && styles.assignedButton]}
                     onPress={() => handleCancelShift(shift, nextWeekDates)}
                     disabled={hasDatePassed(shift.date)}>
-                      <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
+                    <Text style={[styles.buttonText, hasDatePassed(shift.date) && styles.assignedButtonText]}>
                       {'Cancel Shift'}
-                      </Text>
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -247,9 +279,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   noticeText: {
-        fontSize: 16,
-        color: '#000',
-    },
+    fontSize: 16,
+    color: '#000',
+  },
   shiftBox: {
     padding: 15,
     backgroundColor: '#f7f7f7',

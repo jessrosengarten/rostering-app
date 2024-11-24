@@ -1,6 +1,7 @@
 import { db } from './firebaseConfig';
 import { ref, set, get, child, remove, update } from 'firebase/database';
 
+//Method to fetch all clubs
 export const fetchAllClubs = async () => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'Clubs'));
@@ -11,6 +12,7 @@ export const fetchAllClubs = async () => {
   }
 };
 
+//Method to fetch all security personnel
 export const fetchAllSecurityPersonnel = async () => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'securityPersonnel'));
@@ -21,6 +23,7 @@ export const fetchAllSecurityPersonnel = async () => {
   }
 };
 
+//Method to fetch all club managers 
 export const fetchAllClubManagers = async () => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'clubManager'));
@@ -31,6 +34,7 @@ export const fetchAllClubManagers = async () => {
   }
 };
 
+//Method to get personnel needed for a specific club
 export const fetchPersonnelNeeded = async (clubName) => {
   try {
     // Fetch the club's data to get the opening time
@@ -103,6 +107,7 @@ const getAssignedCount = (personnelData, week, day, clubName) => {
   return assignedCount;
 };
 
+// Method to get the full names of security personnel who are not assigned to a shift for a specific day and week
 export const fetchSecurityPersonnelFullNames = async (day, week) => {
   try {
     const personnelRef = ref(db, 'securityPersonnel');
@@ -125,6 +130,7 @@ export const fetchSecurityPersonnelFullNames = async (day, week) => {
   }
 };
 
+// Method to assign personnel to a shift
 export const assignPersonnelToShift = async (personnelName, clubName, week, day, startTime) => {
   try {
     // Fetch all security personnel to find the user with the matching fullName
@@ -184,10 +190,11 @@ export const assignPersonnelToShift = async (personnelName, clubName, week, day,
     return personnelName;
   } catch (error) {
     //console.error('Assigning personnel to shift error:', error);
-    throw error;
+    throw new Error(`Something Went Wrong, Please Try Again.`);
   }
 };
 
+//Method to get the schedule for a specific club and week
 export const getSchedule = async (clubName, week) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, `Clubs/${clubName}/Shifts/${week}`));
@@ -198,6 +205,7 @@ export const getSchedule = async (clubName, week) => {
   }
 };
 
+// Method to get security personnel shifts for a specific club and date range
 export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'securityPersonnel'));
@@ -231,6 +239,7 @@ export const getSecurityPersonnelShifts = async (clubName, dateRange) => {
   return result;
 };
 
+//Method to check if a personnel is already assigned 
 export const checkIfAssigned = (personnelData, clubName, week, day) => {
   for (const userId in personnelData) {
     const shifts = personnelData[userId].Shifts;
@@ -241,6 +250,7 @@ export const checkIfAssigned = (personnelData, clubName, week, day) => {
   return false;
 };
 
+// Method to get all the clubs managed by a specific manager
 export const fetchAllClubsByManager = async (managerName) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'Clubs'));
@@ -264,7 +274,8 @@ export const fetchAllClubsByManager = async (managerName) => {
   return result;
 };
 
-export const getEstimatedAmountsForAllClubs = async () => {
+// Method to get the estimated and actual amounts for all clubs
+export const getAmountsForAllClubs = async () => {
   try {
     // Fetch all clubs
     const clubsRef = ref(db, 'Clubs');
@@ -303,10 +314,10 @@ export const getEstimatedAmountsForAllClubs = async () => {
       if (financesData[currentWeekRange]) {
         for (const day in financesData[currentWeekRange]) {
           const dayData = financesData[currentWeekRange][day];
-          if (dayData.estimatedAmount) {
+          if (dayData.amountDue) {
             currentWeekAmounts.push({
               day,
-              amount: dayData.estimatedAmount
+              amount: dayData.amountDue
             });
           }
         }
@@ -332,7 +343,6 @@ export const getEstimatedAmountsForAllClubs = async () => {
         };
       }
     }
-
     return estimatedAmounts;
   } catch (error) {
     console.error('Error fetching estimated amounts for all clubs:', error);
@@ -340,6 +350,7 @@ export const getEstimatedAmountsForAllClubs = async () => {
   }
 };
 
+// Method to get the estimated and actual amounts for all security personnel
 export const getAmountsForAllSecurityPersonnel = async () => {
   try {
     // Fetch all security personnel
@@ -382,16 +393,6 @@ export const getAmountsForAllSecurityPersonnel = async () => {
     console.error('Error fetching amounts for all security personnel:', error);
     return {};
   }
-};
-
-// Helper function to get the current week's date range
-const getCurrentWeekRange = () => {
-  const now = new Date();
-  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
-  const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 7));
-  const start = `${startOfWeek.getDate()}-${startOfWeek.getMonth() + 1}-${startOfWeek.getFullYear()}`;
-  const end = `${endOfWeek.getDate()}-${endOfWeek.getMonth() + 1}-${endOfWeek.getFullYear()}`;
-  return `${start} to ${end}`;
 };
 
 // Method to get shifts attended by a specific personnel for the current week
@@ -446,6 +447,137 @@ export const getShiftsForPersonnel = async (personnelName) => {
   }
 };
 
+//Method to get the finances for a specific club
+export const getClubFinances = async (clubName) => {
+  try {
+    const dbRef = ref(db);
+
+    // Get the date range for the current week
+    const currentWeekRange = getCurrentWeekRange();
+
+    // Fetch finances for the current week
+    const currentWeekSnapshot = await get(child(dbRef, `Clubs/${clubName}/Finances/${currentWeekRange}`));
+    const currentWeekFinances = currentWeekSnapshot.exists() ? currentWeekSnapshot.val() : {};
+
+    const result = {
+      weekRange: currentWeekRange,
+      finances: []
+    };
+
+    for (const day in currentWeekFinances) {
+      const { amountDue = 0, estimatedAmount = 0 } = currentWeekFinances[day];
+      result.finances.push({ day, amountDue, estimatedAmount });
+    }
+
+    return result; 
+  } catch (error) {
+    console.error('Error fetching finances:', error);
+    throw error;
+  }
+};
+
+// Method to get all security personnel amounts
+export const getAllAmountsForSecurityPersonnel = async () => {
+  try {
+    // Fetch all security personnel
+    const personnelRef = ref(db, 'securityPersonnel');
+    const personnelSnapshot = await get(personnelRef);
+
+    if (!personnelSnapshot.exists()) {
+      console.log('No security personnel data available');
+      return {};
+    }
+
+    const personnelData = personnelSnapshot.val();
+
+    // Initialize the result object
+    const amounts = {};
+
+    // Iterate over all security personnel
+    for (const personnelId in personnelData) {
+      const personnel = personnelData[personnelId];
+      const finances = personnel.Finances;
+
+      if (finances) {
+        // Iterate over all date ranges in the finances node
+        for (const dateRange in finances) {
+          const financeData = finances[dateRange];
+          const actualAmount = financeData.actualAmount || 0;
+          const estimatedAmount = financeData.estimatedAmount || 0;
+
+          // Ensure the date range exists in the result object
+          if (!amounts[dateRange]) {
+            amounts[dateRange] = {
+              totalAmountDue: 0,
+              totalEstimatedAmount: 0,
+            };
+          }
+
+          // Aggregate the amounts
+          amounts[dateRange].totalAmountDue += actualAmount;
+          amounts[dateRange].totalEstimatedAmount += estimatedAmount;
+        }
+      }
+    }
+
+    return amounts;
+  } catch (error) {
+    console.error('Error fetching all amounts for security personnel:', error);
+    return {};
+  }
+};
+
+export const getAmountsForAllDateRanges = async () => {
+  try {
+    // Fetch all clubs
+    const clubsRef = ref(db, 'Clubs');
+    const clubsSnapshot = await get(clubsRef);
+    if (!clubsSnapshot.exists()) {
+      console.log('No clubs data available');
+      return {};
+    }
+    const clubsData = clubsSnapshot.val();
+
+    const amountsByDateRange = {};
+    for (const clubName in clubsData) {
+      const financesRef = ref(db, `Clubs/${clubName}/Finances`);
+      const financesSnapshot = await get(financesRef);
+
+      if (!financesSnapshot.exists()) {
+        continue;
+      }
+      const financesData = financesSnapshot.val();
+
+      for (const dateRange in financesData) {
+        const daysData = financesData[dateRange];
+
+        if (!amountsByDateRange[dateRange]) {
+          amountsByDateRange[dateRange] = {
+            totalAmountDue: 0,
+            totalEstimatedAmount: 0
+          };
+        }
+
+        for (const day in daysData) {
+          const dayData = daysData[day];
+          if (dayData.amountDue) {
+            amountsByDateRange[dateRange].totalAmountDue += dayData.amountDue;
+          }
+          if (dayData.estimatedAmount) {
+            amountsByDateRange[dateRange].totalEstimatedAmount += dayData.estimatedAmount;
+          }
+        }
+      }
+    }
+
+    return amountsByDateRange;
+  } catch (error) {
+    console.error('Error fetching amounts for all date ranges:', error);
+    return {};
+  }
+};
+
+
 // Function to get the next week's range
 function getNextWeekRange(date = new Date()) {
   const currentDate = new Date(date);
@@ -454,8 +586,8 @@ function getNextWeekRange(date = new Date()) {
   const currentDay = currentDate.getDay();
 
   const startOfNextWeek = new Date(currentDate);
-  startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
-
+  const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay); 
+  startOfNextWeek.setDate(currentDate.getDate() - diff + 7);
   const endOfNextWeek = new Date(startOfNextWeek);
   endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
 
@@ -468,6 +600,33 @@ function getNextWeekRange(date = new Date()) {
 
   const startFormatted = formatDate(startOfNextWeek);
   const endFormatted = formatDate(endOfNextWeek);
+
+  return `${startFormatted} to ${endFormatted}`;
+  }
+
+// Helper function to get the current week's date range
+function getCurrentWeekRange(date = new Date()) {
+  const currentDate = new Date(date);
+
+  const startOfWeekDay = 1; // Monday
+  const currentDay = currentDate.getDay();
+
+  const startOfWeek = new Date(currentDate);
+  const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay);
+  startOfWeek.setDate(currentDate.getDate() - diff);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const startFormatted = formatDate(startOfWeek);
+  const endFormatted = formatDate(endOfWeek);
 
   return `${startFormatted} to ${endFormatted}`;
 }

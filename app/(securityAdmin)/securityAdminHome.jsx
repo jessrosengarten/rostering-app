@@ -5,37 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { fetchAllClubs, fetchAllSecurityPersonnel, fetchAllClubManagers } from '../../Backend/securityAdmin';
 
-// Dummy payment data for different clubs
-const paymentData = {
-  'Neon Night Club': {
-    payments: {
-      Thursday: 750.00,
-      Friday: 950.00,
-      Saturday: 500.00,
-      Sunday: 1250.00,
-    },
-    total: 3450.00,
-  },
-  'Jail Night Club': {
-    payments: {
-      Thursday: 650.00,
-      Friday: 800.00,
-      Saturday: 700.00,
-      Sunday: 1100.00,
-    },
-    total: 3250.00,
-  },
-  'Omnia': {
-    payments: {
-      Thursday: 550.00,
-      Friday: 1050.00,
-      Saturday: 900.00,
-      Sunday: 1300.00,
-    },
-    total: 3800.00,
-  },
-};
-
 const SecurityAdmin = () => {
   const { adminName } = useLocalSearchParams();
   const [clubs, setClubs] = useState([]);
@@ -43,6 +12,7 @@ const SecurityAdmin = () => {
   const [clubManagers, setClubManagers] = useState([]);
   const router = useRouter();
 
+  //UseEffect to fetch all clubs, security personnel, and club managers data
   useEffect(() => {
     const loadClubs = async () => {
       const clubsData = await fetchAllClubs();
@@ -117,7 +87,7 @@ const SecurityAdmin = () => {
 
     if (type === 'clubs') {
       displayName = item.name;
-      logoSource = item.logo || images.clubDefaultLogo;
+      logoSource = item.logo || images.clubDefault;
     } else if (type === 'securityPersonnel' || type === 'clubManagers') {
       displayName = item.fullName;
       logoSource = images.profileMale;

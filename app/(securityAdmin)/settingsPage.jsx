@@ -2,70 +2,22 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Switch } from 're
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons'; // For icons
+import { useLocalSearchParams } from 'expo-router';
 
 const Settings = () => {
 
     // State for toggling switches
-    const [isDarkMode, setIsDarkMode] = useState(false); // Light/Dark mode state
+    const { adminName } = useLocalSearchParams();
     const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false); // Notifications switch state
-    const [languageVisible, setLanguageVisible] = useState(false); // State for dropdown visibility
-    const [selectedLanguage, setSelectedLanguage] = useState('English'); // State for selected language
-
-    const toggleDarkMode = () => setIsDarkMode((prev) => !prev); // Toggle dark mode state
     const toggleNotifications = () => setIsNotificationsEnabled((prev) => !prev); // Toggle notifications state
-
-    const toggleLanguageDropdown = () => {
-        setLanguageVisible(!languageVisible); // Toggle dropdown visibility
-    };
-
-    const handleLanguageSelect = (language) => {
-        setSelectedLanguage(language); // Update selected language
-        setLanguageVisible(!languageVisible); // Hide dropdown
-    };
 
     return (
         <SafeAreaView edges={[]}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.profileContainer}>
                     <FontAwesome name="user" size={80} color="black" />
-
+                    <Text style={styles.userName}>{adminName}</Text>
                 </View>
-
-                {/* Settings Options */}
-                <View style={styles.settingsItem}>
-                    <FontAwesome name="user" size={24} color="black" />
-                    <Text style={styles.settingsText}>Profile</Text>
-                </View>
-
-                <View style={styles.settingsItem}>
-                    <FontAwesome name="moon-o" size={24} color="black" />
-                    <Text style={styles.settingsText}>Select Light/Dark Mode</Text>
-                    <View style={styles.switchContainer}>
-                        <Switch
-                            trackColor={{ false: "#D3D3D3", true: "#D3D3D3" }}
-                            thumbColor={isDarkMode ? "#E21A1A" : "#f4f3f4"}
-                            onValueChange={toggleDarkMode} // Toggle switch handler
-                            value={isDarkMode} // Bind switch to state
-                        />
-                    </View>
-                </View>
-
-                <TouchableOpacity style={styles.settingsItem} onPress={toggleLanguageDropdown}>
-                    <FontAwesome name="language" size={24} color="black" />
-                    <Text style={styles.settingsText}>Language Preferences</Text>
-                    <FontAwesome name="caret-down" size={24} color="black" />
-                </TouchableOpacity>
-
-                {languageVisible && (
-                    <View style={styles.dropdown}>
-                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('English')}>
-                            <Text style={styles.dropdownText}>English</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('Afrikaans')}>
-                            <Text style={styles.dropdownText}>Afrikaans</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
 
                 <View style={styles.settingsItem}>
                     <FontAwesome name="bell" size={24} color="black" />
@@ -80,8 +32,7 @@ const Settings = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.settingsItem}
-                    onPress={() => navigation.navigate('changePassword')}>
+                <TouchableOpacity style={styles.settingsItem}>
                     <FontAwesome name="lock" size={24} color="black" />
                     <Text style={styles.settingsText}>Change Password</Text>
                 </TouchableOpacity>

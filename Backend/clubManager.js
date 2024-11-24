@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { ref, set, get, child, remove, update } from 'firebase/database';
+import { ref, set, get, child, update } from 'firebase/database';
 
 // adding security personnel needed: 
 export const addPersonnelNeeded = async (clubName, week, day, personnelNum) => {
@@ -199,6 +199,7 @@ export const getAllFinances = async (clubName) => {
       const finances = snapshot.val();
       const result = [];
       let totalAmount=0;
+      let totalAmountEstimate=0;
 
       // Iterate through all date ranges within the Finances node
       for (const dateRange in finances) {
@@ -206,16 +207,22 @@ export const getAllFinances = async (clubName) => {
 
         // Iterate through each day within the current date range
         for (const day in dailyFinances) {
-          const { amountDue = 0} = dailyFinances[day];
+          const { amountDue = 0, estimatedAmount = 0 } = dailyFinances[day];
           totalAmount +=amountDue;
+          totalAmountEstimate += estimatedAmount;
         }
         const numberOfShifts = rate > 0 ? totalAmount / rate : 0;
+        const numberOfShiftsEstimate = rate > 0 ? totalAmountEstimate / rate : 0;
         result.push({
           rate:rate,
             dateRange,
             totalAmount,
             numberOfShifts: numberOfShifts.toFixed(0),
+            numberOfShiftsEstimate: numberOfShiftsEstimate.toFixed(0),
+            totalAmountEstimate,
           });
+          totalAmount=0;
+          totalAmountEstimate=0;
       }
       return result; 
     } else {
@@ -224,6 +231,31 @@ export const getAllFinances = async (clubName) => {
     }
   } catch (error) {
     console.error('Error fetching finances:', error);
+    throw error;
+  }
+};
+
+export const fetchFinancesByManager = async (managerName) => {
+  try {
+    // Fetch all clubs managed by the manager
+    const clubs = await fetchClubsByManager(managerName);
+
+    if (Object.keys(clubs).length === 0) {
+      console.warn('No clubs found for the manager.');
+      return {};
+    }
+
+    const clubFinances = {};
+
+    for (const clubName in clubs) {
+      // Get summarized finances for each club using getAllFinances
+      const finances = await getAllFinances(clubName);
+      clubFinances[clubName] = finances;
+    }
+
+    return clubFinances; // Object with club names as keys and summarized finances as values
+  } catch (error) {
+    console.error('Error fetching finances by manager:', error);
     throw error;
   }
 };
