@@ -6,6 +6,7 @@ import { images } from '../../constants';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
 import { fetchSecurityPersonnelFullNames, assignPersonnelToShift } from '../../Backend/securityAdmin';
+import NotificationService from '../../Backend/NotificationService'; 
 
 const Assign = () => {
   const { day, personnelCount, clubName, week, startTime, club } = useLocalSearchParams();
@@ -19,6 +20,7 @@ const Assign = () => {
   const [tempSelectedValue, setTempSelectedValue] = useState(null);
   const [clubSchedule, setClubSchedule] = useState({});
   const [personnelOptions, setPersonnelOptions] = useState([]);
+  const [expoPushToken, setExpoPushToken] = useState('');
 
   useEffect(() => {
     const fetchPersonnel = async () => {
@@ -31,6 +33,12 @@ const Assign = () => {
     };
 
     fetchPersonnel();
+  }, []);
+
+  useEffect(() => {
+    NotificationService.registerForPushNotificationsAsync()
+      .then(token => setExpoPushToken(token ?? ''))
+      .catch(error => setExpoPushToken(`${error}`));
   }, []);
 
   const handlePersonnelChange = (value) => {
@@ -87,8 +95,15 @@ const Assign = () => {
           [day]: selectedPersonnel,
         }));
         setModalVisible(true);
+
+        // Send push notification
+        const message = {
+          title: 'Personnel Assigned',
+          body: `Personnel have been successfully assigned for ${day} at ${clubName}.`,
+          data: { day, clubName, week, startTime },
+        };
+        await NotificationService.sendPushNotification(expoPushToken, message);
       } catch (error) {
-        console.error('Error assigning personnel to shift:', error);
         Alert.alert("Error", "There was an error assigning personnel to the shift. Please try again.", [{ text: "OK" }]);
       }
     }

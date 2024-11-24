@@ -93,43 +93,58 @@ const ClubSpecificSchedule = () => {
     return () => clearInterval(interval);
   }, [parsedClub.name, thisWeekDates, nextWeekDates]);
 
+  // Function to get the date range for the week
   function getWeekRange(date = new Date()) {
     const currentDate = new Date(date);
-    const startOfWeekDay = 1;
+
+    const startOfWeekDay = 1; // Monday
     const currentDay = currentDate.getDay();
+
     const startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay));
+    const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay);
+    startOfWeek.setDate(currentDate.getDate() - diff);
+
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
+
     const formatDate = (date) => {
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     };
+
     const startFormatted = formatDate(startOfWeek);
     const endFormatted = formatDate(endOfWeek);
-    return `${startFormatted} to ${endFormatted}`;
-  };
 
-  function getNextWeekRange(date = new Date()) {
+    return `${startFormatted} to ${endFormatted}`;
+  }
+
+   // fucntion to get the next weeks range
+   function getNextWeekRange(date = new Date()) {
     const currentDate = new Date(date);
-    const startOfWeekDay = 1;
+
+    const startOfWeekDay = 1; // Monday
     const currentDay = currentDate.getDay();
+
     const startOfNextWeek = new Date(currentDate);
-    startOfNextWeek.setDate(currentDate.getDate() - (currentDay - startOfWeekDay) + 7);
+    const diff = (currentDay === 0 ? 6 : currentDay - startOfWeekDay); 
+    startOfNextWeek.setDate(currentDate.getDate() - diff + 7);
     const endOfNextWeek = new Date(startOfNextWeek);
     endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+
     const formatDate = (date) => {
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     };
+
     const startFormatted = formatDate(startOfNextWeek);
     const endFormatted = formatDate(endOfNextWeek);
+
     return `${startFormatted} to ${endFormatted}`;
-  };
+  }
 
   return (
     <SafeAreaView edges={[]}>
