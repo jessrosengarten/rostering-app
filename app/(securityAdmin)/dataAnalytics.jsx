@@ -3,97 +3,113 @@ import { ScrollView, View, Text, StyleSheet, Dimensions,ImageBackground } from '
 import { BarChart } from 'react-native-chart-kit';
 import { images } from '../../constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getAmountsForAllClubs, getAmountsForAllSecurityPersonnel } from '../../Backend/securityAdmin';
+import { getAmountsForAllDateRanges, getAllAmountsForSecurityPersonnel } from '../../Backend/securityAdmin';
 
 const screenWidth = Dimensions.get('window').width;
 const Finance = () => {
+ const [clubAmounts, setClubAmounts] = useState({});
+ const [personnelAllAmounts, setAllPersonnelAmounts] = useState({});
 
-  const [estimatedAmounts, setEstimatedAmounts] = useState({});
-  const [personnelAmounts, setPersonnelAmounts] = useState({});
-
-  const fetchEstimatedAmounts = async () => {
+   const fetchClubAmounts = async () => {
     try {
-      const amounts = await getAmountsForAllClubs();
-      setEstimatedAmounts(amounts);
+      const amounts = await getAmountsForAllDateRanges();
+      setClubAmounts(amounts);
     } catch (error) {
       console.error('Error fetching estimated amounts:', error);
     }
   };
 
-  const fetchPersonnelAmounts = async () => {
+  const fetchAllPersonnelAmounts = async () => {
     try {
-      const amounts = await getAmountsForAllSecurityPersonnel();
-      setPersonnelAmounts(amounts);
+      const amounts = await getAllAmountsForSecurityPersonnel();
+      setAllPersonnelAmounts(amounts);
     } catch (error) {
-      console.error('Error fetching personnel amounts:', error);
+      console.error('Error fetching estimated amounts:', error);
     }
   };
 
   useEffect(() => {
-    fetchEstimatedAmounts();
-    fetchPersonnelAmounts();
-    console.log(estimatedAmounts);
-    console.log(personnelAmounts);
+    fetchAllPersonnelAmounts();
+    fetchClubAmounts();
+    calculateProfit(clubAmounts,personnelAllAmounts);
   }, []);
 
-  const totalPaymentsThisWeek = personnelAmounts.personnel?.reduce((acc, { currentWeekAmount }) => acc + currentWeekAmount, 0) || 0;
-  const estimatedPaymentsNextWeek = personnelAmounts.personnel?.reduce((acc, { nextWeekAmount }) => acc + nextWeekAmount, 0) || 0;
+  const calculateProfit = (clubData, personnelData) => {
+  const profitData = {};
 
-  const totalActualEarnThisWeek = Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
-    return acc + clubCosts.currentWeek.reduce((sum, { amount }) => sum + amount, 0);
-  }, 0);
+  const allDateRanges = new Set([
+    ...Object.keys(clubData),
+    ...Object.keys(personnelData),
+  ]);
 
-  const totalEstimatedEarnNextWeek = Object.values(estimatedAmounts.clubs || {}).reduce((acc, clubCosts) => {
-    return acc + clubCosts.nextWeek.reduce((sum, { amount }) => sum + amount, 0);
-  }, 0);
+  allDateRanges.forEach((dateRange) => {
+    const clubAmounts = clubData[dateRange] || { totalAmountDue: 0, totalEstimatedAmount: 0 };
 
-  const totalProfitThisWeek = totalActualEarnThisWeek - totalPaymentsThisWeek;
-  const totalProfitNextWeek = totalEstimatedEarnNextWeek - estimatedPaymentsNextWeek;
+    const personnelAmounts = personnelData[dateRange] || { totalAmountDue: 0, totalEstimatedAmount: 0 };
+
+    // Calculate profit for the current date range
+    profitData[dateRange] = {
+      profitAmountDue: clubAmounts.totalAmountDue - personnelAmounts.totalAmountDue,
+      profitEstimatedAmount: clubAmounts.totalEstimatedAmount - personnelAmounts.totalEstimatedAmount,
+    };
+  });
+  return profitData;
+};
   
-  const graphData = [
-    { week: 'This Week', totalAmount: totalProfitThisWeek},
-    { week: 'Next Week', totalAmount: totalProfitNextWeek},
-  ];
+  const prepareChartData = (data) => {
+  const labels = [];
+  const profits = [];
 
-  const totalAmounts = graphData.map(item => item.totalAmount);
-  const profit = graphData.map(item => item.week);
+  for (const dateRange in data) {
+    labels.push(dateRange); // Add date ranges to labels
+    const { profitAmountDue, profitEstimatedAmount } = data[dateRange];
+    profits.push(profitAmountDue !== 0 ? profitAmountDue : profitEstimatedAmount);
+  }
 
-  // Data structure for Bar Chart
-  const data = {
-    labels: profit, // X-axis labels (club names)
-    datasets: [
-      {
-        data: totalAmounts, // Y-axis values (total amounts)
-        color:'red', // Bar color
-        strokeWidth: 2, // Bar border width
-      },
-    ],
-  };
+  return { labels, profits };
+};
 
-  // Chart configuration
-  const chartConfig = {
-    backgroundGradientFrom: '#fff',
-    backgroundGradientTo: '#fff',
-    decimalPlaces: 0,
-    color: (opacity = 5) => `rgba(255, 0, 0, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    style: {
-      borderRadius: 16,
+const { labels, profits } = prepareChartData(calculateProfit(clubAmounts,personnelAllAmounts));
+
+const chartData = {
+  labels, // Date ranges
+  datasets: [
+    {
+      data: profits, 
+      color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,// Bar color
     },
-  };
+  ],
+};
+
+const chartConfig = {
+  backgroundColor: "#F0F0F0", 
+  backgroundGradientFrom: "#F0F0F0",
+  backgroundGradientTo: "#F0F0F0", 
+  decimalPlaces: 0, 
+  color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, 
+  barPercentage: 0.8,
+  style: {
+    borderRadius: 16,
+  },
+};
 
   return (
     <SafeAreaView edges={[]} style={styles.safeArea}>
     <ImageBackground source={images.background} style={styles.background}>
+       <View style={styles.header}>
+            <Text style={styles.headerText}>Profit and Projected Profit Per Week</Text>
+          </View>
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Total Profit for This Week And Estimated Profit for Next Week</Text>
       <BarChart
-        data={data}
-        width={screenWidth - 30} // Adjust width of the chart
-        height={220} // Height of the chart
-        chartConfig={chartConfig}
-        style={styles.chartStyle}
-      />
+            style={styles.chart}
+            data={chartData}
+            width={screenWidth - 40} 
+            height={500}
+            chartConfig={chartConfig}
+            verticalLabelRotation={30} 
+            fromZero 
+          />
     </ScrollView>
     </ImageBackground>
     </SafeAreaView>
@@ -101,19 +117,39 @@ const Finance = () => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    width: '100%',
+    padding: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    alignItems: 'left',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d3d3d3',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  background: {
+    flex: 1,
+  },
   container: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 16,
+    textAlign: "center",
   },
-  chartStyle: {
-    marginVertical: 10,
+  chart: {
+    marginVertical: 8,
     borderRadius: 16,
   },
 });
