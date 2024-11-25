@@ -1,0 +1,26 @@
+name: GitGuardian
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install GitGuardian CLI
+        run: |
+          curl -sSL https://api.gitguardian.com/1.0/cli/install | bash
+
+      - name: Run GitGuardian scan
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+        run: ggshield scan repo .
