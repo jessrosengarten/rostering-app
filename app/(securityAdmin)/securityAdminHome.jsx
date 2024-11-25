@@ -110,7 +110,6 @@ const SecurityAdmin = () => {
           {/* Semi-transparent Header */}
           <View style={styles.header}>
             <Text style={styles.headerText}>Security Admin Home</Text>
-            <Text style={styles.headerText}>{adminName}</Text>
           </View>
 
           {/* Clubs Section */}

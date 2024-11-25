@@ -1,6 +1,7 @@
 import { db } from './firebaseConfig';
 import { ref, get} from 'firebase/database';
 
+// Method to get all amounts for all date ranges
 export const getAmountsForAllDateRanges = async () => {
   try {
     // Fetch all clubs

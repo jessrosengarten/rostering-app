@@ -22,8 +22,6 @@ const TabIcon = ({ icon, color, name, focused }) => {
 }
 
 const ClubManagerLayout = () => {
-    //const username = "Jason"; // Replace with the actual username
-    //const route = useRoute();
     //Sets managerName when user logs in
     const { managerName } = useLocalSearchParams();
     const userPhoto = images.naraLogo; // Replace with the actual user photo URL
@@ -44,7 +42,7 @@ const ClubManagerLayout = () => {
                         height: 90,
                         paddingTop: 15,
                     },
-                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { managerName } }} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
+                    header: () => <CustomHeader username={managerName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { managerName } }} />, // Use the custom header component
                 }}
             >
                 <Tabs.Screen

@@ -4,6 +4,7 @@ import { createClub, fetchManagers } from '../backend/ClubManagement';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import './style.css';
 
+// AddClub component
 const AddClub = () => {
     const [form, setForm] = useState({
         clubName: '',
@@ -33,6 +34,7 @@ const AddClub = () => {
         loadManagers();
     }, []);
 
+    // Method to handle creating a club
     const handleCreateClub = async (e) => {
         e.preventDefault();
         const sanitizedForm = {
@@ -84,15 +86,18 @@ const AddClub = () => {
         }
     };
 
+    // Method to sanitize input
     const sanitizeInput = (value) => {
         return DOMPurify.sanitize(value);
     };
 
+    //Method to validate contact number
     const validateContactNumber = (contact) => {
         const contactNumberRegex = /^\d{10}$/;
         return contactNumberRegex.test(contact);
     };
 
+    //Method to handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const sanitizedValue = sanitizeInput(value);
