@@ -16,9 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
       - name: Install GitGuardian CLI
-        run: |
-          curl -sSL https://api.gitguardian.com/1.0/cli/install | bash
+        run: pip install ggshield
 
       - name: Run GitGuardian scan
         env:
