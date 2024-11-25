@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 
 const Tutorials = () => {
-  const supportedURL = 'https://www.youtube.com/watch?v=X9bv7TkqdOs';
 
 const OpenURLButton = ({url, children}) => {
   const handlePress = useCallback(async () => {
@@ -31,11 +30,11 @@ const OpenURLButton = ({url, children}) => {
         <ScrollView contentContainerStyle={Styles.scrollContainer}>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to Cancel A Shift?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/HQSRJwQwDpI?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View Finances?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/HtcVrnch9xk?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View />
         </ScrollView>
