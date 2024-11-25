@@ -81,7 +81,7 @@ const ChangePassword = () => {
             <Card.Content>
               <View>
                 <FormField
-                  title="Password"
+                  title="Enter New Password"
                   value={form.password}
                   placeholder={"Enter Password"}
                   handleChangeText={(e) =>
