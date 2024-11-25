@@ -38,7 +38,7 @@ const SecurityAdminLayout = () => {
           height: 90,
           paddingTop: 15,
         },
-        header: () => <CustomHeader username={adminName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { adminName } }} notificationNav={"index"} photoNav={"index"} />, // Use the custom header component
+        header: () => <CustomHeader username={adminName} userPhoto={userPhoto} settingsNav={{ name: 'settingsPage', params: { adminName } }} />, // Use the custom header component
       }}
     >
       <Tabs.Screen

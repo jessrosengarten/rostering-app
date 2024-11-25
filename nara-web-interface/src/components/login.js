@@ -16,6 +16,7 @@ function Login({ onLoginSuccess }) {
   const [messageType, setMessageType] = useState('');
   const navigate = useNavigate();
 
+  //Method to sanitize the input
   const sanitizeInput = (value) => {
     return DOMPurify.sanitize(value);
   };

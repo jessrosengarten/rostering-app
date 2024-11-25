@@ -23,6 +23,7 @@ const ClubsList = () => {
     };
     getClubs();
 
+    //Method to load managers
     const loadManagers = async () => {
             try {
                 const managerList = await fetchManagers();
@@ -34,6 +35,7 @@ const ClubsList = () => {
         loadManagers();
   }, []);
 
+  // filtering clubs by manager
   const handleFilterChange = (e) => {
     const manager = e.target.value;
     setFilterClubManager(manager);
@@ -96,6 +98,7 @@ const ClubsList = () => {
   setShowModal(true);
   };
 
+  //Method to edit club
   const handleEdit = async (club) => {
   try {
     await updateClub(currentClub.clubName, currentClub.address ,currentClub.contactNum, currentClub.openingTime, currentClub.closingTime, currentClub.manager, currentClub.rate);

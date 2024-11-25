@@ -2,7 +2,8 @@ import { db } from './firebaseConfig';
 import { ref, get, child, remove, update, set } from 'firebase/database';
 import { register } from './loginAndRegister';
 
-const fetchUsersFromFolder = async (folder) => {
+// Method to fetch all users from their role
+const fetchUsersFromRole = async (folder) => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, folder));
   if (snapshot.exists()) {
@@ -12,10 +13,11 @@ const fetchUsersFromFolder = async (folder) => {
   }
 };
 
+//Method to fetch all users
 export const fetchUsers = async () => {
-  const clubManagers = await fetchUsersFromFolder('clubManager');
-  const securityPersonnel = await fetchUsersFromFolder('securityPersonnel');
-  const securityAdmins = await fetchUsersFromFolder('securityAdmin');
+  const clubManagers = await fetchUsersFromRole('clubManager');
+  const securityPersonnel = await fetchUsersFromRole('securityPersonnel');
+  const securityAdmins = await fetchUsersFromRole('securityAdmin');
 
   const addRole = (users, role) => {
     const roleMap = {
@@ -36,6 +38,7 @@ export const fetchUsers = async () => {
   };
 };
 
+//Method to delete a user
 export const deleteUserFromDatabase = async (email, role) => {
   const roleMap = {
     'Club Manager': 'clubManager',
@@ -46,6 +49,7 @@ export const deleteUserFromDatabase = async (email, role) => {
   await remove(userRef);
 };
 
+//Method to update a user
 export const updateUser = async (email, updatedData, role) => {
   const roleMap = {
     'Club Manager': 'clubManager',
@@ -56,6 +60,7 @@ export const updateUser = async (email, updatedData, role) => {
   await update(userRef, updatedData);
 };
 
+//Method to add a user
 export const addUser = async ({ email, role, password, fullName, rate, contactNumber, bankDetails, gender, personnelType }) => {
     await register(email, password);
     const userRef = ref(db, `${role}/${email.replace('.', ',')}`);

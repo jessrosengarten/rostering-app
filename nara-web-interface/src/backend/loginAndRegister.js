@@ -1,6 +1,7 @@
 import { auth } from './firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
+// Method to register a new user
 export const register = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -11,6 +12,7 @@ export const register = async (email, password) => {
   }
 };
 
+// Method to login a user
 export const login = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);

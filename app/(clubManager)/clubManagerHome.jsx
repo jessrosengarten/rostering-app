@@ -33,7 +33,6 @@ const clubManagerHome = () => {
             <ImageBackground source={images.background} style={styles.background}>
                 {/* List of clubs header */}
                 <View style={styles.header}>
-                    <Text>Welcome, Manager: {managerName}</Text>
                     <Text style={styles.headerText}>List of Clubs</Text>
                 </View>
 

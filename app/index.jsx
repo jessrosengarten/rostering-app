@@ -27,15 +27,6 @@ export default function App() {
                             handlePress={() => { router.push('/sign-in') }}
                             containerStyles="w-3/4 mt-40"
                         />
-                        {/* <CustomButton
-                            title="Register"
-                            handlePress={() => { router.push('/sign-up') }}
-                            containerStyles="w-3/4 mt-4"
-                        /> */}
-                        {/* <Link href={"/clubManagerHome"} className="text-lg font-psemibold text-sky-500 mt-2">Club Manager Home</Link> */}
-                        <Link href={"/securityAdminHome"} className="text-lg font-psemibold text-sky-500 mt-2">Security admin Home</Link>
-                        {/* <Link href={"/securityPersonnelHome"} className="text-lg font-psemibold text-sky-500 mt-2">Personnel Home</Link>
-                        <Link href={"/settingsPage"} className="text-lg font-psemibold text-sky-500 mt-2">Settings</Link> */}
                     </View>
                 </ScrollView>
             </ImageBackground>

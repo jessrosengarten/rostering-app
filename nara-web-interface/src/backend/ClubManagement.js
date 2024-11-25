@@ -1,6 +1,7 @@
 import { db } from './firebaseConfig';
 import { ref,set, get, child, remove, update } from 'firebase/database';
 
+//Method to create a club
 export const createClub = async (clubName, address, contactNum, openingTime, closingTime, manager, rate) => {
   try {
     const clubRef = ref(db, 'Clubs/' + clubName);
@@ -12,6 +13,7 @@ export const createClub = async (clubName, address, contactNum, openingTime, clo
   }
 };
 
+//Method to fetch all clubs
 export const fetchClubs = async () => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'Clubs'));
@@ -22,6 +24,7 @@ export const fetchClubs = async () => {
   }
 };
 
+//Method to fetch all managers
 export const fetchManagers = async () => {
   const dbRef = ref(db);
   const snapshot = await get(child(dbRef, 'clubManager'));
@@ -33,6 +36,7 @@ export const fetchManagers = async () => {
   }
 };
 
+//Method to delete a club
 export const deleteClubsFromDatabase = async (clubName) => {
   try {
     const clubRef = ref(db, 'Clubs/' + clubName);
@@ -42,7 +46,7 @@ export const deleteClubsFromDatabase = async (clubName) => {
   }
 };
 
-
+//Method to update a club
 export const updateClub = async (clubName, address, contactNum, openingTime, closingTime, manager, rate) => {
   const clubRef = ref(db, 'Clubs/' + clubName);
   await update(clubRef, {address, contactNum, openingTime, closingTime, manager, rate });

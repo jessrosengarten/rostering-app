@@ -4,6 +4,7 @@ import { Form, Button, Container, Row, Col, Alert, InputGroup } from 'react-boot
 import './style.css';
 import { addUser } from '../backend/UserManagement';
 
+// Add a new user to the system
 const AddUser = () => {
     const [form, setForm] = useState({
         email: '',
@@ -22,6 +23,7 @@ const AddUser = () => {
     const [alertVariant, setAlertVariant] = useState('success');
     const [errors, setErrors] = useState({});
 
+    //Method to generate a random password
     const generatePassword = (length = 12) => {
         const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
         let password = "";
@@ -31,6 +33,7 @@ const AddUser = () => {
         return password;
     };
 
+    //Method to handle the generation of a new password
     const handleGeneratePassword = () => {
         const newPassword = generatePassword();
         setForm({ ...form, password: newPassword });
@@ -39,10 +42,12 @@ const AddUser = () => {
         }
     };
 
+    //Method to sanitize the input
     const sanitizeInput = (value) => {
         return DOMPurify.sanitize(value);
     };
 
+    //Method to handle the change in the form fields
     const handleChange = (e) => {
         const { name, value } = e.target;
         const sanitizedValue = sanitizeInput(value);
@@ -82,6 +87,7 @@ const AddUser = () => {
         }
     };
 
+    //Method to validate the form fields
     const validateForm = () => {
         const newErrors = {};
         if (!form.role) newErrors.role = 'Role is required';
