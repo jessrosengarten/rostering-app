@@ -131,6 +131,14 @@ const ClubManagerLayout = () => {
                         href: null,
                     }}
                 />
+                <Tabs.Screen
+                    name="tutorials"
+                    options={{
+                        title: '',
+                        headerShown: true,
+                        href: null,
+                    }}
+                />
             </Tabs>
         </>
     );
