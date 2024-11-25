@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, ImageBackground, StyleSheet,Image } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
@@ -129,6 +129,12 @@ const SignIn = () => {
                     <Text style={Styles.topText}>Log In</Text>
                 </View>
                 <ScrollView contentContainerStyle={Styles.scrollViewContent}>
+                <Image
+                            source={images.naraLogo}
+                            className="w-40 h-40"
+                            resizeMode="contain"
+                            style={{ borderRadius: 30 }}
+                        />
                     <Card style={Styles.card}>
                         <Card.Content>
                             <View>
@@ -186,7 +192,7 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
         marginVertical: 20,
-        marginTop: 100,
+        marginTop: 60,
         marginBottom: 50,
         paddingHorizontal: 15,
         backgroundColor: '#fff',
