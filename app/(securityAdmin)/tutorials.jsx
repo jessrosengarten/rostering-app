@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 
 const Tutorials = () => {
-  const supportedURL = 'https://www.youtube.com/watch?v=X9bv7TkqdOs';
 
 const OpenURLButton = ({url, children}) => {
   const handlePress = useCallback(async () => {
@@ -30,23 +29,23 @@ const OpenURLButton = ({url, children}) => {
         <ScrollView contentContainerStyle={Styles.scrollContainer}>
             <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View Club Details?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/ZVnLFBnBxzs?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View Security Personnel Details?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/4QarXMGggqM?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View Club Mangers Details?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/wGT2RI2XCq8?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View Schedule?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/jtHIEdF_zHw?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View All Finances?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/AH1NU8QFDXk?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View />
           <View />

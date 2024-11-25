@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 
 const Tutorials = () => {
-  const supportedURL = 'https://www.youtube.com/watch?v=X9bv7TkqdOs';
 
 const OpenURLButton = ({url, children}) => {
   const handlePress = useCallback(async () => {
@@ -30,16 +29,16 @@ const OpenURLButton = ({url, children}) => {
         </View>
         <ScrollView contentContainerStyle={Styles.scrollContainer}>
           <View style={Styles.tutorialContainer}>
-            <Text style={Styles.tutorialHeading}>How to View Club Schedule?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <Text style={Styles.tutorialHeading}>How to View Club Schedule and Assign Personnel?</Text>
+            <OpenURLButton url={'https://youtube.com/shorts/r_JhCt4uT8k?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View Club Finances?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/uCU_SMIAmk0?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View style={Styles.tutorialContainer}>
             <Text style={Styles.tutorialHeading}>How to View All Club Finances?</Text>
-            <OpenURLButton url={supportedURL}>Open YouTube Video</OpenURLButton>
+            <OpenURLButton url={'https://youtube.com/shorts/UQ-9m1dx2EM?feature=share'}>Open YouTube Video</OpenURLButton>
           </View>
           <View />
           <View />
