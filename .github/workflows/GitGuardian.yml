@@ -27,4 +27,4 @@ jobs:
       - name: Run GitGuardian scan
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
-        run: ggshield scan repo .
+        run: ggshield secret scan .
