@@ -15,12 +15,39 @@ const ChangePassword = () => {
     password: "",
     confirmPassword: "",
   });
-
+  const [errors, setErrors] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const sanitizeInput = (input) => input.trim();
+
+  const validatePassword = (password) => {
+    const regex = /^.{6,}$/; // At least 6 characters
+    return regex.test(password);
+  };
+
   const submit = async () => {
-    if (form.password !== form.confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+    // Clear previous errors
+    setErrors({ password: "", confirmPassword: "" });
+
+    const sanitizedPassword = sanitizeInput(form.password);
+    const sanitizedConfirmPassword = sanitizeInput(form.confirmPassword);
+
+    if (!validatePassword(sanitizedPassword)) {
+      setErrors((prev) => ({
+        ...prev,
+        password: "Password must be at least 6 characters long.",
+      }));
+      return;
+    }
+
+    if (sanitizedPassword !== sanitizedConfirmPassword) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassword: "Passwords do not match.",
+      }));
       return;
     }
 
@@ -29,14 +56,14 @@ const ChangePassword = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        await updatePassword(user, form.password);
-        Alert.alert('Success', 'Password changed successfully');
-        router.push('/sign-in');
+        await updatePassword(user, sanitizedPassword);
+        Alert.alert("Success", "Password changed successfully");
+        router.push("/sign-in");
       } else {
-        Alert.alert('Error', 'No user is signed in');
+        Alert.alert("Error", "No user is signed in");
       }
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert("Error", error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -57,22 +84,28 @@ const ChangePassword = () => {
                   title="Password"
                   value={form.password}
                   placeholder={"Enter Password"}
-                  handleChangeText={(e) => setForm({
-                    ...form,
-                    password: e
-                  })}
+                  handleChangeText={(e) =>
+                    setForm({
+                      ...form,
+                      password: e,
+                    })
+                  }
                   otherStyles="mt-5"
                 />
+                {errors.password && <Text style={Styles.errorText}>{errors.password}</Text>}
                 <FormField
                   title="Re-Enter Password"
                   value={form.confirmPassword}
                   placeholder={"Re-Enter Password"}
-                  handleChangeText={(e) => setForm({
-                    ...form,
-                    confirmPassword: e
-                  })}
+                  handleChangeText={(e) =>
+                    setForm({
+                      ...form,
+                      confirmPassword: e,
+                    })
+                  }
                   otherStyles="mt-5"
                 />
+                {errors.confirmPassword && <Text style={Styles.errorText}>{errors.confirmPassword}</Text>}
                 <CustomButton
                   title="Change Password"
                   handlePress={submit}
@@ -96,7 +129,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 30,
-    marginTop: 0
+    marginTop: 0,
   },
   card: {
     width: '85%',
@@ -106,23 +139,28 @@ const Styles = StyleSheet.create({
     marginVertical: 20,
     marginTop: 80,
     marginBottom: 250,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   header: {
     padding: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)'
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
   background: {
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   container: {
     flex: 1,
-    width: '100%'
+    width: '100%',
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
   },
 });
