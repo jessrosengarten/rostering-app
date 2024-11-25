@@ -185,6 +185,14 @@ const SecurityAdminLayout = () => {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="tutorials"
+        options={{
+          title: '',
+          headerShown: true,
+          href: null,
+        }}
+      />
     </Tabs>
   );
 };

@@ -44,7 +44,7 @@ const clubManagerHome = () => {
                                 <TouchableOpacity
                                     onPress={() => router.push(`/clubDetails?club=${encodeURIComponent(JSON.stringify(club))}`)}
                                     style={styles.clubInfo}>
-                                    <Image source={club.logo} style={styles.clubLogo} />
+                                    <Image source={images.clubDefault} style={styles.clubLogo} />
                                     <Text style={styles.clubName}>{club.name}</Text>
                                 </TouchableOpacity>
                             </View>

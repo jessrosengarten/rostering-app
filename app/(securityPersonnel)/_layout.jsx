@@ -100,6 +100,14 @@ const SecurityPersonnelLayout = () => {
                     href: null,
                 }}
             />
+            <Tabs.Screen
+                name="tutorials"
+                options={{
+                    title: '',
+                    headerShown: true,
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 };
