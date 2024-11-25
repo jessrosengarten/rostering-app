@@ -88,6 +88,12 @@ const Settings = () => {
                     <Text style={styles.settingsText}>Change Password</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.settingsItem}
+                    onPress={() => navigation.navigate('tutorials')}>
+                    <FontAwesome name="lock" size={24} color="black" />
+                    <Text style={styles.settingsText}>Tutorials</Text>
+                </TouchableOpacity>
+
                 {/* Logout Button */}
                 <TouchableOpacity style={styles.logoutButton}>
                     <Text style={styles.logoutButtonText}>Logout</Text>

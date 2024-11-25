@@ -19,6 +19,10 @@ const Settings = () => {
         router.push('/changePassword');
     };
 
+    const handleTutorials = () => {
+        router.push('/tutorials');
+    };
+
     const handleLogout = async () => {
         try {
             await signOut(auth);
@@ -54,6 +58,11 @@ const Settings = () => {
                     <TouchableOpacity style={styles.settingsItem} onPress={handleChangePassword}>
                         <FontAwesome name="lock" size={24} color="black" />
                         <Text style={styles.settingsText}>Change Password</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.settingsItem} onPress={handleTutorials}>
+                        <FontAwesome name="book" size={24} color="black" />
+                        <Text style={styles.settingsText}>Tutorials</Text>
                     </TouchableOpacity>
 
                     {/* Logout Button */}
