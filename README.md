@@ -12,6 +12,8 @@ Efficient Security Club Rostering
 6. Web Interface Features
 7. YouTube Links
 8. GitHub Repo Link
+9. Running the Web application
+10. Running the Mobile application
 
 ## Team Members
 
@@ -73,3 +75,15 @@ https://youtu.be/QHl6_yrsEpI
 ## 8. GitHub Repo Link
 
 - https://github.com/Rudolf9202/XBCADWilTeam5.git
+
+## 9. Running the Web application
+
+To run the web application you need to change the directory in visual studio code terminal with cd nara-web-interface. Then you need to run npm install to update or add the node modules. Additional dependency to install npm install react-chartjs-2 chart.js. Once that is done you can run npm start in the terminal and the application will run and open in the browser. 
+
+## 10. Running the Mobile application 
+
+Firstly, download expo from app store for apple or google play store on android. Once downloaded open the folder in visual studio code. Open the terminal in visual studio and then run npm install to install or update the node modules. Then run npx expo start -c in the terminal to run the application. Once it is running scan the QR code in the terminal and the application will open in expo go.
+
+
+
+
