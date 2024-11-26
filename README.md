@@ -4,13 +4,13 @@ Efficient Security Club Rostering
 
 # Content:
 
-### 1. Team Members
-### 2. Overview of Application
-### 3. System Architecture & Frameworks
-### 4. Users
-### 5. Mobile App Features
-### 6. Web Interface Features
-### 7. YouTube Links
+1. Team Members
+2. Overview of Application
+3. System Architecture & Frameworks
+4. Users
+5. Mobile App Features
+6. Web Interface Features
+7. YouTube Links
 
 ## Team Members
 
