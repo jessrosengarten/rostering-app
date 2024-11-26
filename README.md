@@ -11,6 +11,7 @@ Efficient Security Club Rostering
 5. Mobile App Features
 6. Web Interface Features
 7. YouTube Links
+8. GitHub Repo Link
 
 ## Team Members
 
@@ -68,3 +69,7 @@ https://youtu.be/SQA-z6ZMYsk
 
 - Web interface demonstration:
 https://youtu.be/QHl6_yrsEpI
+
+## 8. GitHub Repo Link
+
+- https://github.com/Rudolf9202/XBCADWilTeam5.git
