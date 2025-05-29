@@ -84,7 +84,7 @@ A full-stack mobile and web solution designed to streamline the management of ni
 ### Web Application
 
 1. Open your terminal and navigate to the web application folder:
-   	```bash<br>cd nara-web-interface<br>```
+   	```cd nara-web-interface```
 2. Install project dependencies:
 	npm install
 3. Install additional charting libraries:
