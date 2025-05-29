@@ -1,89 +1,113 @@
-	NARA XBCAD Application
-***************************************
-Efficient Security Club Rostering
+# NARA Security Rostering Application
 
-# Content:
+A full-stack mobile and web solution designed to streamline the management of nightclub and event security staffing. Built by a multidisciplinary team using React, React Native, and Firebase, the NARA app helps administrators, club managers, and security personnel manage shifts, communication, and payroll in one unified system.
 
-1. Team Members
-2. Overview of Application
-3. System Architecture & Frameworks
-4. Users
-5. Mobile App Features
-6. Web Interface Features
-7. YouTube Links
-8. GitHub Repo Link
-9. Running the Web application
-10. Running the Mobile application
+---
 
-## Team Members
+## Overview
 
-- Shannon: Backend Development
-- Rudolf: Backend Development
-- Jess: Frontend Development
-- Dagan: Frontend Development
+**NARA** (Nightclub and Roster Assignment) is a scheduling and workforce management application developed to support the operations of security companies and club/event venues. The platform allows administrators to assign shifts, track attendance, manage payments, and provide staff with real-time updates—all from an accessible, mobile-first interface.
 
-## 2. Overview of Application:
+---
 
-The NARA Application is about managing club security personnel and providing the security personnel with exact dates on when there shifts are where the working at that night. It is a digital platform to streamline scheduling, notifications, and financial tracking
+## Tech Stack
 
-## 3. System Architecture & Frameworks
+- **Frontend (Web):** React, JavaScript, CSS  
+- **Frontend (Mobile):** React Native, Expo  
+- **Backend:** Firebase Authentication & Firebase Functions  
+- **Database:** Firebase Realtime Database  
+- **Analytics & Charts:** Chart.js (`react-chartjs-2`)
 
-- React & React Native
-- Front-end: JavaScript and CSS
-- Backend: Firebase & JavaScript
-- Database: Firebase Realtime DB
+---
 
-## 4. Users
+## Users & Roles
 
-Security Admins:
-- Oversee operations
-- Manage schedules
-- Monitor payments
+### Security Administrators
+- Assign and manage security staff shifts  
+- Oversee staffing schedules and updates  
+- Monitor and process payments  
+- Access analytics on shift coverage and finances  
 
-Club Managers:
-- Request staffing
-- View schedules
-- Mark Attendance
+### Club Managers
+- Request security staff for events  
+- View assigned shifts and schedules  
+- Mark attendance for staff  
 
-Security Personnel:
-- View assigned shifts
-- Cancel Shifts
-- Attend shifts
+### Security Personnel
+- View upcoming shifts and locations  
+- Cancel shifts if necessary  
+- Receive real-time notifications and updates  
 
-## 5. Mobile App Features
+---
 
-- Shift Assignment & Management
-- Scheduling Overview
-- Financial Management & Analytics
-- Notifications
+## Mobile App Features
 
-## 6. Web Interface Features
+- **Shift Assignment & Scheduling**  
+  View upcoming shifts and shift details.
 
-This is an Efficient Management Dashboard, which securiy admins use to:
-- Add and manage users
-- Manage club profiles
-- View data analytics of the company. 
+- **Real-Time Notifications**  
+  Receive updates when shifts are added, changed, or canceled.
 
-## 7. YouTube Links
+- **Financial Tracking**  
+  Access payment history and upcoming payouts.
 
-- Mobilbe app demonstration:
-https://youtu.be/SQA-z6ZMYsk
+- **Cross-Device Support**  
+  Built with React Native and Expo for development across Android and iOS devices.
 
-- Web interface demonstration:
-https://youtu.be/QHl6_yrsEpI
+---
 
-## 8. GitHub Repo Link
+## Web Interface Features
 
-- https://github.com/Rudolf9202/XBCADWilTeam5.git
+- **Admin Dashboard**  
+  Manage users, clubs, and shift schedules from a central platform.
 
-## 9. Running the Web application
+- **Data Analytics**  
+  Visual dashboards provide insight into shift coverage, payroll, and performance.
 
-To run the web application you need to change the directory in visual studio code terminal with cd nara-web-interface. Then you need to run npm install to update or add the node modules. Additional dependency to install npm install react-chartjs-2 chart.js. Once that is done you can run npm start in the terminal and the application will run and open in the browser. 
+- **Club Profile Management**  
+  Add and manage club accounts, attendance logs, and staff assignments.
 
-## 10. Running the Mobile application 
+---
 
-Firstly, download expo from app store for apple or google play store on android. Once downloaded open the folder in visual studio code. Open the terminal in visual studio and then run npm install to install or update the node modules. Then run npx expo start -c in the terminal to run the application. Once it is running scan the QR code in the terminal and the application will open in expo go.
+## YouTube Demonstrations
+
+- Mobile App Demonstration:  
+  https://youtu.be/SQA-z6ZMYsk
+
+- Web Interface Demonstration:  
+  https://youtu.be/QHl6_yrsEpI
+
+---
+
+## Running the Application
+
+### Web Application
+
+1. Open your terminal and navigate to the web application folder:
+   	cd nara-web-interface
+2. Install project dependencies:
+	npm install
+3. Install additional charting libraries:
+   	npm install react-chartjs-2 chart.js
+4. Start the development server:
+   	npm start
+
+This will launch the web interface in your default browser.
+
+### Mobile Application
+1. Download and install the **Expo Go** app from the Apple App Store (iOS) or Google Play Store (Android).
+
+2. Open the mobile project folder in Visual Studio Code.
+
+3. In the terminal, install required dependencies:
+   	npm install
+
+4. Start the Expo development server:
+	npx expo start -c
 
 
+5. A QR code will appear in your terminal or browser window. Scan this code with the Expo Go app to open and run the mobile application on your device.
 
+
+   
 
