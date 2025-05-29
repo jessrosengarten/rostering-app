@@ -84,7 +84,7 @@ A full-stack mobile and web solution designed to streamline the management of ni
 ### Web Application
 
 1. Open your terminal and navigate to the web application folder:
-   	cd nara-web-interface
+   	```bash<br>cd nara-web-interface<br>```
 2. Install project dependencies:
 	npm install
 3. Install additional charting libraries:
@@ -103,7 +103,7 @@ This will launch the web interface in your default browser.
    	npm install
 
 4. Start the Expo development server:
-	'npx expo start -c'
+	npx expo start -c
 
 
 5. A QR code will appear in your terminal or browser window. Scan this code with the Expo Go app to open and run the mobile application on your device.
