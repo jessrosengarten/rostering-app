@@ -103,7 +103,7 @@ This will launch the web interface in your default browser.
    	npm install
 
 4. Start the Expo development server:
-	npx expo start -c
+	'npx expo start -c'
 
 
 5. A QR code will appear in your terminal or browser window. Scan this code with the Expo Go app to open and run the mobile application on your device.
